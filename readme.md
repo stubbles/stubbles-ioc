@@ -1,12 +1,11 @@
-Stubbles Core classes
-=====================
+stubbles/ioc
+============
 
-For more information please check the [project's wiki](https://github.com/stubbles/stubbles-core/wiki) here on github.
 
 
 Build status
 ------------
 
-[![Build Status](https://secure.travis-ci.org/stubbles/stubbles-core.png)](http://travis-ci.org/stubbles/stubbles-core) [![Coverage Status](https://coveralls.io/repos/stubbles/stubbles-core/badge.png?branch=master)](https://coveralls.io/r/stubbles/stubbles-core?branch=master)
+[![Build Status](https://secure.travis-ci.org/stubbles/stubbles-ioc.png)](http://travis-ci.org/stubbles/stubbles-ioc) [![Coverage Status](https://coveralls.io/repos/stubbles/stubbles-ioc/badge.png?branch=master)](https://coveralls.io/r/stubbles/stubbles-ioc?branch=master)
 
-[![Latest Stable Version](https://poser.pugx.org/stubbles/core/version.png)](https://packagist.org/packages/stubbles/core) [![Latest Unstable Version](https://poser.pugx.org/stubbles/core/v/unstable.png)](//packagist.org/packages/stubbles/core)
+[![Latest Stable Version](https://poser.pugx.org/stubbles/ioc/version.png)](https://packagist.org/packages/stubbles/ioc) [![Latest Unstable Version](https://poser.pugx.org/stubbles/ioc/v/unstable.png)](//packagist.org/packages/stubbles/ioc)
