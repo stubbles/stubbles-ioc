@@ -10,7 +10,6 @@
 namespace stubbles\environments\exceptionhandler;
 use bovigo\callmap\NewInstance;
 use org\bovigo\vfs\vfsStream;
-use stubbles\lang\exception\Exception;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
@@ -121,7 +120,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function handleChainedExceptionLogsExceptionDataOfChainedAndCause()
     {
-        $exception = new Exception('chained exception', new \Exception('exception message'), 303);
+        $exception = new \Exception('chained exception', 303, new \Exception('exception message'));
         $line      = __LINE__ - 1;
         $this->exceptionHandler->handleException($exception);
         assert(
@@ -133,7 +132,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
                         19
                 ),
                 equals(
-                        '|stubbles\lang\exception\Exception|chained exception|'
+                        '|Exception|chained exception|'
                         . __FILE__ . '|' . $line . '|Exception|exception message|'
                         . __FILE__ . '|' . $line . "\n"
                 )

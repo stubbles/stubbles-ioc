@@ -118,7 +118,7 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function logsExceptionDataOfChainedAndCause()
     {
-        $exception = new Exception('chained exception', new \Exception('exception message'), 303);
+        $exception = new \Exception('chained exception', 303, new \Exception('exception message'));
         $line      = __LINE__ - 1;
         $this->exceptionLogger->log($exception);
         assert(
@@ -127,7 +127,7 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
                                 ->getContent(),
                         19
                 ),
-                equals('|stubbles\lang\exception\Exception|chained exception|' . __FILE__ . '|' . $line . '|Exception|exception message|' . __FILE__ . '|' . $line . "\n")
+                equals('|Exception|chained exception|' . __FILE__ . '|' . $line . '|Exception|exception message|' . __FILE__ . '|' . $line . "\n")
         );
     }
 

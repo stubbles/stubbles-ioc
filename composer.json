@@ -1,9 +1,9 @@
 {
-    "name": "stubbles/core",
+    "name": "stubbles/ioc",
     "type": "library",
     "homepage": "http://stubbles.net/",
     "license": "BSD-3-Clause",
-    "description": "Provides base classes for Stubbles packages.",
+    "description": "Dependency injection.",
     "repositories": [
        {
            "type": "vcs",
@@ -30,8 +30,7 @@
     "autoload": {
         "psr-4": {
             "stubbles\\": "src/main/php"
-        },
-        "files": ["src/main/php/lang/functions.php"]
+        }
     },
     "autoload-dev": {
         "psr-4": {

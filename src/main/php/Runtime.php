@@ -11,7 +11,6 @@ namespace stubbles;
 use stubbles\environments\Production;
 use stubbles\ioc\Binder;
 use stubbles\ioc\module\BindingModule;
-use stubbles\lang\Mode;
 /**
  * Binding module to configure the binder with a runtime environment.
  */
@@ -126,10 +125,6 @@ class Runtime implements BindingModule
         $this->environment->registerExceptionHandler($projectPath);
         $binder->setEnvironment($this->environment->name())
                 ->bind(Environment::class)->toInstance($this->environment);
-        if ($this->environment instanceof Mode) {
-            $binder->bind(Mode::class)->toInstance($this->environment);
-        }
-
         if (file_exists($this->propertiesFile($projectPath))) {
             $binder->bindPropertiesFromFile(
                     $this->propertiesFile($projectPath),

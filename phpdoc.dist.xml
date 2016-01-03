@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-  <title>Stubbles Core API Doc</title>
+  <title>stubbles/ioc API Doc</title>
   <parser>
     <target>docs/api</target>
     <default-package-name>stubbles</default-package-name>

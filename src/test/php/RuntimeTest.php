@@ -10,7 +10,6 @@
 namespace stubbles;
 use bovigo\callmap\NewInstance;
 use stubbles\ioc\Binder;
-use stubbles\lang\Mode;
 use org\bovigo\vfs\vfsStream;
 
 use function bovigo\assert\assert;
@@ -46,7 +45,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     {
         $this->root        = vfsStream::setup('projects');
         // TODO: switch this to Environment::class with 8.0.0
-        $this->environment = NewInstance::of(Mode::class);
+        $this->environment = NewInstance::of(Environment::class);
         Runtime::reset();
     }
 
@@ -123,21 +122,6 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @deprecated  since 7.0.0, will be removed with 8.0.0
-     */
-    public function givenModeShouldBeBound()
-    {
-        $runtime = new Runtime($this->environment);
-        $binder  = new Binder();
-        $runtime->configure($binder, $this->root->url());
-        assert(
-                $binder->getInjector()->getInstance(Mode::class),
-                isSameAs($this->environment)
-        );
-    }
-
-    /**
-     * @test
      * @since  4.0.0
      */
     public function bindsEnvironmentProvidedViaCallable()
@@ -146,7 +130,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $binder  = new Binder();
         $runtime->configure($binder, $this->root->url());
         assert(
-                $binder->getInjector()->getInstance(Mode::class),
+                $binder->getInjector()->getInstance(Environment::class),
                 isSameAs($this->environment)
         );
         verify($this->environment, 'registerErrorHandler')
@@ -160,7 +144,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
      * @expectedException  InvalidArgumentException
      * @since  4.0.0
      */
-    public function createWithNonModeThrowsIllegalArgumentException()
+    public function createWithNonEnvironmentThrowsIllegalArgumentException()
     {
         new Runtime(new \stdClass());
     }

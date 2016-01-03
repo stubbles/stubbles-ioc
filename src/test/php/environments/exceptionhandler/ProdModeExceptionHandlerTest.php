@@ -71,7 +71,7 @@ class stubProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         vfsStream::newFile('docroot/500.html')
                  ->withContent('An error occurred')
                  ->at($this->root);
-        $exception                = new \stubbles\lang\exception\Exception('message');
+        $exception                = new \Exception('message');
         $prodModeExceptionHandler = $this->createExceptionHandler('apache');
         $prodModeExceptionHandler->handleException($exception);
         verify($prodModeExceptionHandler, 'header')
