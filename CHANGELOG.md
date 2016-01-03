@@ -1,54 +1,27 @@
 7.0.0 (2016-??-??)
 ------------------
 
+  * split off from [stubbles/core](https://github.com/stubbles/stubbles-core)
+
+
 ### BC breaks
 
   * raised minimum required PHP version to 5.6
-  * moved `stubbles\lang\Sequence` into a separate package _stubbles/sequence_
-    * package is required by _stubbles/core_
-    * the new full class name is `stubbles\sequence\Sequence`
-    * moved `stubbles\lang\castToArray()` to `stubbles\sequence\castToArray()`
-    * moved `stubbles\lang\ensureCallable()` to `stubbles\sequence\ensureCallable()`
-  * moved `stubbles\peer` into separate package _stubbles/peer_
-  * moved `stubbles\streams` into separate package _stubbles/streams_
-  * moved several classes and functions to _stubbles/values_
-    * `stubbles\lang\ModifiableProperties` is now `stubbles\value\ModifiableProperties`
-    * `stubbles\lang\Properties` is now `stubbles\value\Properties`
-    * `stubbles\lang\Parse` is now `stubbles\value\Parse`
-    * `stubbles\lang\Result` is now `stubbles\value\Result`
-    * `stubbles\lang\SecureString` is now `stubbles\value\Secret`
-    * `stubbles\lang\getType()` is now `stubbles\values\typeOf()`
-    * `stubbles\lang\exception\lastErrorMessage()` is now `stubbles\values\lastErrorMessage()`
-    * removed `stubbles\lang\properties()`
-    * removed `stubbles\lang\parseProperties()`
-    * removed `stubbles\lang\parsePropertiesFile()`
-  * moved `stubbles\lang\reflect` into separate package _stubbles/reflect_
   * changed `stubbles\ioc\module\BindingModule::configure()` to accept an optional second parameter `$projectPath`
-  * deprecated `stubbles\ioc\App`, use `stubbles\App` instead, will be removed with 8.0.0
-  * deprecated `stubbles\lang\Mode` use `stubbles\Environment` instead, will be removed with 8.0.0
-  * deprecated `stubbles\lang\DefaultMode::prod()` use `stubbles\environments\Production` instead, will be removed with 8.0.0
-  * deprecated `stubbles\lang\DefaultMode::dev()` use `stubbles\environments\Development` instead, will be removed with 8.0.0
+  * moved `stubbles\ioc\App`, to `stubbles\App` instead
+  * removed `stubbles\lang\Mode`, use `stubbles\Environment` instead
+  * removed `stubbles\lang\DefaultMode::prod()`, use `stubbles\environments\Production` instead
+  * removed `stubbles\lang\DefaultMode::dev()`, use `stubbles\environments\Development` instead
   * moved `stubbles\ioc\modules\Runtime` to `stubbles\Runtime`
-  * deprecated `stubbles\lang\errorhandler\ExceptionLogger`, use `stubbles\environments\ExceptionLogger` instead, will be removed with 8.0.0
-  * moved classes and functions from `stubbles\lang` to `stubbles`, old class definition will be removed with 8.0.0
+  * moved `stubbles\lang\errorhandler\ExceptionLogger` to `stubbles\ExceptionLogger`
+  * moved classes and functions from `stubbles\lang` to `stubbles`
     * moved `stubbles\lang\ResourceLoader` to `stubbles\ResourceLoader`
     * moved `stubbles\lang\Rootpath` to `stubbles\Rootpath`
-  * deprecated several classes and functions, will be removed with 8.0.0:
-    * `stubbles\lang\__toString()`
-    * `stubbles\lang\__convertToStringRepresentation()`
-    * `stubbles\lang\errorhandler\CompositeErrorHandler`
-    * `stubbles\lang\errorhandler\ErrorHandler`
-    * `stubbles\lang\errorhandler\ExceptionHandler`
-    * `stubbles\lang\DefaultMode`
-    * `stubbles\lang\Enum` - parsing enums in properties and annotations is not supported any more as of this release
-    * `stubbles\predicate`
-    * everything in `stubbles\lang\exception`
 
 
 ### Other changes
 
   * added `stubbles\ioc\Binder::createInjector(callable ...$applyBindings)`
-  * fixed `stubbles\lang\iterator\MappingIterator` calling value- and key-mapper when end of iteration reached
 
 
 6.3.0 (2015-07-01)
