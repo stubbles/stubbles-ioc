@@ -4,16 +4,6 @@
     "homepage": "http://stubbles.net/",
     "license": "BSD-3-Clause",
     "description": "Dependency injection.",
-    "repositories": [
-       {
-           "type": "vcs",
-           "url": "git@github.com:stubbles/stubbles-streams.git"
-       },
-       {
-           "type": "vcs",
-           "url": "git@github.com:stubbles/stubbles-reflect.git"
-       }
-    ],
     "require": {
         "php": ">=5.6.0",
         "stubbles/sequence": "^7.0",
