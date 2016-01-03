@@ -7,9 +7,8 @@
  *
  * @package  stubbles
  */
-namespace stubbles\environments;
+namespace stubbles;
 use org\bovigo\vfs\vfsStream;
-use stubbles\lang\exception\Exception;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertTrue;
@@ -17,9 +16,9 @@ use function bovigo\assert\predicate\equals;
 use function stubbles\reflect\annotationsOf;
 use function stubbles\reflect\annotationsOfConstructor;
 /**
- * Tests for stubbles\environments\ExceptionLogger.
+ * Tests for stubbles\ExceptionLogger.
  *
- * @group  environments
+ * @group  app
  * @since  3.3.0
  */
 class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +26,7 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\environments\ExceptionLogger
+     * @type  \stubbles\ExceptionLogger
      */
     private $exceptionLogger;
     /**

@@ -7,7 +7,7 @@
  *
  * @package  stubbles
  */
-namespace stubbles\environments;
+namespace stubbles;
 /**
  * Can be used to log exceptions.
  *
@@ -52,7 +52,7 @@ class ExceptionLogger
      * sets the mode for new log directories
      *
      * @param   int  $filemode
-     * @return  \stubbles\environments\exceptionhandler\ExceptionLogger
+     * @return  \stubbles\environments\ExceptionLogger
      */
     public function setFilemode($filemode)
     {
