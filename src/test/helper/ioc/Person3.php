@@ -12,7 +12,7 @@ namespace stubbles\test\ioc;
  * Interface with annotation.
  *
  * @since  6.0.0
- * @ImplementedBy(mode="DEV", class=stubbles\test\ioc\Mikey.class)
+ * @ImplementedBy(environment="DEV", class=stubbles\test\ioc\Mikey.class)
  * @ImplementedBy(stubbles\test\ioc\Schst.class)
  */
 interface Person3

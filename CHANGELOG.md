@@ -17,6 +17,7 @@
   * moved classes and functions from `stubbles\lang` to `stubbles`
     * moved `stubbles\lang\ResourceLoader` to `stubbles\ResourceLoader`
     * moved `stubbles\lang\Rootpath` to `stubbles\Rootpath`
+  * property `mode` of annotation `@ImplementedBy` must now be `environment`
 
 
 ### Other changes
