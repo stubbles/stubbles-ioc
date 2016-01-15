@@ -80,18 +80,18 @@ class Runtime implements BindingModule
                 );
             }
         } else {
-            $this->environment = $this->getFallbackMode();
+            $this->environment = $this->defaultEnvironment();
         }
 
         self::$initialized = true;
     }
 
     /**
-     * returns fallback environment
+     * returns default environment as fallback if no environment provided
      *
      * @return  \stubbles\Environment
      */
-    protected function getFallbackMode()
+    protected function defaultEnvironment()
     {
         return new Production();
     }
