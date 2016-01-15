@@ -73,11 +73,9 @@ class BMW implements Car {
     private $engine;
     private $tire;
 
-    public function __construct(Engine $engine, Tire $tire) {
+    public function __construct(Engine $engine, Tire $tire, Person $driver) {
         $this->engine = $engine;
-        $this->tire = $tire;
-    }
-    public function setDriver(Person $driver) {
+        $this->tire   = $tire;
         $this->driver = $driver;
     }
     public function moveForward($miles) {
@@ -117,9 +115,7 @@ required:
     $engine = new TwoLitresEngine();
     $schst  = new Schst();
 
-    $bmw    = new BMW($engine, $tire);
-    $bmw->setDriver($schst);
-
+    $bmw    = new BMW($engine, $tire, $schst);
     $bmw->moveForward(50);
 ```
 
@@ -186,12 +182,12 @@ Next, you probably want to get an instance of `Car` using the same approach:
 
 ```
 object(BMW)#33 (3) {
-  ["driver:protected"]=>
+  ["driver:private"]=>
   NULL
-  ["engine:protected"]=>
+  ["engine:private"]=>
   object(TwoLitresEngine)#37 (0) {
   }
-  ["tire:protected"]=>
+  ["tire:private"]=>
   object(Goodyear)#40 (0) {
   }
 }
@@ -207,285 +203,22 @@ What you also can see is, that Stubbles did not inject an object into the
 will *never* inject any dependencies via setter methods.
 
 
-### Optional injection
+Further features
+----------------
 
-Probably you do not want to inject an object every time, because the class will
-work fine without the dependency. If a parameter has a default value and is
-optional injection will be done using the default value.
-
-```php
-class BMWWithCoDriver extends BMW {
-    private $codriver;
-
-    public function __construct(Engine $engine, Tire $tire, CoDriver $codriver = null) {
-        parent::__construct($engine, $tire);
-        $this->codriver = $codriver;
-    }
-
-    public function moveForward($miles) {
-        if (null !== $this->codriver) {
-            $this->codriver->sayHello();
-        }
-
-        parent::moveForward($miles);
-    }
-}
-```
-
-
-### Implicit bindings
-
-_stubbles/ioc_ does not force you to use interfaces in your type hints. If you are
-already using concrete classes, there is no need to bind them, as _stubbles/ioc_
-will implicitly bind the concrete class to itself:
-
-```php
-class Window {}
-
-class BMW implements Car {
-    private $driver;
-    private $engine;
-    private $tire;
-    private $window;
-
-    // same constructor and methods as in previous examples
-
-    /**
-     * @Inject
-     */
-    public function setWindow(Window $win) {
-        $this->window = $win;
-    }
-}
-```
-
-When creating an instance of `BMW`, it will automatically have a reference to an
-instance of `Window` although no special binding has been added.
-
-_Please note that implicit bindings turn into explicit bindings once one of
-these methods is called:_
-
- * `stubbles\ioc\Binder::hasBinding()`
- * `stubbles\ioc\Injector::hasBinding()`
- * `stubbles\ioc\Injector::getInstance()`
-
-
-### Default implementations
-
-Very often you only use one concrete implementation of an interface in your
-application and only added the interface or abstract class to make dependent
-classes better testable. To avoid having to bind all of your interfaces to the
-concrete implementations you may specify a default implementation which will be
-used. To achieve this, add the `@ImplementedBy` annotation to your interface.
-
-```php
-/**
- * All Persons should be bound to the class Schst unless Person is bound
- *
- * @ImplementedBy(Schst.class)
- */
-interface Person {
-    public function sayHello();
-}
-
-
-$person = $injector->getInstance('Person'); // $person is now an instance of Schst
-```
-
-It should be noted though, that once a specific binding for `Person` is added to
-the binder that the annotation is not considered anymore:
-
-```php
-    $binder->bind('Person')->to('Mikey);
-    $person = $binder->getInjector()->getInstance('Person');
-```
-
-In this example, `$person` is now an instance of `Mikey` and not of `Schst` -
-the explicit binding overruled the annotated binding.
-
-
-### Default implementations per runtime environment
-
-_Available since release 6.0.0_
-
-Sometimes it is required to have a different default implementation per runtime
-environment, e.g. a mock implementation for DEV and the real service
-implementation for PROD. This can be accomplished by specifying the environment:
-
-```php
-/**
- * @ImplementedBy(environment="DEV", class=Mikey.class)
- * @ImplementedBy(Schst.class)
- */
-interface Person {
-    public function sayHello();
-}
-```
-
-Now, depending on the runtime mode, the according implementation will be chosen.
-If the runtime environment is DEV, an instance of `Mikey` will be created, and
-`Schst` for all other runtime environments.
-
-Please note that you should always specify one default without a runtime
-environment, otherwise a `stubbles\ioc\binding\BindingException` will be thrown
-in case no implementation can be found for the current runtime environment.
-
-
-### The singleton scope
-
-Multiple calls to `$injector->getInstance('Car');` will return different
-objects. In most cases, this is probably what you want, as the IoC framework
-behaves like the `new` operator. If you want to create only one instance of the
-`BMW` class, you can easily convert the `BMW` class to a [singleton](http://en.wikipedia.org/wiki/Singleton_pattern).
-
-```php
-$binder = new stubbles\ioc\Binder();
-$binder->bind('Car')->to('BMW')->asSingleton();
-// other bindings
-
-$injector = $binder->getInjector();
-$bmw1 = $injector->getInstance('Car');
-$bmw2 = $injector->getInstance('Car');
-
-if ($bmw1 === $bmw2) {
-    echo "Same object.\n";
-}
-```
-
-Using `asSingleton()` makes sure that the instance is created only once and
-subsequent calls to `getInstance()` will return the same instance.
-
-Another way to treat a class as a singleton is using the `@Singleton`
-annotation, which is used to annotate the class. The following example makes
-sure, that the application uses only one instance of the class `Schst`:
-
-```php
-/**
- * @Singleton
- */
-class Schst implements Person {
-    public function sayHello() {
-        echo "My name is Stephan\n";
-    }
-}
-```
-
-The following code will now create two instances of the class `BMW`, but both
-should have a reference to the same `Schst` instance:
-
-```php
-$binder = new stubbles\ioc\Binder();
-$binder->bind('Car')->to('BMW');
-// other bindings
-
-$injector = $binder->getInjector();
-$bmw1 = $injector->getInstance('Car');
-$bmw2 = $injector->getInstance('Car');
-
-var_dump($bmw1);
-var_dump($bmw1);
-```
-
-If you run the code snippet, you get the following output:
-```
-object(BMW)#34 (3) {
-  ["driver:protected"]=>
-  object(Schst)#50 (0) {
-  }
-  ["engine:protected"]=>
-  object(TwoLitresEngine)#38 (0) {
-  }
-  ["tire:protected"]=>
-  object(Goodyear)#41 (0) {
-  }
-}
-object(BMW)#30 (3) {
-  ["driver:protected"]=>
-  object(Schst)#50 (0) {
-  }
-  ["engine:protected"]=>
-  object(TwoLitresEngine)#44 (0) {
-  }
-  ["tire:protected"]=>
-  object(Goodyear)#39 (0) {
-  }
-}
-```
-
-As you can see, the two `BMW` instances have different object handles (_#30_
-and _#34_), but the `$driver` properties point to the same `Schst` instance
-(object handle _#50_).
-
-Implementing the singleton pattern never has been this easy.
-
-
-### The session scope
-
-Session scope means that an instance is only created once in a session, and not
-a new one for each request.
-
-_stubbles/ioc_ is prepared to support the session scope. It doesn't offer an own
-session scope implementation, but it's very easy to implement one. For this, the
-`stubbles\ioc\binding\BindingScope` interface has to be implemented, which only
-consists of one method:
-
-```php
-/**
- * returns the requested instance from the scope
- *
- * @param  \ReflectionClass $impl concrete implementation
- * @param  \stubbles\ioc\InjectionProvider $provider
- * @return Object
- */
-public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
-```
-
-Within this method the implementation has to decide whether there is already an
-instance of the class denoted by `$impl` within the session, or if a new
-instance has to be created. Luckily the creation of the new instance is
-delegated to `$provider`. An very simplistic approach to implement the session
-scope might look like that:
-
-```php
-namespace example;
-use stubbles\ioc\InjectionProvider;
-use stubbles\ioc\binding\BindingScope;
-
-class ExampleSessionScope implements BindingScope
-{
-    /**
-     * returns the requested instance from the scope
-     *
-     * @param  \ReflectionClass $impl concrete implementation
-     * @param  \stubbles\ioc\InjectionProvider $provider
-     * @return object
-     */
-    public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
-    {
-        if (!isset($_SESSION[$impl->getName()]) {
-            $_SESSION[$impl->getName()] = $provider->get();
-        }
-
-        return $_SESSION[$impl->getName()];
-    }
-}
-```
-
-To make the session scope available add it to the binder instance:
-
-```php
-$binder->setSessionScope(new ExampleSessionScope());
-```
-
-Now you can bind classes to the session scope:
-
-```php
-$binder->bind('Person')->to('Mikey')->inSession();
-```
-
-Please note that the call to `inSession()` will throw a
-`stubbles\lang\exception\RuntimeException` in case no session scope was added
-before. This means you can only bind to the session scope after a session scope
-implementation was added to the binder.
-
-
+* [Optional injection](docs/optional_injection.md)
+* [Implicit bindings](docs/implicit_bindings.md)
+* [Default implementations](docs/default_implementations.md)
+* [Inject instances](docs/inject_instances.md)
+* [Singletons](docs/singleton_scope.md)
+* [Session scope](docs/session_scope.md)
+* [Named parameters](docs/named_parameters.md)
+* [Constant values](docs/constant_values.md)
+* [List bindings](docs/list_bindings.md)
+* [Map bindings](docs/map_bindings.md)
+* [Closure bindings](docs/closure_bindings.md)
+* [Injection providers](docs/injection_providers.md)
+* [Create the whole application](docs/application.md)
+* [Application properties](docs/application_properties.md)
+* [Runtime environment](docs/runtime_environment.md)
+* [Rootpath & Resource loader](docs/rootpath_resourceloader.md)
