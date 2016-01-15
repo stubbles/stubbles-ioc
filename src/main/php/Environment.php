@@ -25,8 +25,9 @@ interface Environment
      * constant for disabled cache
      */
     const CACHE_DISABLED = false;
+
     /**
-     * returns the name of the mode
+     * returns the name of the environment
      *
      * @api
      * @return  string
@@ -34,7 +35,7 @@ interface Environment
     public function name();
 
     /**
-     * registers exception handler for current mode
+     * registers exception handler for current environment
      *
      * Return value depends on registration: if no exception handler set return
      * value will be false, if registered handler was an instance the handler
@@ -46,7 +47,7 @@ interface Environment
     public function registerExceptionHandler($projectPath);
 
     /**
-     * registers error handler for current mode
+     * registers error handler for current environment
      *
      * Return value depends on registration: if no error handler set return value
      * will be false, if registered handler was an instance the handler instance

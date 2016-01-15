@@ -310,9 +310,9 @@ class Injector
         $implementation = null;
         foreach ($annotations->named('ImplementedBy') as $annotation) {
             /* @var $annotation \stubbles\reflect\annotation\Annotation */
-            if (null !== $this->environment && $annotation->hasValueByName('mode') && strtoupper($annotation->getMode()) === $this->environment) {
+            if (null !== $this->environment && $annotation->hasValueByName('environment') && strtoupper($annotation->getEnvironment()) === $this->environment) {
                 $implementation = $annotation->getClass();
-            } elseif (!$annotation->hasValueByName('mode') && null == $implementation) {
+            } elseif (!$annotation->hasValueByName('environment') && null == $implementation) {
                 $implementation = $annotation->getClass();
             }
         }
