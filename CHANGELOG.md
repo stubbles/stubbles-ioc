@@ -1,3 +1,10 @@
+7.1.0 (2016-02-0?)
+------------------
+
+  * deprecated `stubbles\Rootpath`, use `stubbles\values\Rootpath` instead, will be removed with 8.0.0
+  * deprecated `stubbles\ResourceLoader`, use `stubbles\values\ResourceLoader` instead, will be removed with 8.0.0
+
+
 7.0.0 (2016-01-15)
 ------------------
 

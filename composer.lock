@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ee3375eb7f283da12b174109913d2705",
-    "content-hash": "9623b09c845d53fc3e3905ca71cf53b3",
+    "hash": "88d00455ac53e8d706666aa5e74a633c",
+    "content-hash": "a4c7b19f8ca848abd2af76e04d7f7cce",
     "packages": [
         {
             "name": "stubbles/reflect",
@@ -98,16 +98,16 @@
         },
         {
             "name": "stubbles/values",
-            "version": "v7.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "458bf7af0c7dee9fee437c872c82fed80c39db08"
+                "reference": "46ecc3d3d46fecbfa1b0fb5c7b09ceee81510d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/458bf7af0c7dee9fee437c872c82fed80c39db08",
-                "reference": "458bf7af0c7dee9fee437c872c82fed80c39db08",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/46ecc3d3d46fecbfa1b0fb5c7b09ceee81510d8b",
+                "reference": "46ecc3d3d46fecbfa1b0fb5c7b09ceee81510d8b",
                 "shasum": ""
             },
             "require": {
@@ -115,13 +115,15 @@
             },
             "require-dev": {
                 "bovigo/assert": "^1.5",
+                "bovigo/callmap": "^2.0",
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.1"
+                "phpunit/phpunit": "^5.1",
+                "stubbles/reflect": "^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.0.x-dev"
+                    "dev-master": "7.2.x-dev"
                 }
             },
             "autoload": {
@@ -138,7 +140,7 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-01-11 18:55:54"
+            "time": "2016-02-03 15:16:48"
         }
     ],
     "packages-dev": [
@@ -727,16 +729,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.1.4",
+            "version": "5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "676c25c4ac563869572c878fdaf3db21587f5f3b"
+                "reference": "d0f7ae467dcbe7a6ad050540c9d1d39a7aefff26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/676c25c4ac563869572c878fdaf3db21587f5f3b",
-                "reference": "676c25c4ac563869572c878fdaf3db21587f5f3b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d0f7ae467dcbe7a6ad050540c9d1d39a7aefff26",
+                "reference": "d0f7ae467dcbe7a6ad050540c9d1d39a7aefff26",
                 "shasum": ""
             },
             "require": {
@@ -797,7 +799,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-01-11 10:11:10"
+            "time": "2016-02-02 09:03:29"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1321,16 +1323,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "3df409958a646dad2bc5046c3fb671ee24a1a691"
+                "reference": "3cf0709d7fe936e97bee9e954382e449003f1d9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/3df409958a646dad2bc5046c3fb671ee24a1a691",
-                "reference": "3df409958a646dad2bc5046c3fb671ee24a1a691",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3cf0709d7fe936e97bee9e954382e449003f1d9a",
+                "reference": "3cf0709d7fe936e97bee9e954382e449003f1d9a",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1368,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-12-26 13:39:53"
+            "time": "2016-02-02 13:44:19"
         }
     ],
     "aliases": [],

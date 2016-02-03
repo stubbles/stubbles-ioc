@@ -1,6 +1,8 @@
 ResourceLoader
 --------------
 
+_Deprecated since 7.1.0, use stubbles\values\Rootpath instead, will be removed with 8.0.0._
+
 ## Description
 
 The `stubbles\ResourceLoader` allows to load resources from different locations.
@@ -58,6 +60,8 @@ vendor resources is also in alphabetical order of vendor/package names.
 
 Rootpath
 --------
+
+_Deprecated since 7.1.0, use stubbles\values\Rootpath instead, will be removed with 8.0.0._
 
 ## Description
 
