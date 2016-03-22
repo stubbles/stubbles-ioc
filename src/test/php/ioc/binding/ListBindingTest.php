@@ -14,6 +14,7 @@ use stubbles\ioc\Injector;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertEmptyArray;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\ioc\binding\ListBinding.
@@ -122,26 +123,28 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValue(303)->getInstance(
-                $this->injector,
-                new \ReflectionClass(\stdClass::class)
-        );
+        expect(function() {
+                $this->listBinding->withValue(303)->getInstance(
+                        $this->injector,
+                        new \ReflectionClass(\stdClass::class)
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValue(new \stdClass())->getInstance(
-                $this->injector,
-                new \ReflectionClass(InjectionProvider::class)
-        );
+        expect(function() {
+            $this->listBinding->withValue(new \stdClass())->getInstance(
+                    $this->injector,
+                    new \ReflectionClass(InjectionProvider::class)
+            );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -188,30 +191,34 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromProviderAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValueFromProvider(
+        $listBinding = $this->listBinding->withValueFromProvider(
                 $this->createInjectionProvider(303)
-        )->getInstance(
-                $this->injector,
-                new \ReflectionClass(\stdClass::class)
         );
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
+                        $this->injector,
+                        new \ReflectionClass(\stdClass::class)
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromProviderAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValueFromProvider(
+        $listBinding = $this->listBinding->withValueFromProvider(
                 $this->createInjectionProvider(new \stdClass())
-        )->getInstance(
-                $this->injector,
-                new \ReflectionClass(InjectionProvider::class)
         );
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
+                        $this->injector,
+                        new \ReflectionClass(InjectionProvider::class)
+                );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -248,32 +255,34 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException()
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
-        $this->listBinding->withValueFromProvider(get_class($provider))
-                ->getInstance(
+        $listBinding = $this->listBinding->withValueFromProvider(get_class($provider));
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(\stdClass::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException()
     {
         $provider = $this->createInjectionProvider(new \stdClass());
         $this->prepareInjector($provider);
-        $this->listBinding->withValueFromProvider(get_class($provider))
-                ->getInstance(
+        $listBinding = $this->listBinding->withValueFromProvider(get_class($provider));
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -289,26 +298,28 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function addInvalidProviderClassThrowsBindingException()
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
         $this->injector->mapCalls(['getInstance' => \stdClass::class]);
-        $this->listBinding->withValueFromProvider($providerClass)
-                ->getInstance(
+        $listBinding = $this->listBinding->withValueFromProvider($providerClass);
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function addInvalidProviderValueThrowsIlegalArgumentException()
     {
-        $this->listBinding->withValueFromProvider(new \stdClass());
+        expect(function() {
+                $this->listBinding->withValueFromProvider(new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -348,29 +359,35 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      * @since  2.1.0
      * @test
      * @group  issue_31
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromClosureAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValueFromClosure(function() { return 303; })
-                ->getInstance(
+        $listBinding = $this->listBinding->withValueFromClosure(
+                function() { return 303; }
+        );
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(\stdClass::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @since  2.1.0
      * @test
      * @group  issue_31
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromClosureAddedToTypedListThrowsBindingException()
     {
-        $this->listBinding->withValueFromClosure(function() { return new \stdClass(); })
-                ->getInstance(
+        $listBinding = $this->listBinding->withValueFromClosure(
+                function() { return new \stdClass(); }
+        );
+        expect(function() use ($listBinding) {
+                $listBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 }

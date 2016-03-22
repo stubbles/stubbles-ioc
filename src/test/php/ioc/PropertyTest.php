@@ -9,11 +9,14 @@
  */
 namespace stubbles\ioc;
 use stubbles\test\ioc\PropertyReceiver;
+use stubbles\ioc\binding\BindingException;
 use stubbles\values\Properties;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
+use function bovigo\assert\predicate\startsWith;
 /**
  * Test for property bindings.
  *
@@ -80,13 +83,18 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
-     * @expectedExceptionMessage  Can not inject into stubbles\test\ioc\PropertyReceiver::__construct($foo). No binding for type __PROPERTY__ (named "example.foo") specified.
      */
     public function instanceCreationThrowsBindingExceptionWhenNoPropertiesBound()
     {
-        $binder = new Binder();
-        $binder->getInjector()->getInstance(PropertyReceiver::class);
+        $injector = Binder::createInjector();
+        expect(function() use ($injector) {
+                $injector->getInstance(PropertyReceiver::class);
+        })
+        ->throws(BindingException::class)
+        ->message(startsWith(
+                'Can not inject into ' . PropertyReceiver::class . '::__construct($foo).'
+                . ' No binding for type __PROPERTY__ (named "example.foo") specified.'
+        ));
     }
 
     /**

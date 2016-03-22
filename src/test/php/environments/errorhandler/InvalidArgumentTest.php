@@ -10,6 +10,7 @@
 namespace stubbles\environments\errorhandler;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 /**
  * Tests for stubbles\environments\errorhandler\InvalidArgument
  *
@@ -71,10 +72,11 @@ class InvalidArgumentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function handleThrowsIllegalArgumentException()
     {
-        $this->invalidArgument->handle(E_RECOVERABLE_ERROR, 'foo');
+        expect(function() {
+                $this->invalidArgument->handle(E_RECOVERABLE_ERROR, 'foo');
+        })->throws(\InvalidArgumentException::class);
     }
 }

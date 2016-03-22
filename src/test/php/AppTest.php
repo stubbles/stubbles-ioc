@@ -17,6 +17,7 @@ use stubbles\test\AppUsingBindingModule;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
@@ -159,11 +160,15 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function invalidBindingModuleThrowsIllegalArgumentException()
     {
-        App::createInstance(AppClassWithInvalidBindingModule::class, 'projectPath');
+        expect(function() {
+                App::createInstance(
+                        AppClassWithInvalidBindingModule::class,
+                        'projectPath'
+                );
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

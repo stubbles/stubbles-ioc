@@ -8,6 +8,7 @@
  * @package  stubbles
  */
 namespace stubbles\ioc;
+use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Bike;
 use stubbles\test\ioc\BikeWithOptionalOtherParam;
 use stubbles\test\ioc\BikeWithOptionalTire;
@@ -23,6 +24,7 @@ use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
@@ -131,32 +133,35 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function missingBindingThrowsBindingException()
     {
         $injector = Binder::createInjector();
-        $injector->getInstance(Vehicle::class);
+        expect(function() use ($injector) {
+                $injector->getInstance(Vehicle::class);
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function missingBindingOnInjectionHandlingThrowsBindingException()
     {
         $injector = Binder::createInjector();
-        $injector->getInstance(Bike::class);
+        expect(function() use ($injector) {
+                $injector->getInstance(Bike::class);
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function missingConstantBindingOnInjectionHandlingThrowsBindingException()
     {
         $injector = Binder::createInjector();
-        $injector->getInstance(MissingArrayInjection::class);
+        expect(function() use ($injector) {
+                $injector->getInstance(MissingArrayInjection::class);
+        })->throws(BindingException::class);
     }
 
     /**

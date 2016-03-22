@@ -14,6 +14,7 @@ use stubbles\ioc\Injector;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertEmptyArray;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\ioc\binding\MapBinding.
@@ -122,28 +123,30 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntry('x', 303)
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntry('x', 303);
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(\stdClass::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntry('x', new \stdClass())
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntry('x', new \stdClass());
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -192,32 +195,36 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromProviderAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntryFromProvider(
+        $mapBinding = $this->mapBinding->withEntryFromProvider(
                 'x',
                 $this->createInjectionProvider(303)
-        )->getInstance(
-                $this->injector,
-                new \ReflectionClass('\\stdClass')
         );
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
+                        $this->injector,
+                        new \ReflectionClass('\\stdClass')
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromProviderAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntryFromProvider(
+        $mapBinding = $this->mapBinding->withEntryFromProvider(
                 'x',
                 $this->createInjectionProvider(new \stdClass())
-        )->getInstance(
-                $this->injector,
-                new \ReflectionClass(InjectionProvider::class)
         );
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
+                        $this->injector,
+                        new \ReflectionClass(InjectionProvider::class)
+                );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -254,32 +261,34 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException()
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
-        $this->mapBinding->withEntryFromProvider('x', get_class($provider))
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntryFromProvider('x', get_class($provider));
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(\stdClass::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException()
     {
         $provider = $this->createInjectionProvider(new \stdClass());
         $this->prepareInjector($provider);
-        $this->mapBinding->withEntryFromProvider('x', get_class($provider))
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntryFromProvider('x', get_class($provider));
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
@@ -295,26 +304,28 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function addInvalidProviderClassThrowsBindingException()
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
         $this->injector->mapCalls(['getInstance' => \stdClass::class]);
-        $this->mapBinding->withEntryFromProvider('x', $providerClass)
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntryFromProvider('x', $providerClass);
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function addInvalidProviderValueThrowsIlegalArgumentException()
     {
-        $this->mapBinding->withEntryFromProvider('x', new \stdClass());
+        expect(function() {
+                $this->mapBinding->withEntryFromProvider('x', new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -355,29 +366,37 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      * @since  2.1.0
      * @test
      * @group  issue_31
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidValueFromClosureAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntryFromClosure('x', function() { return 303; })
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntryFromClosure(
+                'x',
+                function() { return 303; }
+        );
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(\stdClass::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 
     /**
      * @since  2.1.0
      * @test
      * @group  issue_31
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function invalidObjectFromClosureAddedToTypedListThrowsBindingException()
     {
-        $this->mapBinding->withEntryFromClosure('x', function() { return new \stdClass(); })
-                ->getInstance(
+        $mapBinding = $this->mapBinding->withEntryFromClosure(
+                'x',
+                function() { return new \stdClass(); }
+        );
+        expect(function() use ($mapBinding) {
+                $mapBinding->getInstance(
                         $this->injector,
                         new \ReflectionClass(InjectionProvider::class)
-        );
+                );
+        })->throws(BindingException::class);
     }
 }

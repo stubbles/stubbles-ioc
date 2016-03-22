@@ -9,12 +9,14 @@
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\AnswerConstantProvider;
 use stubbles\test\ioc\Question;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Helper class for the test.
@@ -56,11 +58,12 @@ class InjectorConstantTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function retrieveNonExistingConstantThrowsBindingException()
     {
-        Binder::createInjector()->getConstant('answer');
+        expect(function() {
+                Binder::createInjector()->getConstant('answer');
+        })->throws(BindingException::class);
     }
 
     /**
@@ -106,16 +109,17 @@ class InjectorConstantTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
-     * @group              ioc_constantprovider
-     * @since              1.6.0
+     * @group  ioc_constantprovider
+     * @since  1.6.0
      */
     public function constantViaInvalidInjectionProviderClassThrowsBindingException()
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
                ->toProviderClass('\stdClass');
-        $binder->getInjector()->getConstant('answer');
+        expect(function() use ($binder) {
+                $binder->getInjector()->getConstant('answer');
+        })->throws(BindingException::class);
     }
 
     /**

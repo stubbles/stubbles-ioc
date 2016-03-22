@@ -8,6 +8,7 @@
  * @package  stubbles
  */
 namespace stubbles\ioc;
+use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Mikey;
 use stubbles\test\ioc\Person;
 use stubbles\test\ioc\Person3;
@@ -15,6 +16,7 @@ use stubbles\test\ioc\Person4;
 use stubbles\test\ioc\Schst;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
  * Test for stubbles\ioc\Injector with the ImplementedBy annotation.
@@ -93,24 +95,27 @@ class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      * @since  6.0.0
      */
     public function throwsBindingExceptionWhenNoFallbackSpecified()
     {
-        $binder = new Binder();
-        $binder->setEnvironment('PROD')
-                ->getInjector()
-                ->getInstance(Person4::class);
+        $injector = (new Binder())
+                ->setEnvironment('PROD')
+                ->getInjector();
+        expect(function() use ($injector) {
+                $injector->getInstance(Person4::class);
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      * @since  6.0.0
      */
     public function throwsBindingExceptionWhenNoFallbackSpecifiedAndNoModeSet()
     {
-        Binder::createInjector()->getInstance(Person4::class);
+        $injector = Binder::createInjector();
+        expect(function() use ($injector) {
+                $injector->getInstance(Person4::class);
+        })->throws(BindingException::class);
     }
 }

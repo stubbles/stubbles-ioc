@@ -9,6 +9,7 @@
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\ListBinding;
 use stubbles\ioc\binding\MapBinding;
 use stubbles\test\ioc\Plugin;
@@ -17,6 +18,7 @@ use stubbles\test\ioc\PluginHandler;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for list and map bindings.
@@ -69,11 +71,13 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function injectorRetrievesNonAddedListThrowsBindingException()
     {
-        Binder::createInjector()->getInstance(ListBinding::TYPE, 'listConfig');
+        $injector = Binder::createInjector();
+        expect(function() use ($injector) {
+                $injector->getInstance(ListBinding::TYPE, 'listConfig');
+        })->throws(BindingException::class);
     }
 
     /**
@@ -139,11 +143,13 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function injectorRetrievesNonAddedMapThrowsBindingException()
     {
-        Binder::createInjector()->getInstance(MapBinding::TYPE, 'mapConfig');
+        $injector = Binder::createInjector();
+        expect(function() use ($injector) {
+                $injector->getInstance(MapBinding::TYPE, 'mapConfig');
+        })->throws(BindingException::class);
     }
 
     /**
@@ -310,7 +316,6 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function typedListWithInvalidValueThrowsBindingException()
     {
@@ -318,12 +323,13 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindList(Plugin::class)->withValue(303);
-        $this->createPluginHandler($binder);
+        expect(function() use ($binder) {
+                $this->createPluginHandler($binder);
+        })->throws(BindingException::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
      */
     public function typedMapWithInvalidValueThrowsBindingException()
     {
@@ -331,7 +337,9 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindMap(Plugin::class)->withEntry('tb', 303);
-        $this->createPluginHandler($binder);
+        expect(function() use ($binder) {
+                $this->createPluginHandler($binder);
+        })->throws(BindingException::class);
     }
 
     /**

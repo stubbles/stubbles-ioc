@@ -13,6 +13,7 @@ use stubbles\Environment;
 use stubbles\environments\errorhandler\ErrorHandler;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -70,11 +71,12 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function registerErrorHandlerWithInvalidClassThrowsIllegalArgumentException()
     {
-        $this->environment->useErrorHandler(404);
+        expect(function() {
+                $this->environment->useErrorHandler(404);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

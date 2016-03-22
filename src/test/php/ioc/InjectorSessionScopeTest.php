@@ -15,6 +15,7 @@ use stubbles\test\ioc\Person2;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -55,11 +56,12 @@ class InjectorSessionScopeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @since  5.4.0
-     * @expectedException  RuntimeException
      */
     public function requestSessionScopedWithoutSessionThrowsRuntimeException()
     {
-        $this->injector->getInstance(Person2::class);
+        expect(function() {
+                $this->injector->getInstance(Person2::class);
+        })->throws(\RuntimeException::class);
     }
 
     /**

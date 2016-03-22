@@ -15,6 +15,7 @@ use org\bovigo\vfs\vfsStream;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
@@ -141,12 +142,13 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      * @since  4.0.0
      */
     public function createWithNonEnvironmentThrowsIllegalArgumentException()
     {
-        new Runtime(new \stdClass());
+        expect(function() {
+                new Runtime(new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

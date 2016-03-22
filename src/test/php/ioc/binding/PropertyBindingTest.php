@@ -17,6 +17,7 @@ use stubbles\values\Secret;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function stubbles\reflect\reflect;
@@ -153,12 +154,15 @@ class PropertyBindingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\ioc\binding\BindingException
-     * @expectedExceptionMessage  Missing property does.not.exist for environment PROD
      */
     public function throwsBindingExceptionWhenPropertyNotSet()
     {
-        $this->createPropertyBinding()->getInstance($this->injector, 'does.not.exist');
+        $properyBinding = $this->createPropertyBinding();
+        expect(function() use ($properyBinding) {
+                $properyBinding->getInstance($this->injector, 'does.not.exist');
+        })
+        ->throws(BindingException::class)
+        ->withMessage('Missing property does.not.exist for environment PROD');
     }
 
     /**

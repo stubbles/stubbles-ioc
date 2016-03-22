@@ -12,6 +12,7 @@ use bovigo\callmap\NewInstance;
 use stubbles\ioc\InjectionProvider;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
 use function stubbles\reflect\reflect;
@@ -100,13 +101,14 @@ class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  RuntimeException
      */
     public function throwsRuntimeExceptionWhenCreatedWithoutSession()
     {
-        $this->sessionScope->getInstance(
-                reflect(\stdClass::class),
-                $this->provider
-        );
+        expect(function() {
+                $this->sessionScope->getInstance(
+                        reflect(\stdClass::class),
+                        $this->provider
+                );
+        })->throws(\RuntimeException::class);
     }
 }
