@@ -1,4 +1,4 @@
-7.1.0 (2016-02-0?)
+7.1.0 (2016-06-08)
 ------------------
 
   * deprecated `stubbles\Rootpath`, use `stubbles\values\Rootpath` instead, will be removed with 8.0.0
