@@ -1,7 +1,7 @@
 ResourceLoader
 --------------
 
-_Deprecated since 7.1.0, use stubbles\values\Rootpath instead, will be removed with 8.0.0._
+_Deprecated since 7.1.0, use stubbles\values\ResourceLoader instead, will be removed with 8.0.0._
 
 ## Description
 
