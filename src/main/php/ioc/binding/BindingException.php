@@ -16,8 +16,8 @@ class BindingException extends \Exception
     /**
      * constructor
      *
-     * @param  string                    $message
-     * @param  \stubbles\peer\Exception  $previous
+     * @param  string      $message
+     * @param  \Exception  $previous  optional
      */
     public function __construct($message, \Exception $previous = null)
     {
