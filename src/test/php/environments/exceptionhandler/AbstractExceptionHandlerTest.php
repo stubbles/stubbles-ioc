@@ -55,12 +55,26 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @return  array
      */
-    public function loggingDisabledDoesNotCreateLogfile()
+    public function throwables()
+    {
+        $throwables = [[new \Exception('failure message')]];
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $throwables[] = [new \Error('failure message')];
+        }
+
+        return $throwables;
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     */
+    public function loggingDisabledDoesNotCreateLogfile($throwable)
     {
         $this->exceptionHandler->disableLogging()
-                ->handleException(new \Exception());
+                ->handleException($throwable);
         assertFalse(
                 $this->root->hasChild(
                         'log/errors/' . date('Y') . '/' . date('m')
@@ -71,10 +85,11 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function loggingNotDisabledCreatesLogfile()
+    public function loggingNotDisabledCreatesLogfile($throwable)
     {
-        $this->exceptionHandler->handleException(new \Exception());
+        $this->exceptionHandler->handleException($throwable);
         assertTrue(
                 $this->root->hasChild(
                         'log/errors/' . date('Y') . '/' . date('m')
@@ -85,11 +100,12 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function loggingDisabledFillsResponseOnly()
+    public function loggingDisabledFillsResponseOnly($throwable)
     {
         $this->exceptionHandler->disableLogging()
-                ->handleException(new \Exception());
+                ->handleException($throwable);
         verify($this->exceptionHandler, 'header')->wasCalledOnce();
         verify($this->exceptionHandler, 'createResponseBody')->wasCalledOnce();
         verify($this->exceptionHandler, 'writeBody')->wasCalledOnce();
@@ -97,10 +113,11 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function handleExceptionLogsExceptionData()
+    public function handleExceptionLogsExceptionData($throwable)
     {
-        $this->exceptionHandler->handleException(new \Exception('exception message'));
+        $this->exceptionHandler->handleException($throwable);
         $line = __LINE__ - 1;
         assert(
                 substr(
@@ -110,17 +127,21 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
                         )->getContent(),
                         19
                 ),
-                equals('|Exception|exception message|' . __FILE__ . '|' . $line . "||||\n")
+                equals(
+                        '|' . get_class($throwable) . '|failure message|'
+                        . __FILE__ . '|' . $throwable->getLine() . "||||\n"
+                )
         );
 
     }
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function handleChainedExceptionLogsExceptionDataOfChainedAndCause()
+    public function handleChainedExceptionLogsExceptionDataOfChainedAndCause($throwable)
     {
-        $exception = new \Exception('chained exception', 303, new \Exception('exception message'));
+        $exception = new \Exception('chained exception', 303, $throwable);
         $line      = __LINE__ - 1;
         $this->exceptionHandler->handleException($exception);
         assert(
@@ -133,19 +154,19 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
                 ),
                 equals(
                         '|Exception|chained exception|'
-                        . __FILE__ . '|' . $line . '|Exception|exception message|'
-                        . __FILE__ . '|' . $line . "\n"
+                        . __FILE__ . '|' . $line . '|' . get_class($throwable) . '|failure message|'
+                        . __FILE__ . '|' . $throwable->getLine() . "\n"
                 )
         );
     }
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function createsLogDirectoryWithDefaultPermissionsIfNotExists()
+    public function createsLogDirectoryWithDefaultPermissionsIfNotExists($throwable)
     {
-        $exception = new \Exception('exception message');
-        $this->exceptionHandler->handleException($exception);
+        $this->exceptionHandler->handleException($throwable);
         assert(
                 $this->root->getChild(
                         'log/errors/' . date('Y') . '/' . date('m')
@@ -156,11 +177,11 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function createLogDirectoryWithChangedPermissionsIfNotExists()
+    public function createLogDirectoryWithChangedPermissionsIfNotExists($throwable)
     {
-        $exception = new \Exception('exception message');
-        $this->exceptionHandler->setFilemode(0777)->handleException($exception);
+        $this->exceptionHandler->setFilemode(0777)->handleException($throwable);
         assert(
                 $this->root->getChild(
                         'log/errors/' . date('Y') . '/' . date('m')

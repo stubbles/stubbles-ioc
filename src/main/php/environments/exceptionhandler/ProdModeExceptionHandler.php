@@ -18,10 +18,10 @@ class ProdModeExceptionHandler extends AbstractExceptionHandler
     /**
      * creates response body with useful data for display
      *
-     * @param   \Exception  $exception  the uncatched exception
+     * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected function createResponseBody(\Exception $exception)
+    protected function createResponseBody($exception)
     {
         if (file_exists($this->projectPath . '/docroot/500.html')) {
             return file_get_contents($this->projectPath . '/docroot/500.html');

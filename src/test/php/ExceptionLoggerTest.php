@@ -86,20 +86,35 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @return  array
      */
-    public function logsExceptionDataCreatesLogfile()
+    public function throwables()
     {
-        $this->exceptionLogger->log(new \Exception('exception message'));
+        $throwables = [[new \Exception('failure message')]];
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $throwables[] = [new \Error('failure message')];
+        }
+
+        return $throwables;
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     */
+    public function logsExceptionDataCreatesLogfile($throwable)
+    {
+        $this->exceptionLogger->log($throwable);
         assertTrue($this->root->hasChild(self::$logPath . '/' . self::$logFile));
     }
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function logsExceptionData()
+    public function logsExceptionData($throwable)
     {
-        $this->exceptionLogger->log(new \Exception('exception message'));
+        $this->exceptionLogger->log($throwable);
         $line = __LINE__ - 1;
         assert(
                 substr(
@@ -107,17 +122,21 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
                                 ->getContent(),
                         19
                 ),
-                equals('|Exception|exception message|' . __FILE__ . '|' . $line . "||||\n")
+                equals(
+                        '|' . get_class($throwable) . '|failure message|'
+                        . __FILE__ . '|' . $throwable->getLine() . "||||\n"
+                )
         );
 
     }
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function logsExceptionDataOfChainedAndCause()
+    public function logsExceptionDataOfChainedAndCause($throwable)
     {
-        $exception = new \Exception('chained exception', 303, new \Exception('exception message'));
+        $exception = new \Exception('chained exception', 303, $throwable);
         $line      = __LINE__ - 1;
         $this->exceptionLogger->log($exception);
         assert(
@@ -126,17 +145,21 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
                                 ->getContent(),
                         19
                 ),
-                equals('|Exception|chained exception|' . __FILE__ . '|' . $line . '|Exception|exception message|' . __FILE__ . '|' . $line . "\n")
+                equals(
+                        '|Exception|chained exception|' . __FILE__ . '|' . $line
+                        . '|' . get_class($throwable) . '|failure message|'
+                        . __FILE__ . '|' . $throwable->getLine() . "\n"
+                )
         );
     }
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function createsLogDirectoryWithDefaultModeIfNotExists()
+    public function createsLogDirectoryWithDefaultModeIfNotExists($throwable)
     {
-        $exception = new \Exception('exception message');
-        $this->exceptionLogger->log($exception);
+        $this->exceptionLogger->log($throwable);
         assert(
                 $this->root->getChild(self::$logPath)->getPermissions(),
                 equals(0700)
@@ -145,11 +168,11 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function createsLogDirectoryWithChangedModeIfNotExists()
+    public function createsLogDirectoryWithChangedModeIfNotExists($throwable)
     {
-        $exception = new \Exception('exception message');
-        $this->exceptionLogger->setFilemode(0777)->log($exception);
+        $this->exceptionLogger->setFilemode(0777)->log($throwable);
         assert(
                 $this->root->getChild(self::$logPath)->getPermissions(),
                 equals(0777)

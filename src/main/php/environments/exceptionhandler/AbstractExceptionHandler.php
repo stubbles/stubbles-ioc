@@ -80,9 +80,9 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * handles the exception
      *
-     * @param  \Exception  $exception  the uncatched exception
+     * @param  \Throwable  $exception  the uncatched exception
      */
-    public function handleException(\Exception $exception)
+    public function handleException($exception)
     {
         if ($this->loggingEnabled) {
             $this->exceptionLogger->log($exception);
@@ -100,10 +100,10 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * creates response body with useful data for display
      *
-     * @param   \Exception  $exception  the uncatched exception
+     * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected abstract function createResponseBody(\Exception $exception);
+    protected abstract function createResponseBody($exception);
 
     /**
      * helper method to send the header

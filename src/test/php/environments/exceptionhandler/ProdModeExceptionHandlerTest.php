@@ -50,13 +50,26 @@ class stubProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @return  array
      */
-    public function createsFallbackErrorMessageIfNoError500FilePresent()
+    public function throwables()
     {
-        $exception                = new \Exception('message');
+        $throwables = [[new \Exception('failure message')]];
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $throwables[] = [new \Error('failure message')];
+        }
+
+        return $throwables;
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     */
+    public function createsFallbackErrorMessageIfNoError500FilePresent($throwable)
+    {
         $prodModeExceptionHandler = $this->createExceptionHandler('cgi');
-        $prodModeExceptionHandler->handleException($exception);
+        $prodModeExceptionHandler->handleException($throwable);
         verify($prodModeExceptionHandler, 'header')
                 ->received('Status: 500 Internal Server Error');
         verify($prodModeExceptionHandler, 'writeBody')
@@ -65,15 +78,15 @@ class stubProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  throwables
      */
-    public function returnsContentOfError500FileIfPresent()
+    public function returnsContentOfError500FileIfPresent($throwable)
     {
         vfsStream::newFile('docroot/500.html')
-                 ->withContent('An error occurred')
-                 ->at($this->root);
-        $exception                = new \Exception('message');
+                ->withContent('An error occurred')
+                ->at($this->root);
         $prodModeExceptionHandler = $this->createExceptionHandler('apache');
-        $prodModeExceptionHandler->handleException($exception);
+        $prodModeExceptionHandler->handleException($throwable);
         verify($prodModeExceptionHandler, 'header')
                 ->received('HTTP/1.1 500 Internal Server Error');
         verify($prodModeExceptionHandler, 'writeBody')

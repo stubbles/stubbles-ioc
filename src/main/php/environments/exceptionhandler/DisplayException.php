@@ -20,10 +20,10 @@ class DisplayException extends AbstractExceptionHandler
     /**
      * creates response body with useful data for display
      *
-     * @param   \Exception  $exception  the uncatched exception
+     * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected function createResponseBody(\Exception $exception)
+    protected function createResponseBody($exception)
     {
         return $exception->getMessage()
                 . "\nTrace:\n" . $exception->getTraceAsString();

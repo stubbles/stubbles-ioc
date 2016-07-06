@@ -63,13 +63,13 @@ class ExceptionLogger
     /**
      * logs the exception into a logfile
      *
-     * @param  \Exception  $exception  exception to log
+     * @param  \Throwable  $throwable  exception to log
      */
-    public function log(\Exception $exception)
+    public function log($throwable)
     {
         $logData  = date('Y-m-d H:i:s');
-        $logData .= $this->exceptionFields($exception);
-        $logData .= $this->fieldsForPrevious($exception->getPrevious());
+        $logData .= $this->fieldsOf($throwable);
+        $logData .= $this->fieldsOf($throwable->getPrevious());
         error_log(
                 $logData . "\n",
                 3,
@@ -80,30 +80,19 @@ class ExceptionLogger
     /**
      * returns fields for exception to log
      *
-     * @param   \Exception  $exception
+     * @param   \Throwable  $throwable  optional
      * @return  string
      */
-    private function exceptionFields(\Exception $exception)
+    private function fieldsOf($throwable = null)
     {
-        return '|' . get_class($exception)
-             . '|' . $exception->getMessage()
-             . '|' . $exception->getFile()
-             . '|' . $exception->getLine();
-    }
-
-    /**
-     * returns fields for previous exception
-     *
-     * @param   \Exception  $exception
-     * @return  string
-     */
-    private function fieldsForPrevious(\Exception $exception = null)
-    {
-        if (null === $exception) {
+        if (null === $throwable) {
             return '||||';
         }
 
-        return $this->exceptionFields($exception);
+        return '|' . get_class($throwable)
+             . '|' . $throwable->getMessage()
+             . '|' . $throwable->getFile()
+             . '|' . $throwable->getLine();
     }
 
     /**

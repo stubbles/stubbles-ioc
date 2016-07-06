@@ -34,16 +34,29 @@ class DisplayExceptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @return  array
      */
-    public function writesMessageAndTraceForInternalException()
+    public function throwables()
     {
-        $exception = new \Exception('message');
+        $throwables = [[new \Exception('failure message')]];
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $throwables[] = [new \Error('failure message')];
+        }
+
+        return $throwables;
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     */
+    public function writesMessageAndTraceForInternalException($throwable)
+    {
         $displayExceptionHandler = $this->createExceptionHandler('cgi');
-        $displayExceptionHandler->handleException($exception);
+        $displayExceptionHandler->handleException($throwable);
         verify($displayExceptionHandler, 'header')
                 ->received('Status: 500 Internal Server Error');
         verify($displayExceptionHandler, 'writeBody')
-                ->received("message\nTrace:\n" . $exception->getTraceAsString());
+                ->received("failure message\nTrace:\n" . $throwable->getTraceAsString());
     }
 }
