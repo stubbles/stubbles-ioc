@@ -4,37 +4,37 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1a94aea4370e4a0a4820843947561392",
-    "content-hash": "7b9d06feb37dd9b5d654a55461744b81",
+    "hash": "ed9252e64a5fa8e947c099acdce37d75",
+    "content-hash": "daef64dc57314445d2f4b0b6fd37d4a1",
     "packages": [
         {
             "name": "stubbles/reflect",
-            "version": "v7.0.0",
+            "version": "v8.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-reflect.git",
-                "reference": "1e5fe395856278a047e363cb70a872520457edcb"
+                "reference": "4c45bd493dfea16df871294c62323e042becd016"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-reflect/zipball/1e5fe395856278a047e363cb70a872520457edcb",
-                "reference": "1e5fe395856278a047e363cb70a872520457edcb",
+                "url": "https://api.github.com/repos/stubbles/stubbles-reflect/zipball/4c45bd493dfea16df871294c62323e042becd016",
+                "reference": "4c45bd493dfea16df871294c62323e042becd016",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0",
-                "stubbles/sequence": "^7.0",
-                "stubbles/values": "^7.0"
+                "php": "^7.0",
+                "stubbles/sequence": "^8.1",
+                "stubbles/values": "^8.0"
             },
             "require-dev": {
-                "bovigo/assert": "^1.5",
+                "bovigo/assert": "^2.0",
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.1"
+                "phpunit/phpunit": "^5.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.0.x-dev"
+                    "dev-master": "8.0.x-dev"
                 }
             },
             "autoload": {
@@ -51,33 +51,34 @@
             ],
             "description": "Reflection helper functions and annotations.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-01-11 20:01:25"
+            "time": "2016-07-21 08:47:05"
         },
         {
             "name": "stubbles/sequence",
-            "version": "v7.0.0",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-sequence.git",
-                "reference": "68defca3fdcae102b4d0c13c9f98d898aa75fcda"
+                "reference": "258d2247f1cdd826818348fe15829d5a98a9de70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-sequence/zipball/68defca3fdcae102b4d0c13c9f98d898aa75fcda",
-                "reference": "68defca3fdcae102b4d0c13c9f98d898aa75fcda",
+                "url": "https://api.github.com/repos/stubbles/stubbles-sequence/zipball/258d2247f1cdd826818348fe15829d5a98a9de70",
+                "reference": "258d2247f1cdd826818348fe15829d5a98a9de70",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": "^7.0"
             },
             "require-dev": {
-                "bovigo/assert": "^1.5",
-                "phpunit/phpunit": "^5.1"
+                "bovigo/assert": "^2.0",
+                "bovigo/callmap": "^3.0",
+                "phpunit/phpunit": "^5.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.0.x-dev"
+                    "dev-master": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -94,36 +95,36 @@
             ],
             "description": "Stream your iterators.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-01-11 19:11:27"
+            "time": "2016-07-11 16:21:11"
         },
         {
             "name": "stubbles/values",
-            "version": "v7.2.1",
+            "version": "v8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "98a11f2779202b05d827345706f12df7ac2a7e1f"
+                "reference": "d2caf21b46293552c050c38eba7bd50fe4b307c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/98a11f2779202b05d827345706f12df7ac2a7e1f",
-                "reference": "98a11f2779202b05d827345706f12df7ac2a7e1f",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/d2caf21b46293552c050c38eba7bd50fe4b307c7",
+                "reference": "d2caf21b46293552c050c38eba7bd50fe4b307c7",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
-                "php": ">=5.6.0"
+                "php": "^7.0"
             },
             "require-dev": {
-                "bovigo/assert": "^1.7",
-                "bovigo/callmap": "^2.1",
+                "bovigo/assert": "^2.0",
+                "bovigo/callmap": "^3.0",
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "^5.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.2.x-dev"
+                    "dev-master": "8.0.x-dev"
                 }
             },
             "autoload": {
@@ -140,37 +141,37 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-07-06 19:03:49"
+            "time": "2016-07-11 14:20:22"
         }
     ],
     "packages-dev": [
         {
             "name": "bovigo/assert",
-            "version": "v1.7.1",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-assert.git",
-                "reference": "d93e10ece407dc91a777ab1877df46d05fabc8c1"
+                "reference": "5187f3f880fbe8c4a937c0d362682431429f999f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-assert/zipball/d93e10ece407dc91a777ab1877df46d05fabc8c1",
-                "reference": "d93e10ece407dc91a777ab1877df46d05fabc8c1",
+                "url": "https://api.github.com/repos/mikey179/bovigo-assert/zipball/5187f3f880fbe8c4a937c0d362682431429f999f",
+                "reference": "5187f3f880fbe8c4a937c0d362682431429f999f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0",
+                "php": "^7.0",
                 "sebastian/comparator": "^1.2",
                 "sebastian/exporter": "^1.2"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.2"
+                "phpunit/phpunit": "^5.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -187,38 +188,39 @@
                 "BSD-3-Clause"
             ],
             "description": "Provides assertions for unit tests.",
-            "time": "2016-06-28 14:52:46"
+            "time": "2016-07-10 10:31:41"
         },
         {
             "name": "bovigo/callmap",
-            "version": "v2.1.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-callmap.git",
-                "reference": "18164f739cd4d88a6ebc0173258c1b45d62b1c32"
+                "reference": "28e9568ba151903a8e967a27581f8aa2caf1b2f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/18164f739cd4d88a6ebc0173258c1b45d62b1c32",
-                "reference": "18164f739cd4d88a6ebc0173258c1b45d62b1c32",
+                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/28e9568ba151903a8e967a27581f8aa2caf1b2f3",
+                "reference": "28e9568ba151903a8e967a27581f8aa2caf1b2f3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": "^7.0"
             },
             "require-dev": {
-                "bovigo/assert": " ^1.6",
-                "phpunit/phpunit": "~5.4"
+                "bovigo/assert": " ^2.0",
+                "phpunit/phpunit": "~5.4",
+                "xp-framework/unittest": "^7.0"
             },
             "suggest": {
                 "bovigo/assert": "To use argument verification",
                 "phpunit/phpunit": "Alternative option for argument verification",
-                "xp-framework/core": "Alternative option for argument verification"
+                "xp-framework/unittest": "Alternative option for argument verification"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -234,7 +236,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Allows to stub and mock method calls by applying a callmap.",
-            "time": "2016-06-20 15:01:55"
+            "time": "2016-07-11 11:13:58"
         },
         {
             "name": "doctrine/instantiator",
@@ -292,16 +294,16 @@
         },
         {
             "name": "mikey179/vfsStream",
-            "version": "v1.6.3",
+            "version": "v1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/vfsStream.git",
-                "reference": "c19925cd0390d3c436a0203ae859afa460d0474b"
+                "reference": "0247f57b2245e8ad2e689d7cee754b45fbabd592"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/c19925cd0390d3c436a0203ae859afa460d0474b",
-                "reference": "c19925cd0390d3c436a0203ae859afa460d0474b",
+                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/0247f57b2245e8ad2e689d7cee754b45fbabd592",
+                "reference": "0247f57b2245e8ad2e689d7cee754b45fbabd592",
                 "shasum": ""
             },
             "require": {
@@ -334,7 +336,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2016-04-09 09:42:01"
+            "time": "2016-07-18 14:02:57"
         },
         {
             "name": "myclabs/deep-copy",
@@ -832,16 +834,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.6",
+            "version": "5.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59"
+                "reference": "6c8a756c17a1a92a066c99860eb57922e8b723da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
-                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6c8a756c17a1a92a066c99860eb57922e8b723da",
+                "reference": "6c8a756c17a1a92a066c99860eb57922e8b723da",
                 "shasum": ""
             },
             "require": {
@@ -906,7 +908,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-16 06:01:15"
+            "time": "2016-07-21 06:55:27"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1482,28 +1484,29 @@
         },
         {
             "name": "stubbles/streams",
-            "version": "v7.0.0",
+            "version": "v8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-streams.git",
-                "reference": "353083d99e39a16dddfb54c3dabbdfa008b7cedd"
+                "reference": "8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/353083d99e39a16dddfb54c3dabbdfa008b7cedd",
-                "reference": "353083d99e39a16dddfb54c3dabbdfa008b7cedd",
+                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5",
+                "reference": "8fae2ecf6fa6e0e77a5e81c3a90c3b25a71c9bf5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": "^7.0"
             },
             "require-dev": {
-                "bovigo/assert": "^1.5",
-                "bovigo/callmap": "2.0",
+                "bovigo/assert": "^2.0",
+                "bovigo/callmap": "3.0",
                 "ext-iconv": "*",
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.1",
-                "stubbles/sequence": "^7.0"
+                "phpunit/phpunit": "^5.4",
+                "stubbles/reflect": "^8.0",
+                "stubbles/sequence": "^8.1"
             },
             "suggest": {
                 "ext-iconv": "For use in decoding and encoding stream decorators.",
@@ -1512,7 +1515,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.0.x-dev"
+                    "dev-master": "8.0.x-dev"
                 }
             },
             "autoload": {
@@ -1529,7 +1532,7 @@
             ],
             "description": "Input- and OutputStreams.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-01-11 20:08:21"
+            "time": "2016-07-20 15:29:54"
         },
         {
             "name": "symfony/yaml",
@@ -1636,7 +1639,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.0"
+        "php": "^7.0"
     },
     "platform-dev": []
 }
