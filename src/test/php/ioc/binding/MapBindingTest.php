@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -155,7 +156,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      * @param   mixed  $value
      * @return  \stubbles\ioc\InjectionProvider
      */
-    private function createInjectionProvider($value)
+    private function createInjectionProvider($value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
                 ->mapCalls(['get' => $value]);
@@ -299,7 +300,6 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     private function prepareInjector(InjectionProvider $provider)
     {
         $this->injector->mapCalls(['getInstance' => $provider]);
-
     }
 
     /**

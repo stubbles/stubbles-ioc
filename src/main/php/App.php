@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -34,7 +35,7 @@ abstract class App
      * @param   string  $projectPath  path to project
      * @return  \stubbles\App
      */
-    public static function create($projectPath)
+    public static function create(string $projectPath): App
     {
         return self::createInstance(get_called_class(), $projectPath);
     }
@@ -54,7 +55,7 @@ abstract class App
      * @since   5.0.0
      * @return  string
      */
-    protected static function projectPath()
+    protected static function projectPath(): string
     {
         return self::$projectPath;
     }
@@ -71,7 +72,7 @@ abstract class App
      * @param   string  $projectPath  path to project
      * @return  \stubbles\App
      */
-    public static function createInstance($className, $projectPath)
+    public static function createInstance(string $className, string $projectPath): App
     {
         Runtime::reset();
         self::$projectPath = $projectPath;
@@ -101,11 +102,10 @@ abstract class App
      *
      * @internal  must not be used by applications
      * @param   string  $className    full qualified class name of class to create an instance of
-     * @param   string  $projectPath  path to project
      * @return  \stubbles\ioc\module\BindingModule[]
      * @since   1.3.0
      */
-    protected static function getBindingsForApp($className)
+    protected static function getBindingsForApp(string $className): array
     {
         $bindings = method_exists($className, '__bindings') ? $className::__bindings() : [];
         if (!Runtime::initialized()) {
@@ -123,7 +123,7 @@ abstract class App
      * @return  \stubbles\Runtime
      * @since   2.0.0
      */
-    protected static function runtime($environment = null)
+    protected static function runtime($environment = null): Runtime
     {
         return new Runtime($environment);
     }
@@ -134,7 +134,7 @@ abstract class App
      * @api
      * @return  \Closure
      */
-    protected static function currentWorkingDirectory()
+    protected static function currentWorkingDirectory(): \Closure
     {
         return function(Binder $binder)
         {
@@ -149,7 +149,7 @@ abstract class App
      * @api
      * @return  \Closure
      */
-    protected static function hostname()
+    protected static function hostname(): \Closure
     {
         return function(Binder $binder)
         {

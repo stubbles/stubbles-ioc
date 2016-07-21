@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -40,7 +41,7 @@ class PropertyBinding implements Binding
      * @param  \stubbles\values\Properties  $properties
      * @param  string                       $environment  current environment
      */
-    public function __construct(Properties $properties, $environment)
+    public function __construct(Properties $properties, string $environment)
     {
         $this->properties  = $properties;
         $this->environment = $environment;
@@ -52,7 +53,7 @@ class PropertyBinding implements Binding
      * @param   string  $name
      * @return  bool
      */
-    public function hasProperty($name)
+    public function hasProperty(string $name): bool
     {
         if ($this->properties->containValue($this->environment, $name)) {
             return true;
@@ -69,7 +70,7 @@ class PropertyBinding implements Binding
      * @return  mixed
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    public function getInstance(Injector $injector, $name)
+    public function getInstance(Injector $injector, $name = null)
     {
         if ($this->properties->containValue($this->environment, $name)) {
             return $this->properties->parseValue($this->environment, $name);
@@ -87,7 +88,7 @@ class PropertyBinding implements Binding
      *
      * @return  string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return self::TYPE;
     }

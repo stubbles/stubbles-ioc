@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -29,12 +30,11 @@ abstract class ExeptionHandlerEnvironment implements Environment
      * To register the new exception handler call registerExceptionHandler().
      *
      * @param   string|object  $class        name or instance of exception handler class
-     * @param   string         $methodName   name of exception handler method
      * @return  \stubbles\Environment
      */
-    public function useExceptionHandler($class, $methodName = 'handleException')
+    public function useExceptionHandler($class): Environment
     {
-        return $this->setExceptionHandler($class, $methodName);
+        return $this->setExceptionHandler($class, 'handleException');
     }
 }
 /**

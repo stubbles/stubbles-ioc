@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -32,7 +33,7 @@ interface Environment
      * @api
      * @return  string
      */
-    public function name();
+    public function name(): string;
 
     /**
      * registers exception handler for current environment
@@ -44,7 +45,7 @@ interface Environment
      * @param   string       $projectPath  path to project
      * @return  bool|object
      */
-    public function registerExceptionHandler($projectPath);
+    public function registerExceptionHandler(string $projectPath);
 
     /**
      * registers error handler for current environment
@@ -56,7 +57,7 @@ interface Environment
      * @param   string       $projectPath  path to project
      * @return  bool|object
      */
-    public function registerErrorHandler($projectPath);
+    public function registerErrorHandler(string $projectPath);
 
     /**
      * checks whether cache is enabled or not
@@ -64,5 +65,5 @@ interface Environment
      * @api
      * @return  bool
      */
-    public function isCacheEnabled();
+    public function isCacheEnabled(): bool;
 }

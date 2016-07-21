@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -36,7 +37,7 @@ abstract class MultiBinding implements Binding
      *
      * @param  string  $name  name of the list or map
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -47,7 +48,7 @@ abstract class MultiBinding implements Binding
      * @param   mixed $value
      * @return  \Closure
      */
-    protected function getValueCreator($value)
+    protected function getValueCreator($value): \Closure
     {
         if (is_string($value) && class_exists($value)) {
             return function($injector) use($value) { return $injector->getInstance($value); };
@@ -63,7 +64,7 @@ abstract class MultiBinding implements Binding
      * @return  \Closure
      * @throws  \InvalidArgumentException
      */
-    protected function getProviderCreator($provider)
+    protected function getProviderCreator($provider): \Closure
     {
         if (is_string($provider)) {
             return function($injector, $name, $key) use($provider)
@@ -94,7 +95,7 @@ abstract class MultiBinding implements Binding
      * @param   string                  $name
      * @return  mixed
      */
-    public function getInstance(Injector $injector, $name)
+    public function getInstance(Injector $injector, $name = null)
     {
         if (null === $this->array) {
             $this->array = $this->resolve($injector, $name);
@@ -111,7 +112,7 @@ abstract class MultiBinding implements Binding
      * @return  array
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    private function resolve(Injector $injector, $type)
+    private function resolve(Injector $injector, $type): array
     {
         $resolved = [];
         foreach ($this->getBindings() as $key => $bindingValue) {
@@ -138,7 +139,7 @@ abstract class MultiBinding implements Binding
      * @param   mixed                    $value
      * @return  bool
      */
-    private function isTypeMismatch($type, $value)
+    private function isTypeMismatch($type, $value): bool
     {
         if (!($type instanceof \ReflectionClass)) {
             return false;
@@ -156,14 +157,14 @@ abstract class MultiBinding implements Binding
      *
      * @return  array
      */
-    protected abstract function getBindings();
+    protected abstract function getBindings(): array;
 
     /**
      * creates a unique key for this binding
      *
      * @return  string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->getTypeKey() . '#' . $this->name;
     }
@@ -173,5 +174,5 @@ abstract class MultiBinding implements Binding
      *
      * @return  string
      */
-    protected abstract function getTypeKey();
+    protected abstract function getTypeKey(): string;
 }

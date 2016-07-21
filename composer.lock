@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ed9252e64a5fa8e947c099acdce37d75",
-    "content-hash": "daef64dc57314445d2f4b0b6fd37d4a1",
+    "hash": "abfcad044d81c1c10b31032580bbfd01",
+    "content-hash": "cbc673020b93f7dd70b12938307c6d89",
     "packages": [
         {
             "name": "stubbles/reflect",
@@ -192,16 +192,16 @@
         },
         {
             "name": "bovigo/callmap",
-            "version": "v3.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/bovigo-callmap.git",
-                "reference": "28e9568ba151903a8e967a27581f8aa2caf1b2f3"
+                "reference": "7a40a4183bd267057bae83d4e2cf78bb845106bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/28e9568ba151903a8e967a27581f8aa2caf1b2f3",
-                "reference": "28e9568ba151903a8e967a27581f8aa2caf1b2f3",
+                "url": "https://api.github.com/repos/mikey179/bovigo-callmap/zipball/7a40a4183bd267057bae83d4e2cf78bb845106bc",
+                "reference": "7a40a4183bd267057bae83d4e2cf78bb845106bc",
                 "shasum": ""
             },
             "require": {
@@ -236,7 +236,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Allows to stub and mock method calls by applying a callmap.",
-            "time": "2016-07-11 11:13:58"
+            "time": "2016-07-21 10:56:33"
         },
         {
             "name": "doctrine/instantiator",

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -54,7 +55,7 @@ class ExceptionLogger
      * @param   int  $filemode
      * @return  \stubbles\environments\ExceptionLogger
      */
-    public function setFilemode($filemode)
+    public function setFilemode(int $filemode): self
     {
         $this->filemode = $filemode;
         return $this;
@@ -65,7 +66,7 @@ class ExceptionLogger
      *
      * @param  \Throwable  $throwable  exception to log
      */
-    public function log($throwable)
+    public function log(\Throwable $throwable)
     {
         $logData  = date('Y-m-d H:i:s');
         $logData .= $this->fieldsOf($throwable);
@@ -73,7 +74,7 @@ class ExceptionLogger
         error_log(
                 $logData . "\n",
                 3,
-                $this->getLogDir() . DIRECTORY_SEPARATOR . 'exceptions-' . date('Y-m-d') . '.log'
+                $this->logDir() . DIRECTORY_SEPARATOR . 'exceptions-' . date('Y-m-d') . '.log'
         );
     }
 
@@ -83,7 +84,7 @@ class ExceptionLogger
      * @param   \Throwable  $throwable  optional
      * @return  string
      */
-    private function fieldsOf($throwable = null)
+    private function fieldsOf(\Throwable $throwable = null): string
     {
         if (null === $throwable) {
             return '||||';
@@ -100,7 +101,7 @@ class ExceptionLogger
      *
      * @return  string
      */
-    private function getLogDir()
+    private function logDir(): string
     {
         $logDir = str_replace(
                 '{Y}',

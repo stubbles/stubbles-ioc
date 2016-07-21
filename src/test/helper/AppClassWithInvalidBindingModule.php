@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -28,7 +29,7 @@ class AppClassWithInvalidBindingModule extends App
      *
      * @return  array
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return ['\stdClass'];
     }

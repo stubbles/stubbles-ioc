@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -27,7 +28,7 @@ abstract class App extends App
      * @param   string  $projectPath  path to project
      * @return  \stubbles\App
      */
-    public static function create($projectPath)
+    public static function create(string $projectPath): App
     {
         trigger_error(
                 'Using ' . __CLASS__ . ' is deprecated since 7.0.0,'

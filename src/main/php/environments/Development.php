@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -35,7 +36,7 @@ class Development implements Environment
      *
      * @return  string
      */
-    public function name()
+    public function name(): string
     {
         return 'DEV';
     }
@@ -45,7 +46,7 @@ class Development implements Environment
      *
      * @return  bool
      */
-    public function isCacheEnabled()
+    public function isCacheEnabled(): bool
     {
         return Environment::CACHE_DISABLED;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -85,17 +86,12 @@ class ExceptionLoggerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function throwables()
+    public function throwables(): array
     {
-        $throwables = [[new \Exception('failure message')]];
-        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
-            $throwables[] = [new \Error('failure message')];
-        }
-
-        return $throwables;
+        return [
+                [new \Exception('failure message')],
+                [new \Error('failure message')]
+        ];
     }
 
     /**

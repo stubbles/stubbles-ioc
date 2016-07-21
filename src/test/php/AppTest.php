@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -134,10 +135,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         assertTrue($binder->getInjector()->hasConstant('stubbles.cwd'));
     }
 
-    /**
-     * @return  array
-     */
-    public function hostnameKeys()
+    public function hostnameKeys(): array
     {
         return [
             ['stubbles.hostname.nq'],
@@ -171,10 +169,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         })->throws(\InvalidArgumentException::class);
     }
 
-    /**
-     * @return  array
-     */
-    public function assertions()
+    public function assertions(): array
     {
         return [
             [function(Injector $injector) { assertTrue($injector->hasBinding('foo')); }],

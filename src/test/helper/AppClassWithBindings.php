@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -32,16 +33,16 @@ class AppClassWithBindings extends App
      *
      * @return  array
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
-        return array(new AppTestBindingModuleOne(),
-                     new AppTestBindingModuleTwo(),
-                     function(Binder $binder)
-                     {
-                         $binder->bindConstant('boundBy')
-                                ->to('closure');
-                     }
-               );
+        return [
+                new AppTestBindingModuleOne(),
+                new AppTestBindingModuleTwo(),
+                function(Binder $binder)
+                {
+                    $binder->bindConstant('boundBy')->to('closure');
+                }
+        ];
     }
 
     /**
@@ -52,7 +53,7 @@ class AppClassWithBindings extends App
      * @Named{projectPath}('stubbles.project.path')
      * @Named{boundBy}('boundBy')
      */
-    public function __construct(Injector $injector, $projectPath, $boundBy = null)
+    public function __construct(Injector $injector, string $projectPath, string $boundBy = null)
     {
         $this->injector    = $injector;
         $this->projectPath = $projectPath;
@@ -64,7 +65,7 @@ class AppClassWithBindings extends App
      *
      * @return  string
      */
-    public function wasBoundBy()
+    public function wasBoundBy(): string
     {
         return $this->boundBy;
     }

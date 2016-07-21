@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -43,7 +44,13 @@ class ErrorHandlers implements ErrorHandler
      * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error handler is responsible, else false
      */
-    public function isResponsible($level, $message, $file = null, $line = null, array $context = [])
+    public function isResponsible(
+            int $level,
+            string $message,
+            string $file = null,
+            int $line = null,
+            array $context = []
+    ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
             if ($errorHandler->isResponsible($level, $message, $file, $line, $context) == true) {
@@ -64,7 +71,13 @@ class ErrorHandlers implements ErrorHandler
      * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error is supressable, else false
      */
-    public function isSupressable($level, $message, $file = null, $line = null, array $context = [])
+    public function isSupressable(
+            int $level,
+            string $message,
+            string $file = null,
+            int $line = null,
+            array $context = []
+    ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
             if ($errorHandler->isSupressable($level, $message, $file, $line, $context) == false) {
@@ -85,7 +98,13 @@ class ErrorHandlers implements ErrorHandler
      * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error message should populate $php_errormsg, else false
      */
-    public function handle($level, $message, $file = null, $line = null, array $context = [])
+    public function handle(
+            int $level,
+            string $message,
+            string $file = null,
+            int $line = null,
+            array $context = []
+    ): bool
     {
         $errorReporting = error_reporting();
         foreach ($this->errorHandlers as $errorHandler) {

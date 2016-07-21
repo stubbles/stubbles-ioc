@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -22,7 +23,7 @@ class AnswerConstantProvider implements InjectionProvider
      * @param   string  $name  optional
      * @return  mixed
      */
-    public function get($name = null)
+    public function get(string $name = null)
     {
         return 42;
     }

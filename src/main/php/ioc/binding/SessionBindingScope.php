@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -34,7 +35,7 @@ class SessionBindingScope implements BindingScope
      * @param   \stubbles\ioc\binding\Session  $session
      * @return  \stubbles\ioc\binding\SessionBindingScope
      */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
         return $this;

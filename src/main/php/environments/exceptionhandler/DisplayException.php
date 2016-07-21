@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -23,7 +24,7 @@ class DisplayException extends AbstractExceptionHandler
      * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected function createResponseBody($exception)
+    protected function createResponseBody(\Throwable $exception): string
     {
         return $exception->getMessage()
                 . "\nTrace:\n" . $exception->getTraceAsString();

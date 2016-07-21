@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -38,7 +39,7 @@ class Production implements Environment
      *
      * @return  string
      */
-    public function name()
+    public function name(): string
     {
         return 'PROD';
     }
@@ -48,7 +49,7 @@ class Production implements Environment
      *
      * @return  bool
      */
-    public function isCacheEnabled()
+    public function isCacheEnabled(): bool
     {
         return Environment::CACHE_ENABLED;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -29,7 +30,7 @@ class Runtime implements BindingModule
      * @internal
      * @return  bool
      */
-    public static function initialized()
+    public static function initialized(): bool
     {
         return self::$initialized;
     }
@@ -91,7 +92,7 @@ class Runtime implements BindingModule
      *
      * @return  \stubbles\Environment
      */
-    protected function defaultEnvironment()
+    protected function defaultEnvironment(): Environment
     {
         return new Production();
     }
@@ -107,7 +108,7 @@ class Runtime implements BindingModule
      * @param   string  $pathType
      * @return  \stubbles\ioc\module\Runtime
      */
-    public function addPathType($pathType)
+    public function addPathType(string $pathType): self
     {
         $this->pathTypes[] = $pathType;
         return $this;
@@ -119,7 +120,7 @@ class Runtime implements BindingModule
      * @param  \stubbles\ioc\Binder  $binder
      * @param  string                $projectPath  optional  project base path
      */
-    public function configure(Binder $binder, $projectPath = null)
+    public function configure(Binder $binder, string $projectPath = null)
     {
         $this->environment->registerErrorHandler($projectPath);
         $this->environment->registerExceptionHandler($projectPath);
@@ -141,9 +142,10 @@ class Runtime implements BindingModule
     /**
      * returns path to config file
      *
+     * @param   string  $projectPath
      * @return  string
      */
-    private function propertiesFile($projectPath)
+    private function propertiesFile(string $projectPath): string
     {
         return $projectPath . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini';
     }
@@ -152,9 +154,9 @@ class Runtime implements BindingModule
      * appends directory separator if necessary
      *
      * @param   string  $projectPath
-     * @return  string
+     * @return  array
      */
-    private function buildPathes($projectPath)
+    private function buildPathes(string $projectPath): array
     {
         if (substr($projectPath, -1) !== DIRECTORY_SEPARATOR) {
             $projectPath .= DIRECTORY_SEPARATOR;

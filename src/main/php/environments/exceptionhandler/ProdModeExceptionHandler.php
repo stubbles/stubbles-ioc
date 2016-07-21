@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -21,7 +22,7 @@ class ProdModeExceptionHandler extends AbstractExceptionHandler
      * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected function createResponseBody($exception)
+    protected function createResponseBody(\Throwable $exception): string
     {
         if (file_exists($this->projectPath . '/docroot/500.html')) {
             return file_get_contents($this->projectPath . '/docroot/500.html');

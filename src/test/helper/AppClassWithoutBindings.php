@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -22,7 +23,7 @@ class AppClassWithoutBindings extends App
      * @param  string  $projectPath
      * @Named('stubbles.project.path')
      */
-    public function __construct($projectPath)
+    public function __construct(string $projectPath)
     {
         $this->projectPath = $projectPath;
     }

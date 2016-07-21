@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -22,7 +23,7 @@ interface Session
      * @param   string  $key
      * @return  bool
      */
-    public function hasValue($key);
+    public function hasValue(string $key): bool;
 
     /**
      * returns value stored under given key
@@ -30,7 +31,7 @@ interface Session
      * @param   string  $key
      * @return  mixed
      */
-    public function value($key);
+    public function value(string $key);
 
     /**
      * stores given value under given key
@@ -38,5 +39,5 @@ interface Session
      * @param  string  $key
      * @param  mixed   $value
      */
-    public function putValue($key, $value);
+    public function putValue(string $key, $value);
 }

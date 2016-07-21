@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -47,7 +48,7 @@ class BindingScopes
      * @return  \stubbles\ioc\binding\BindingScope
      * @since   1.5.0
      */
-    public function singleton()
+    public function singleton(): BindingScope
     {
         return $this->singletonScope;
     }
@@ -60,7 +61,7 @@ class BindingScopes
      * @throws  \RuntimeException  in case the session scope has been replaced with another implementation
      * @since   5.4.0
      */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         if ($this->sessionScope instanceof SessionBindingScope) {
             $this->sessionScope->setSession($session);
@@ -76,7 +77,7 @@ class BindingScopes
      * @return  \stubbles\ioc\binding\BindingScope
      * @since   1.5.0
      */
-    public function session()
+    public function session(): BindingScope
     {
         return $this->sessionScope;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -17,9 +18,9 @@ class BindingException extends \Exception
      * constructor
      *
      * @param  string      $message
-     * @param  \Exception  $previous  optional
+     * @param  \Throwable  $previous  optional
      */
-    public function __construct($message, \Exception $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
     }

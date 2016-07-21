@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -55,7 +56,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   string  $name
      * @return  mixed
      */
-    public function get($name = null)
+    public function get(string $name = null)
     {
         $constructor = $this->class->getConstructor();
         if (null === $constructor || $this->class->isInternal()) {
@@ -77,7 +78,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @return  array
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    private function injectionValuesForMethod(\ReflectionMethod $method)
+    private function injectionValuesForMethod(\ReflectionMethod $method): array
     {
         $paramValues = [];
         $defaultName = $this->methodBindingName($method);
@@ -112,7 +113,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * returns default binding name for all parameters on given method
      *
      * @param   \ReflectionMethod  $method
-     * @return  string
+     * @return  string|null
      */
     private function methodBindingName(\ReflectionMethod $method)
     {
@@ -143,7 +144,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   \ReflectionParameter  $param
      * @return  string
      */
-    private function paramType(\ReflectionMethod $method, \ReflectionParameter $param)
+    private function paramType(\ReflectionMethod $method, \ReflectionParameter $param): string
     {
         $methodAnnotations = annotationsOf($method);
         $paramAnnotations  = annotationsOf($param);
@@ -178,7 +179,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   string                $default
      * @return  string|\ReflectionClass
      */
-    private function detectBindingName(\ReflectionParameter $param, $default)
+    private function detectBindingName(\ReflectionParameter $param, string $default = null)
     {
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {
@@ -207,7 +208,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   string  $name  name of named parameter
      * @return  string
      */
-    private function createTypeMessage($type, $name)
+    private function createTypeMessage(string $type, string $name = null): string
     {
         return ((null !== $name) ? ($type . ' (named "' . $name . '")') : ($type));
     }
@@ -219,7 +220,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   string                $type
      * @return  string
      */
-    private function createParamString(\ReflectionParameter $parameter, $type)
+    private function createParamString(\ReflectionParameter $parameter, string $type): string
     {
         $message = '';
         if (!in_array($type, [PropertyBinding::TYPE, ConstantBinding::TYPE, ListBinding::TYPE, MapBinding::TYPE])) {

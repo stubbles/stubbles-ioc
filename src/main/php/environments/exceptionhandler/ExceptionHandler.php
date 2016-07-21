@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -20,5 +21,5 @@ interface ExceptionHandler
      *
      * @param  \Throwable  $exception  the uncatched exception
      */
-    public function handleException($exception);
+    public function handleException(\Throwable $exception);
 }

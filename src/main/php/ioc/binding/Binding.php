@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -23,12 +24,12 @@ interface Binding
      * @param   string                  $name
      * @return  mixed
      */
-    public function getInstance(Injector $injector, $name);
+    public function getInstance(Injector $injector, $name = null);
 
     /**
      * creates a unique key for this binding
      *
      * @return  string
      */
-    public function getKey();
+    public function getKey(): string;
 }

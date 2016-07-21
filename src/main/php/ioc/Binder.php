@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -68,7 +69,7 @@ class Binder
      * @param   \stubbles\ioc\binding\Binding  $binding
      * @return  \stubbles\ioc\binding\Binding
      */
-    public function addBinding(Binding $binding)
+    public function addBinding(Binding $binding): Binding
     {
          $this->bindings[] = $binding;
          return $binding;
@@ -80,7 +81,7 @@ class Binder
      * @param   string  $interface
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    public function bind($interface)
+    public function bind($interface): ClassBinding
     {
         return $this->addBinding(new ClassBinding($interface, $this->scopes));
     }
@@ -92,7 +93,7 @@ class Binder
      * @return  \stubbles\ioc\Binder
      * @since   6.0.0
      */
-    public function setEnvironment($environment)
+    public function setEnvironment(string $environment): self
     {
         $this->environment = $environment;
         return $this;
@@ -106,7 +107,7 @@ class Binder
      * @return  \stubbles\values\Properties
      * @since   4.0.0
      */
-    public function bindPropertiesFromFile($propertiesFile, $environment)
+    public function bindPropertiesFromFile(string $propertiesFile, string $environment): Properties
     {
         return $this->bindProperties(
                 Properties::fromFile($propertiesFile),
@@ -122,7 +123,7 @@ class Binder
      * @return  \stubbles\values\Properties
      * @since   3.4.0
      */
-    public function bindProperties(Properties $properties, $environment)
+    public function bindProperties(Properties $properties, string $environment): Properties
     {
         $this->addBinding(new PropertyBinding($properties, $environment));
         $this->bind(Properties::class)
@@ -137,7 +138,7 @@ class Binder
      * @param   string  $name  name of constant to bind
      * @return  \stubbles\ioc\binding\ConstantBinding
      */
-    public function bindConstant($name)
+    public function bindConstant(string $name): ConstantBinding
     {
         return $this->addBinding(new ConstantBinding($name));
     }
@@ -152,7 +153,7 @@ class Binder
      * @return  \stubbles\ioc\binding\ListBinding
      * @since   2.0.0
      */
-    public function bindList($name)
+    public function bindList(string $name): ListBinding
     {
         if (!isset($this->listBindings[$name])) {
             $this->listBindings[$name] = $this->addBinding(new ListBinding($name));
@@ -171,7 +172,7 @@ class Binder
      * @return  \stubbles\ioc\binding\MapBinding
      * @since   2.0.0
      */
-    public function bindMap($name)
+    public function bindMap(string $name): MapBinding
     {
         if (!isset($this->mapBindings[$name])) {
             $this->mapBindings[$name] = $this->addBinding(new MapBinding($name));
@@ -185,7 +186,7 @@ class Binder
      *
      * @return  \stubbles\ioc\Injector
      */
-    public function getInjector()
+    public function getInjector(): Injector
     {
         return new Injector($this->environment, $this->bindings, $this->scopes);
     }
@@ -197,7 +198,7 @@ class Binder
      * @return  \stubbles\ioc\Injector
      * @since   7.0.0
      */
-    public static function createInjector(callable ...$applyBindings)
+    public static function createInjector(callable ...$applyBindings): Injector
     {
         $self = new self();
         foreach ($applyBindings as $applyBinding) {

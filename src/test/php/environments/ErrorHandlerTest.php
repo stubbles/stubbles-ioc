@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -29,12 +30,11 @@ abstract class ErrorHandlerEnvironment implements Environment
      * To register the new error handler call registerErrorHandler().
      *
      * @param   string|object  $class        name or instance of error handler class
-     * @param   string         $methodName   name of error handler method
      * @return  \stubbles\Environment
      */
-    public function useErrorHandler($class, $methodName = 'handle')
+    public function useErrorHandler($class): Environment
     {
-        return $this->setErrorHandler($class, $methodName);
+        return $this->setErrorHandler($class, 'handle');
     }
 }
 /**

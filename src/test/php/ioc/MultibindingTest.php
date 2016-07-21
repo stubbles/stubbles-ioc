@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -377,7 +378,7 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
      * @param   mixed  $value
      * @return  \stubbles\ioc\InjectionProvider
      */
-    private function createProviderForValue($value)
+    private function createProviderForValue($value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
                 ->mapCalls(['get' => $value]);
@@ -389,7 +390,7 @@ class MultibindingTest extends \PHPUnit_Framework_TestCase
      * @param   Binder  $binder
      * @return  PluginHandler
      */
-    private function createPluginHandler(Binder $binder)
+    private function createPluginHandler(Binder $binder): PluginHandler
     {
         return $binder->getInjector()->getInstance(PluginHandler::class);
     }

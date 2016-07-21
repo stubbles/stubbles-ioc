@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,6 +9,7 @@
  * @package  stubbles
  */
 namespace stubbles\environments;
+use stubbles\Environment;
 /**
  * Provides methods for error and exception handling in environments.
  *
@@ -38,7 +40,7 @@ trait Handler
      * @param   string         $methodName   name of exception handler method
      * @return  \stubbles\Environment
      */
-    protected function setExceptionHandler($class, $methodName = 'handleException')
+    protected function setExceptionHandler($class, string $methodName = 'handleException'): Environment
     {
         if (!is_string($class) && !is_object($class)) {
             throw new \InvalidArgumentException(
@@ -60,7 +62,7 @@ trait Handler
      * @param   string       $projectPath  path to project
      * @return  bool|object
      */
-    public function registerExceptionHandler($projectPath)
+    public function registerExceptionHandler(string $projectPath)
     {
         if (null === $this->exceptionHandler) {
             return false;
@@ -84,7 +86,7 @@ trait Handler
      * @param   string         $methodName   name of error handler method
      * @return  \stubbles\Environment
      */
-    protected function setErrorHandler($class, $methodName = 'handle')
+    protected function setErrorHandler($class, string $methodName = 'handle'): Environment
     {
         if (!is_string($class) && !is_object($class)) {
             throw new \InvalidArgumentException(
@@ -106,7 +108,7 @@ trait Handler
      * @param   string       $projectPath  path to project
      * @return  bool|object
      */
-    public function registerErrorHandler($projectPath)
+    public function registerErrorHandler(string $projectPath)
     {
         if (null === $this->errorHandler) {
             return false;
@@ -129,7 +131,7 @@ trait Handler
      * @param   string         $projectPath  path to project
      * @return  callback
      */
-    private function createCallback($class, $methodName, $projectPath)
+    private function createCallback($class, string $methodName, string $projectPath): callable
     {
         $instance = ((is_string($class)) ? (new $class($projectPath)) : ($class));
         return [$instance, $methodName];

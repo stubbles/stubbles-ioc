@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -33,7 +34,7 @@ class ListBinding extends MultiBinding
      * @param   mixed  $value
      * @return  \stubbles\ioc\binding\ListBinding
      */
-    public function withValue($value)
+    public function withValue($value): self
     {
         $this->bindings[] = $this->getValueCreator($value);
         return $this;
@@ -46,7 +47,7 @@ class ListBinding extends MultiBinding
      * @param   string|\stubbles\ioc\InjectionProvider  $provider
      * @return  \stubbles\ioc\binding\ListBinding
      */
-    public function withValueFromProvider($provider)
+    public function withValueFromProvider($provider): self
     {
         $this->bindings[] = $this->getProviderCreator($provider);
         return $this;
@@ -60,7 +61,7 @@ class ListBinding extends MultiBinding
      * @return  \stubbles\ioc\binding\ListBinding
      * @since   2.1.0
      */
-    public function withValueFromClosure(\Closure $closure)
+    public function withValueFromClosure(\Closure $closure): self
     {
         $this->bindings[] = $closure;
         return $this;
@@ -71,7 +72,7 @@ class ListBinding extends MultiBinding
      *
      * @return  array
      */
-    protected function getBindings()
+    protected function getBindings(): array
     {
         return $this->bindings;
     }
@@ -81,7 +82,7 @@ class ListBinding extends MultiBinding
      *
      * @return  string
      */
-    protected function getTypeKey()
+    protected function getTypeKey(): string
     {
         return self::TYPE;
     }

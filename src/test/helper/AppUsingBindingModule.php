@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -9,6 +10,7 @@
  */
 namespace stubbles\test;
 use stubbles\App;
+use stubbles\Runtime;
 /**
  * Helper class to test binding module creations.
  *
@@ -23,7 +25,7 @@ class AppUsingBindingModule extends App
      * @param   \stubbles\Environment  $environment  runtime mode
      * @return  \stubbles\ioc\module\Runtime
      */
-    public static function callBindRuntime(Environment $environment = null)
+    public static function callBindRuntime(Environment $environment = null): Runtime
     {
         return self::runtime($environment);
     }
@@ -34,7 +36,7 @@ class AppUsingBindingModule extends App
      * @return  \Closure
      * @since   3.4.0
      */
-    public static function currentWorkingDirectoryModule()
+    public static function currentWorkingDirectoryModule(): \Closure
     {
         return self::currentWorkingDirectory();
     }
@@ -45,7 +47,7 @@ class AppUsingBindingModule extends App
      * @return  \Closure
      * @since   3.4.0
      */
-    public static function bindHostnameModule()
+    public static function bindHostnameModule(): \Closure
     {
         return self::hostname();
     }

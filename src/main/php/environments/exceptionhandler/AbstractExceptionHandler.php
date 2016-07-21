@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -59,7 +60,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @return  \stubbles\environments\exceptionhandler\AbstractExceptionHandler
      */
-    public function disableLogging()
+    public function disableLogging(): ExceptionHandler
     {
         $this->loggingEnabled = false;
         return $this;
@@ -71,7 +72,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      * @param   int  $filemode
      * @return  \stubbles\environments\exceptionhandler\AbstractExceptionHandler
      */
-    public function setFilemode($filemode)
+    public function setFilemode(int $filemode): ExceptionHandler
     {
         $this->exceptionLogger->setFilemode($filemode);
         return $this;
@@ -82,7 +83,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @param  \Throwable  $exception  the uncatched exception
      */
-    public function handleException($exception)
+    public function handleException(\Throwable $exception)
     {
         if ($this->loggingEnabled) {
             $this->exceptionLogger->log($exception);
@@ -103,14 +104,14 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      * @param   \Throwable  $exception  the uncatched exception
      * @return  string
      */
-    protected abstract function createResponseBody($exception);
+    protected abstract function createResponseBody(\Throwable $exception): string;
 
     /**
      * helper method to send the header
      *
      * @param  string  $header
      */
-    protected function header($header)
+    protected function header(string $header)
     {
         header($header);
     }
@@ -120,7 +121,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @param  string  $body
      */
-    protected function writeBody($body)
+    protected function writeBody(string $body)
     {
         echo $body;
         flush();

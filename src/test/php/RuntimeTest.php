@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -45,8 +46,8 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root        = vfsStream::setup('projects');
-        // TODO: switch this to Environment::class with 8.0.0
-        $this->environment = NewInstance::of(Environment::class);
+        $this->environment = NewInstance::of(Environment::class)
+                ->mapCalls(['name' => 'TEST']);
         Runtime::reset();
     }
 
@@ -195,25 +196,14 @@ stubbles.webapp.xml.serializeMode=true")
         );
     }
 
-    /**
-     * returns constant names and values
-     *
-     * @return  array
-     */
-    public function getConstants()
+    public function getConstants(): array
     {
         return ['config' => ['config', 'stubbles.config.path'],
                 'log'    => ['log', 'stubbles.log.path']
         ];
     }
 
-    /**
-     * returns complete path
-     *
-     * @param   string  $part
-     * @return  string
-     */
-    private function getProjectPath($part)
+    private function getProjectPath(string $part): string
     {
         return $this->root->url() . DIRECTORY_SEPARATOR . $part;
     }

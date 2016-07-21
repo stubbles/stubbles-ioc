@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -70,7 +71,7 @@ class PropertyBindingTest extends \PHPUnit_Framework_TestCase
      * @param   string  $environment
      * @return  \stubbles\ioc\binding\PropertyBinding
      */
-    private function createPropertyBinding($environment = 'PROD')
+    private function createPropertyBinding(string $environment = 'PROD'): PropertyBinding
     {
         return new PropertyBinding(
                 new Properties(['PROD'   => ['foo.bar' => 'baz',

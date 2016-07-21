@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -50,7 +51,7 @@ class ConstantBinding implements Binding
      *
      * @param  string  $name  name of the list or map
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -62,7 +63,7 @@ class ConstantBinding implements Binding
      * @param   mixed  $value
      * @return  ConstantBinding
      */
-    public function to($value)
+    public function to($value): self
     {
         $this->value = $value;
         return $this;
@@ -79,7 +80,7 @@ class ConstantBinding implements Binding
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */
-    public function toProvider(InjectionProvider $provider)
+    public function toProvider(InjectionProvider $provider): self
     {
         $this->provider = $provider;
         return $this;
@@ -96,7 +97,7 @@ class ConstantBinding implements Binding
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */
-    public function toProviderClass($providerClass)
+    public function toProviderClass($providerClass): self
     {
         $this->providerClass = (($providerClass instanceof \ReflectionClass) ?
                                     ($providerClass->getName()) : ($providerClass));
@@ -111,7 +112,7 @@ class ConstantBinding implements Binding
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   2.1.0
      */
-    public function toClosure(\Closure $closure)
+    public function toClosure(\Closure $closure): self
     {
         $this->provider = new ClosureInjectionProvider($closure);
         return $this;
@@ -122,7 +123,7 @@ class ConstantBinding implements Binding
      *
      * @return  string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return self::TYPE . '#' . $this->name;
     }
@@ -134,7 +135,7 @@ class ConstantBinding implements Binding
      * @param   string                  $name
      * @return  mixed
      */
-    public function getInstance(Injector $injector, $name)
+    public function getInstance(Injector $injector, $name = null)
     {
         if (null !== $this->provider) {
             return $this->provider->get($name);

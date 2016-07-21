@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -34,7 +35,7 @@ class MapBinding extends MultiBinding
      * @param   mixed   $value
      * @return  \stubbles\ioc\binding\MapBinding
      */
-    public function withEntry($key, $value)
+    public function withEntry(string $key, $value): self
     {
         $this->bindings[$key] = $this->getValueCreator($value);
         return $this;
@@ -48,7 +49,7 @@ class MapBinding extends MultiBinding
      * @param   string|\stubbles\ioc\InjectionProvider  $provider
      * @return  \stubbles\ioc\binding\MapBinding
      */
-    public function withEntryFromProvider($key, $provider)
+    public function withEntryFromProvider(string $key, $provider): self
     {
         $this->bindings[$key] = $this->getProviderCreator($provider);
         return $this;
@@ -63,7 +64,7 @@ class MapBinding extends MultiBinding
      * @return  \stubbles\ioc\binding\MapBinding
      * @since   2.1.0
      */
-    public function withEntryFromClosure($key, \Closure $closure)
+    public function withEntryFromClosure(string $key, \Closure $closure): self
     {
         $this->bindings[$key] = $closure;
         return $this;
@@ -74,7 +75,7 @@ class MapBinding extends MultiBinding
      *
      * @return  array
      */
-    protected function getBindings()
+    protected function getBindings(): array
     {
         return $this->bindings;
     }
@@ -84,7 +85,7 @@ class MapBinding extends MultiBinding
      *
      * @return  string
      */
-    protected function getTypeKey()
+    protected function getTypeKey(): string
     {
         return self::TYPE;
     }

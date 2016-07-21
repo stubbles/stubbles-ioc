@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,6 +9,7 @@
  * @package  stubbles
  */
 namespace stubbles\ioc;
+use stubbles\ioc\binding\Binding;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\BindingScopes;
 use stubbles\ioc\binding\ClassBinding;
@@ -61,7 +63,7 @@ class Injector
      * @param  \stubbles\ioc\binding\BindingScopes  $scopes       optional
      * @since  1.5.0
      */
-    public function __construct($environment = null, array $bindings = [], BindingScopes $scopes = null)
+    public function __construct(string $environment = null, array $bindings = [], BindingScopes $scopes = null)
     {
         $this->environment = $environment;
         $this->scopes      = $scopes !== null ? $scopes : new BindingScopes();
@@ -82,7 +84,7 @@ class Injector
      * @return  \stubbles\ioc\Injector
      * @since   5.4.0
      */
-    public function setSession(Session $session, $sessionInterface = null)
+    public function setSession(Session $session, string $sessionInterface = null): self
     {
         $this->scopes->setSession($session);
         $binding = $this->bind(null !== $sessionInterface ? $sessionInterface : get_class($session))
@@ -99,7 +101,7 @@ class Injector
      * @param   string   $name
      * @return  boolean
      */
-    public function hasBinding($type, $name = null)
+    public function hasBinding(string $type, $name = null): bool
     {
         if (PropertyBinding::TYPE === $type) {
             return $this->hasProperty($name);
@@ -115,7 +117,7 @@ class Injector
      * @return  bool
      * @since   3.4.0
      */
-    private function hasProperty($name)
+    private function hasProperty(string $name): bool
     {
         if (!isset($this->index[PropertyBinding::TYPE])) {
             return false;
@@ -135,7 +137,7 @@ class Injector
      * @param   string   $name
      * @return  boolean
      */
-    public function hasExplicitBinding($type, $name = null)
+    public function hasExplicitBinding(string $type, $name = null): bool
     {
         if (PropertyBinding::TYPE === $type) {
             return $this->hasProperty($name);
@@ -161,7 +163,7 @@ class Injector
      * @param   string  $name
      * @return  object
      */
-    public function getInstance($type, $name = null)
+    public function getInstance(string $type, $name = null)
     {
         if (__CLASS__ === $type) {
             return $this;
@@ -178,7 +180,7 @@ class Injector
      *
      * @return  string[]
      */
-    public function stack()
+    public function stack(): array
     {
         return $this->injectionStack;
     }
@@ -191,7 +193,7 @@ class Injector
      * @return  bool
      * @since   1.1.0
      */
-    public function hasConstant($name)
+    public function hasConstant(string $name): bool
     {
         return $this->hasBinding(ConstantBinding::TYPE, $name);
     }
@@ -204,7 +206,7 @@ class Injector
      * @return  scalar
      * @since   1.1.0
      */
-    public function getConstant($name)
+    public function getConstant(string $name)
     {
         return $this->getBinding(ConstantBinding::TYPE, $name)
                     ->getInstance($this, $name);
@@ -218,7 +220,7 @@ class Injector
      * @return  \stubbles\ioc\binding\Binding
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    private function getBinding($type, $name = null)
+    private function getBinding(string $type, $name): Binding
     {
         $binding = $this->findBinding($type, $name);
         if (null === $binding) {
@@ -235,7 +237,7 @@ class Injector
      * @param   string  $name
      * @return  \stubbles\ioc\binding\Binding
      */
-    private function findBinding($type, $name)
+    private function findBinding(string $type, $name)
     {
         $bindingName = $this->bindingName($name);
         if (null !== $bindingName && isset($this->index[$type . '#' . $bindingName])) {
@@ -258,7 +260,7 @@ class Injector
      * parses binding name from given name
      *
      * @param   string|\ReflectionClass  $name
-     * @return  string
+     * @return  string|null
      */
     private function bindingName($name)
     {
@@ -278,7 +280,7 @@ class Injector
      * If this is not the case it will fall back to the implicit binding.
      *
      * @param   \ReflectionClass  $class
-     * @return  \stubbles\ioc\binding\Binding
+     * @return  \stubbles\ioc\binding\Binding|null
      */
     private function getAnnotatedBinding(\ReflectionClass $class)
     {
@@ -301,11 +303,11 @@ class Injector
      * finds implementation to be used from list of @ImplementedBy annotations
      *
      * @param   \stubbles\reflect\annotation\Annotations  $annotations
-     * @param   string                                         $type
+     * @param   string                                    $type
      * @return  \ReflectionClass
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    private function findImplementation(Annotations $annotations, $type)
+    private function findImplementation(Annotations $annotations, string $type): \ReflectionClass
     {
         $implementation = null;
         foreach ($annotations->named('ImplementedBy') as $annotation) {
@@ -349,7 +351,7 @@ class Injector
      * @param   string  $classname
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    private function bind($classname)
+    private function bind(string $classname): ClassBinding
     {
         return new ClassBinding($classname, $this->scopes);
     }

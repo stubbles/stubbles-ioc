@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -22,5 +23,5 @@ interface InjectionProvider
      * @param   string  $name
      * @return  mixed
      */
-    public function get($name = null);
+    public function get(string $name = null);
 }

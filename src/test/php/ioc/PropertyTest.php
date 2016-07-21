@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -52,7 +53,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      * @param   string  $environment  optional
      * @return  \stubbles\ioc\Injector
      */
-    private function createInjector($environment = 'PROD')
+    private function createInjector($environment = 'PROD'): Injector
     {
         $binder = new Binder();
         $binder->bindProperties($this->properties, $environment);

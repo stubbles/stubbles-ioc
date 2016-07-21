@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -82,7 +83,7 @@ class ClassBinding implements Binding
      * @param  string                               $type
      * @param  \stubbles\ioc\binding\BindingScopes  $scopes
      */
-    public function __construct($type, BindingScopes $scopes)
+    public function __construct(string $type, BindingScopes $scopes)
     {
         $this->type     = $type;
         $this->impl     = $type;
@@ -97,7 +98,7 @@ class ClassBinding implements Binding
      * @return  \stubbles\ioc\binding\ClassBinding
      * @throws  \InvalidArgumentException
      */
-    public function to($impl)
+    public function to($impl): self
     {
         if (!is_string($impl) && !($impl instanceof \ReflectionClass)) {
             throw new \InvalidArgumentException(
@@ -120,7 +121,7 @@ class ClassBinding implements Binding
      * @return  \stubbles\ioc\binding\ClassBinding
      * @throws  \InvalidArgumentException
      */
-    public function toInstance($instance)
+    public function toInstance($instance): self
     {
         if (!($instance instanceof $this->type)) {
             throw new \InvalidArgumentException(
@@ -143,7 +144,7 @@ class ClassBinding implements Binding
      * @param   \stubbles\ioc\InjectionProvider  $provider
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    public function toProvider(InjectionProvider $provider)
+    public function toProvider(InjectionProvider $provider): self
     {
         $this->provider = $provider;
         return $this;
@@ -159,7 +160,7 @@ class ClassBinding implements Binding
      * @param   string|\ReflectionClass  $providerClass
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    public function toProviderClass($providerClass)
+    public function toProviderClass($providerClass): self
     {
         $this->providerClass = (($providerClass instanceof \ReflectionClass) ?
                                     ($providerClass->getName()) : ($providerClass));
@@ -174,7 +175,7 @@ class ClassBinding implements Binding
      * @return  \stubbles\ioc\binding\ClassBinding
      * @since   2.1.0
      */
-    public function toClosure(\Closure $closure)
+    public function toClosure(\Closure $closure): self
     {
         $this->provider = new ClosureInjectionProvider($closure);
         return $this;
@@ -187,7 +188,7 @@ class ClassBinding implements Binding
      * @return  \stubbles\ioc\binding\ClassBinding
      * @since   1.5.0
      */
-    public function asSingleton()
+    public function asSingleton(): self
     {
         $this->scope = $this->scopes->singleton();
         return $this;
@@ -200,7 +201,7 @@ class ClassBinding implements Binding
      * @return  \stubbles\ioc\binding\ClassBinding
      * @since   1.5.0
      */
-    public function inSession()
+    public function inSession(): self
     {
         $this->scope = $this->scopes->session();
         return $this;
@@ -213,7 +214,7 @@ class ClassBinding implements Binding
      * @param   \stubbles\ioc\binding\BindingScope  $scope
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    public function in(BindingScope $scope)
+    public function in(BindingScope $scope): self
     {
         $this->scope = $scope;
         return $this;
@@ -226,7 +227,7 @@ class ClassBinding implements Binding
      * @param   string            $name
      * @return  \stubbles\ioc\binding\ClassBinding
      */
-    public function named($name)
+    public function named(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -240,7 +241,7 @@ class ClassBinding implements Binding
      * @return  mixed
      * @throws  \stubbles\ioc\binding\BindingException
      */
-    public function getInstance(Injector $injector, $name)
+    public function getInstance(Injector $injector, $name = null)
     {
         if (null !== $this->instance) {
             return $this->instance;
@@ -281,7 +282,7 @@ class ClassBinding implements Binding
      *
      * @return  string
      */
-    public function getKey()
+    public function getKey(): string
     {
         if (null === $this->name) {
             return $this->type;
