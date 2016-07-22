@@ -5,6 +5,8 @@
 
   * raised minimum required PHP version to 7.0.0
   * introduced scalar type hints and strict type checking
+  * removed `stubbles\Rootpath`, use `stubbles\values\Rootpath` instead, was deprecated since 7.1.0
+  * removed `stubbles\ResourceLoader`, use `stubbles\values\ResourceLoader` instead, was deprecated since 7.1.0
 
 
 7.1.1 (2016-07-06)
