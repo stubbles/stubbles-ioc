@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace stubbles\environments;
 use stubbles\Environment;
-use stubbles\environments\errorhandler\DefaultErrorHandler;
+use stubbles\environments\errorhandler\LogErrorHandler;
 use stubbles\environments\exceptionhandler\ProdModeExceptionHandler;
 /**
  * Represents production environment.
@@ -31,7 +31,7 @@ class Production implements Environment
     public function __construct()
     {
         $this->setExceptionHandler(ProdModeExceptionHandler::class)
-                ->setErrorHandler(DefaultErrorHandler::class);
+                ->setErrorHandler(LogErrorHandler::class);
     }
 
     /**

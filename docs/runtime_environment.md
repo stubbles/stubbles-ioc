@@ -58,17 +58,8 @@ You can create your own exception handler by implementing the
 
 ## Error handler
 
-For production the `stubbles\environments\errorhandler\DefaultErrorHandler` is
-used. It combines some other error handlers which are executed in the following
-order:
-
-   * `stubbles\environments\errorhandler\IllegalArgumentErrorHandler` checks for
-      errors of type `E_RECOVERABLE_ERROR` and if they denote a hurted type hint.
-      If this is the case a `stubbles\lang\exceptions\IllegalArgumentException`
-      is thrown.
-   * `stubbles\environments\errorhandler\LogErrorHandler` will log any PHP
-     errors that have not been handled by another error handler. Log files go
-     to _path/to/project/log/errors/YYYY/MM/php-error-YYYY-MM-DD.log_.
+For production the `stubbles\environments\errorhandler\LogErrorHandler` is
+used. It will log any PHP errors to _path/to/project/log/errors/YYYY/MM/php-error-YYYY-MM-DD.log_.
 
 See [PHP manual on exception handlers](http://php.net/set_error_handler) for
 more information.

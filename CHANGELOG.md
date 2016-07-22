@@ -9,6 +9,11 @@
   * removed `stubbles\ResourceLoader`, use `stubbles\values\ResourceLoader` instead, was deprecated since 7.1.0
 
 
+### Other changes
+
+  * removed error handler for `E_RECOVERABLE_ERROR` of type argument type violations, was superseded by PHP's `\TypeError`
+
+
 7.1.1 (2016-07-06)
 ------------------
 
