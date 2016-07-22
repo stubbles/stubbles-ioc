@@ -23,7 +23,7 @@ class DevelopersMultipleConstructorParamsWithConstant
      * @param  string                            $role
      * @Named{role}('boss')
      */
-    public function __construct(Employee $schst, $role)
+    public function __construct(Employee $schst, string $role)
     {
         $this->schst = $schst;
         $this->role  = $role;

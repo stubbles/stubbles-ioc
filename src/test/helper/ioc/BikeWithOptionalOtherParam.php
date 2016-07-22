@@ -31,7 +31,7 @@ class BikeWithOptionalOtherParam implements Vehicle
      *
      * @param  Tire  $tire
      */
-    public function __construct(Tire $tire, $other = 'foo')
+    public function __construct(Tire $tire, string $other = 'foo')
     {
         $this->tire  = $tire;
         $this->other = $other;
