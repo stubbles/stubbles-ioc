@@ -36,7 +36,7 @@ class ExceptionLogger
      * @param  string  $projectPath  path to project
      * @Named('stubbles.project.path')
      */
-    public function __construct($projectPath)
+    public function __construct(string $projectPath)
     {
         $this->logDir = $projectPath
                 . DIRECTORY_SEPARATOR
