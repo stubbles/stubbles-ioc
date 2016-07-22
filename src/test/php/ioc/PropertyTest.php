@@ -77,7 +77,8 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     public function setsCorrectPropertiesInRuntimeModeWithDefaultProperties()
     {
-        $propertyReceiver = $this->createInjector('DEV')->getInstance(PropertyReceiver::class);
+        $propertyReceiver = $this->createInjector('DEV')
+                ->getInstance(PropertyReceiver::class);
         assert($propertyReceiver->foo, equals('default'));
         assert($propertyReceiver->bar, equals('someValue'));
     }

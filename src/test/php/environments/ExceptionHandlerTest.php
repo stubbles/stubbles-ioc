@@ -18,26 +18,6 @@ use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
- * Helper class for the test.
- */
-abstract class ExeptionHandlerEnvironment implements Environment
-{
-    use Handler;
-
-    /**
-     * sets the exception handler to given class and method name
-     *
-     * To register the new exception handler call registerExceptionHandler().
-     *
-     * @param   string|object  $class        name or instance of exception handler class
-     * @return  \stubbles\Environment
-     */
-    public function useExceptionHandler($class): Environment
-    {
-        return $this->setExceptionHandler($class, 'handleException');
-    }
-}
-/**
  * Tests for stubbles\environments\Handler.
  *
  * Contains all tests which require restoring the previous exception handler.
@@ -58,7 +38,19 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->environment = NewInstance::of(ExeptionHandlerEnvironment::class);
+        $this->environment = new class() implements Environment
+        {
+            use Handler;
+
+            public function useExceptionHandler($class)
+            {
+                return $this->setExceptionHandler($class, 'handleException');
+            }
+
+            public function name(): string { return 'TEST'; }
+
+            public function isCacheEnabled(): bool { return false; }
+        };
     }
 
     /**

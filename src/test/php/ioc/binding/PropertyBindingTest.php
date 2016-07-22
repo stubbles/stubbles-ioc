@@ -74,15 +74,15 @@ class PropertyBindingTest extends \PHPUnit_Framework_TestCase
     private function createPropertyBinding(string $environment = 'PROD'): PropertyBinding
     {
         return new PropertyBinding(
-                new Properties(['PROD'   => ['foo.bar' => 'baz',
-                                             'baz'     => __CLASS__ . '.class'
-                                            ],
-                                'config' => ['foo.bar'          => 'default',
-                                             'other'            => 'someValue',
-                                             'baz'              => Properties::class . '.class'
-                                            ]
-                               ]
-                ),
+                new Properties([
+                        'PROD'   => ['foo.bar' => 'baz',
+                                     'baz'     => __CLASS__ . '.class'
+                                    ],
+                        'config' => ['foo.bar'          => 'default',
+                                     'other'            => 'someValue',
+                                     'baz'              => Properties::class . '.class'
+                                    ]
+                ]),
                 $environment
 
         );
@@ -206,7 +206,6 @@ class PropertyBindingTest extends \PHPUnit_Framework_TestCase
             assert($example->password, isInstanceOf(Secret::class));
         } finally {
             // ensure all references are removed to clean up environment
-            // otherwise all *SecretTests will fail
             unset($properties);
             $example->password = null;
             unset($example);

@@ -25,19 +25,6 @@ use function bovigo\assert\predicate\isSameAs;
 class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * helper assertion
-     *
-     * @param  SlotMachine  $slot
-     * @param  string       $numberClass
-     */
-    protected function assertSlotMachineIsBuildCorrect(SlotMachine $slot, $numberClass)
-    {
-        assert($slot->number1, isInstanceOf($numberClass));
-        assert($slot->number2, isInstanceOf($numberClass));
-        assert($slot->number1, isSameAs($slot->number2));
-    }
-
-    /**
      * @test
      */
     public function assigningSingletonScopeToBindingWillReuseInitialInstance()
@@ -46,9 +33,10 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
         $binder->bind(Number::class)
                ->to(Random::class)
                ->asSingleton();
-        $this->assertSlotMachineIsBuildCorrect(
-                $binder->getInjector()->getInstance(SlotMachine::class),
-                Random::class
+        $slot = $binder->getInjector()->getInstance(SlotMachine::class);
+        assert(
+                $slot->number1,
+                isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
     }
 
@@ -61,11 +49,12 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
     {
         $binder = new Binder();
         $binder->bind(Number::class)
-               ->toClosure(function() { return new Random(); })
-               ->asSingleton();
-        $this->assertSlotMachineIsBuildCorrect(
-                $binder->getInjector()->getInstance(SlotMachine::class),
-                Random::class
+                ->toClosure(function() { return new Random(); })
+                ->asSingleton();
+        $slot = $binder->getInjector()->getInstance(SlotMachine::class);
+        assert(
+                $slot->number1,
+                isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
     }
 
@@ -75,11 +64,11 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
     public function classAnnotatedWithSingletonWillOnlyBeCreatedOnce()
     {
         $binder = new Binder();
-        $binder->bind(Number::class)
-               ->to(RandomSingleton::class);
-        $this->assertSlotMachineIsBuildCorrect(
-                $binder->getInjector()->getInstance(SlotMachine::class),
-                RandomSingleton::class
+        $binder->bind(Number::class)->to(RandomSingleton::class);
+        $slot = $binder->getInjector()->getInstance(SlotMachine::class);
+        assert(
+                $slot->number1,
+                isInstanceOf(RandomSingleton::class)->and(isSameAs($slot->number2))
         );
     }
 }
