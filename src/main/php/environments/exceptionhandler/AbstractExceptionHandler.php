@@ -48,7 +48,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      * @param  string  $projectPath  path to project
      * @param  string  $sapi         current php sapi
      */
-    public function __construct($projectPath, $sapi = PHP_SAPI)
+    public function __construct(string $projectPath, string $sapi = PHP_SAPI)
     {
         $this->projectPath     = $projectPath;
         $this->sapi            = $sapi;
