@@ -144,7 +144,7 @@ class LogErrorHandler implements ErrorHandler
     ): bool
     {
         $logData  = date('Y-m-d H:i:s') . '|' . $level;
-        $logData .= '|' . ((isset(self::$levelStrings[$level])) ? (self::$levelStrings[$level]) : ('unknown'));
+        $logData .= '|' . (self::$levelStrings[$level] ?? 'unknown');
         $logData .= '|' . $message;
         $logData .= '|' . $file;
         $logData .= '|' . $line;
