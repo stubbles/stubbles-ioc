@@ -175,11 +175,11 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * detects name for binding
      *
-     * @param   \ReflectionParameter  $param
-     * @param   string                $default
+     * @param   \ReflectionParameter     $param
+     * @param   string|\ReflectionClass  $default
      * @return  string|\ReflectionClass
      */
-    private function detectBindingName(\ReflectionParameter $param, string $default = null)
+    private function detectBindingName(\ReflectionParameter $param, $default = null)
     {
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {

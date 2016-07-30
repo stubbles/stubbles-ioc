@@ -1,3 +1,9 @@
+8.0.1 (2016-07-30)
+------------------
+
+  * fixed bug that typed map bindings lead to a `\TypeError`
+
+
 8.0.0 (2016-07-22)
 ------------------
 
