@@ -19,7 +19,7 @@ use function bovigo\callmap\verify;
  * @group  environments
  * @group  environments_exceptionhandler
  */
-class stubProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class ProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * root path for log files
