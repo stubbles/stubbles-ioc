@@ -8,6 +8,7 @@ parameters:
       - '#Call to an undefined method bovigo\\callmap\\ClassProxy::disableLogging\(\).#'
       - '#Access to an undefined property stubbles\\App::\$#'
       - '#Call to an undefined method stubbles\\App::wasBoundBy\(\).#'
+      - '#but returns bovigo\\callmap\\ClassProxy#'
       -
           message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
           path: src/main/php/environments/Production.php
