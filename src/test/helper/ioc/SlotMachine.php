@@ -27,8 +27,8 @@ class SlotMachine
     /**
      * Set number 1
      *
-     * @param  Number  $number1
-     * @param  Number  $number2
+     * @param  \stubbles\test\ioc\Number  $number1
+     * @param  \stubbles\test\ioc\Number  $number2
      */
     public function __construct(Number $number1, Number $number2)
     {

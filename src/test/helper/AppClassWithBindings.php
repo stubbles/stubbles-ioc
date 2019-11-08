@@ -24,7 +24,7 @@ class AppClassWithBindings extends App
 
     public $injector;
 
-    public $projectPath;
+    public $pathOfProject;
 
     /**
      * return list of bindings required for this command
@@ -53,9 +53,9 @@ class AppClassWithBindings extends App
      */
     public function __construct(Injector $injector, string $projectPath, string $boundBy = null)
     {
-        $this->injector    = $injector;
-        $this->projectPath = $projectPath;
-        $this->boundBy     = $boundBy;
+        $this->injector      = $injector;
+        $this->pathOfProject = $projectPath;
+        $this->boundBy       = $boundBy;
     }
 
     /**

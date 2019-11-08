@@ -77,7 +77,7 @@ class AppTest extends TestCase
     public function projectPathIsBoundWithExplicitBindings()
     {
         assertThat(
-                AppClassWithBindings::create('projectPath')->projectPath,
+                AppClassWithBindings::create('projectPath')->pathOfProject,
                 equals('projectPath')
         );
     }
@@ -89,7 +89,7 @@ class AppTest extends TestCase
     public function projectPathIsBoundWithoutExplicitBindings()
     {
         assertThat(
-                AppClassWithoutBindings::create('projectPath')->projectPath,
+                AppClassWithoutBindings::create('projectPath')->pathOfProject,
                 equals('projectPath')
         );
     }

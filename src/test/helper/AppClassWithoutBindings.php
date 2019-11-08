@@ -14,7 +14,7 @@ use stubbles\App;
 class AppClassWithoutBindings extends App
 {
 
-    public $projectPath;
+    public $pathOfProject;
 
     /**
      *
@@ -23,7 +23,7 @@ class AppClassWithoutBindings extends App
      */
     public function __construct(string $projectPath)
     {
-        $this->projectPath = $projectPath;
+        $this->pathOfProject = $projectPath;
     }
 
     /**

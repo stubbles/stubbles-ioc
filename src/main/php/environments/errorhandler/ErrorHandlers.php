@@ -24,7 +24,7 @@ class ErrorHandlers implements ErrorHandler
     /**
      * adds an error handler to the collection
      *
-     * @param  \stubbles\environments\ErrorHandler  $errorHandler
+     * @param  \stubbles\environments\errorhandler\ErrorHandler  $errorHandler
      */
     public function addErrorHandler(ErrorHandler $errorHandler)
     {

@@ -22,7 +22,7 @@ class AppUsingBindingModule extends App
      * creates mode binding module
      *
      * @param   \stubbles\Environment  $environment  runtime mode
-     * @return  \stubbles\ioc\module\Runtime
+     * @return  \stubbles\Runtime
      */
     public static function callBindRuntime(Environment $environment = null): Runtime
     {
