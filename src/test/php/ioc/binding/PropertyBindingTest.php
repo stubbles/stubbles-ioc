@@ -184,8 +184,11 @@ class PropertyBindingTest extends TestCase
         } finally {
             // ensure all references are removed to clean up environment
             unset($properties);
-            $example->password = null;
-            unset($example);
+            if (isset($example)) {
+                $example->password = null;
+                unset($example);
+            }
+
             unset($binder);
             gc_collect_cycles();
         }
