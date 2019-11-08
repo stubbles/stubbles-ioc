@@ -5,15 +5,14 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc\binding;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\Injector;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertEmptyArray;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
@@ -24,7 +23,7 @@ use function bovigo\assert\predicate\equals;
  * @group  ioc
  * @group  ioc_binding
  */
-class ListBindingTest extends \PHPUnit_Framework_TestCase
+class ListBindingTest extends TestCase
 {
     /**
      * instance to test
@@ -39,10 +38,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     private $injector;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->injector    = NewInstance::of(Injector::class);
         $this->listBinding = new ListBinding('foo');
@@ -53,7 +49,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function getKeyReturnsUniqueListKey()
     {
-        assert($this->listBinding->getKey(), equals(ListBinding::TYPE . '#foo'));
+        assertThat($this->listBinding->getKey(), equals(ListBinding::TYPE . '#foo'));
     }
 
     /**
@@ -82,7 +78,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->listBinding->withValue(303)
                         ->getInstance($this->injector, 'int'),
                 equals([303])
@@ -95,7 +91,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     public function valueIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->listBinding->withValue($value)
                         ->getInstance(
                                 $this->injector,
@@ -111,8 +107,8 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     public function classNameIsAddedToTypedList()
     {
         $value = new \stdClass();
-        $this->injector->mapCalls(['getInstance' => $value]);
-        assert(
+        $this->injector->returns(['getInstance' => $value]);
+        assertThat(
                 $this->listBinding->withValue(\stdClass::class)
                         ->getInstance(
                                 $this->injector,
@@ -157,7 +153,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     private function createInjectionProvider($value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
-                ->mapCalls(['get' => $value]);
+                ->returns(['get' => $value]);
     }
 
     /**
@@ -165,7 +161,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueFromProviderIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->listBinding
                         ->withValueFromProvider($this->createInjectionProvider(303))
                         ->getInstance($this->injector, 'int'),
@@ -179,7 +175,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     public function valueFromProviderIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->listBinding
                         ->withValueFromProvider($this->createInjectionProvider($value))
                         ->getInstance(
@@ -229,7 +225,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
-        assert(
+        assertThat(
                 $this->listBinding->withValueFromProvider(get_class($provider))
                         ->getInstance($this->injector, 'int'),
                 equals([303])
@@ -244,7 +240,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
         $value    = new \stdClass();
         $provider = $this->createInjectionProvider($value);
         $this->prepareInjector($provider);
-        assert(
+        assertThat(
                 $this->listBinding->withValueFromProvider(get_class($provider))
                         ->getInstance(
                                 $this->injector,
@@ -293,7 +289,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareInjector(InjectionProvider $provider)
     {
-        $this->injector->mapCalls(['getInstance' => $provider]);
+        $this->injector->returns(['getInstance' => $provider]);
     }
 
     /**
@@ -302,7 +298,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     public function addInvalidProviderClassThrowsBindingException()
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
-        $this->injector->mapCalls(['getInstance' => \stdClass::class]);
+        $this->injector->returns(['getInstance' => \stdClass::class]);
         $listBinding = $this->listBinding->withValueFromProvider($providerClass);
         expect(function() use ($listBinding) {
                 $listBinding->getInstance(
@@ -329,7 +325,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueFromClosureIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->listBinding->withValueFromClosure(function() { return 303; })
                         ->getInstance($this->injector, 'int'),
                 equals([303])
@@ -344,7 +340,7 @@ class ListBindingTest extends \PHPUnit_Framework_TestCase
     public function valueFromClosureIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->listBinding->withValueFromClosure(
                                 function() use($value) { return $value; }
                         )->getInstance(

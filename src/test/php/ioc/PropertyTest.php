@@ -5,15 +5,14 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
+use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\PropertyReceiver;
 use stubbles\ioc\binding\BindingException;
 use stubbles\values\Properties;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
@@ -24,7 +23,7 @@ use function bovigo\assert\predicate\startsWith;
  * @group  ioc
  * @since  3.4.0
  */
-class PropertyTest extends \PHPUnit_Framework_TestCase
+class PropertyTest extends TestCase
 {
     /**
      * properties to be bound
@@ -33,10 +32,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     private $properties;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->properties = new Properties(
                 ['PROD'   => ['example.foo' => 'baz'],
@@ -68,8 +64,8 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     {
         $propertyReceiver = $this->createInjector('PROD')
                 ->getInstance(PropertyReceiver::class);
-        assert($propertyReceiver->foo, equals('baz'));
-        assert($propertyReceiver->bar, equals('someValue'));
+        assertThat($propertyReceiver->foo, equals('baz'));
+        assertThat($propertyReceiver->bar, equals('someValue'));
     }
 
     /**
@@ -79,8 +75,8 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     {
         $propertyReceiver = $this->createInjector('DEV')
                 ->getInstance(PropertyReceiver::class);
-        assert($propertyReceiver->foo, equals('default'));
-        assert($propertyReceiver->bar, equals('someValue'));
+        assertThat($propertyReceiver->foo, equals('default'));
+        assertThat($propertyReceiver->bar, equals('someValue'));
     }
 
     /**
@@ -105,7 +101,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     public function propertyInstanceIsBound()
     {
-        assert(
+        assertThat(
                 $this->createInjector()->getInstance(
                         Properties::class,
                         'config.ini'

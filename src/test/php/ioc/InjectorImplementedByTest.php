@@ -5,10 +5,9 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Mikey;
 use stubbles\test\ioc\Person;
@@ -16,7 +15,7 @@ use stubbles\test\ioc\Person3;
 use stubbles\test\ioc\Person4;
 use stubbles\test\ioc\Schst;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
@@ -24,14 +23,14 @@ use function bovigo\assert\predicate\isInstanceOf;
  *
  * @group  ioc
  */
-class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
+class InjectorImplementedByTest extends TestCase
 {
     /**
      * @test
      */
     public function createsInstanceFromImplementedByAnnotationIfNoExplicitBindingsSet()
     {
-        assert(
+        assertThat(
                 Binder::createInjector()->getInstance(Person::class),
                 isInstanceOf(Schst::class)
         );
@@ -44,7 +43,7 @@ class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
     {
         $binder = new Binder();
         $binder->bind(Person::class)->to(Mikey::class);
-        assert(
+        assertThat(
                 $binder->getInjector()->getInstance(Person::class),
                 isInstanceOf(Mikey::class)
         );
@@ -56,7 +55,7 @@ class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
      */
     public function fallsBackToDefaultImplementedByIfNoEnvironmentSet()
     {
-        assert(
+        assertThat(
                 Binder::createInjector()->getInstance(Person3::class),
                 isInstanceOf(Schst::class)
         );
@@ -70,7 +69,7 @@ class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
     {
 
         $binder = new Binder();
-        assert(
+        assertThat(
                 $binder->setEnvironment('PROD')
                         ->getInjector()
                         ->getInstance(Person3::class),
@@ -86,7 +85,7 @@ class InjectorImplementedByTest extends \PHPUnit_Framework_TestCase
     {
 
         $binder = new Binder();
-        assert(
+        assertThat(
                 $binder->setEnvironment('DEV')
                         ->getInjector()
                         ->getInstance(Person3::class),

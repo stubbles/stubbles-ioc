@@ -5,11 +5,10 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 
 use function bovigo\callmap\verify;
 /**
@@ -18,7 +17,7 @@ use function bovigo\callmap\verify;
  * @group  environments
  * @group  environments_exceptionhandler
  */
-class DisplayExceptionTest extends \PHPUnit_Framework_TestCase
+class DisplayExceptionTest extends TestCase
 {
     /**
      * creates instance to test
@@ -30,7 +29,7 @@ class DisplayExceptionTest extends \PHPUnit_Framework_TestCase
         $displayExceptionHandler = NewInstance::of(
                 DisplayException::class,
                 ['/tmp', $sapi]
-        )->mapCalls(['header' => false, 'writeBody' => false]);
+        )->returns(['header' => false, 'writeBody' => false]);
         return $displayExceptionHandler->disableLogging();
     }
 

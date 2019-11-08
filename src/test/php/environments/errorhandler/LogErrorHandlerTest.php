@@ -5,13 +5,12 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\environments\errorhandler;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
@@ -21,7 +20,7 @@ use function bovigo\assert\predicate\equals;
  * @group  environments
  * @group  environments_errorhandler
  */
-class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
+class LogErrorHandlerTest extends TestCase
 {
     /**
      * instance to test
@@ -47,16 +46,13 @@ class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * set up test environment
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$logPath = 'log/errors/' . date('Y') . '/' . date('m');
         self::$logFile = 'php-error-' . date('Y-m-d') . '.log';
     }
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->root            = vfsStream::setup();
         $this->logErrorHandler = new LogErrorHandler(vfsStream::url('root'));
@@ -83,7 +79,7 @@ class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function stopsErrorHandlingWhenHandled()
     {
-        assert(
+        assertThat(
                 $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__),
                 equals(ErrorHandler::STOP_ERROR_HANDLING)
         );
@@ -105,7 +101,7 @@ class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $line = __LINE__;
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, $line);
-        assert(
+        assertThat(
                 substr(
                         $this->root->getChild(self::$logPath . '/' . self::$logFile)
                                 ->getContent(),
@@ -121,7 +117,7 @@ class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
     public function handleShouldCreateLogDirectoryWithDefaultPermissionsIfNotExists()
     {
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__);
-        assert(
+        assertThat(
                 $this->root->getChild(self::$logPath)->getPermissions(),
                 equals(0700)
         );
@@ -134,7 +130,7 @@ class LogErrorHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->logErrorHandler->setFilemode(0777)
                 ->handle(E_WARNING, 'message', __FILE__, __LINE__);
-        assert(
+        assertThat(
                 $this->root->getChild(self::$logPath)->getPermissions(),
                 equals(0777)
         );

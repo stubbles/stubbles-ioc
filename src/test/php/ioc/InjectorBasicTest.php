@@ -5,10 +5,9 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Bike;
 use stubbles\test\ioc\BikeWithOptionalOtherParam;
@@ -21,7 +20,7 @@ use stubbles\test\ioc\MissingArrayInjection;
 use stubbles\test\ioc\Tire;
 use stubbles\test\ioc\Vehicle;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
@@ -33,7 +32,7 @@ use function bovigo\assert\predicate\isInstanceOf;
  *
  * @group  ioc
  */
-class InjectorBasicTest extends \PHPUnit_Framework_TestCase
+class InjectorBasicTest extends TestCase
 {
     /**
      * @test
@@ -63,7 +62,7 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
                     $binder->bind(Vehicle::class)->to(Car::class);
                 }
         );
-        assert(
+        assertThat(
                 $injector->getInstance(Vehicle::class),
                 equals(new Car(new Goodyear()))
         );
@@ -84,7 +83,7 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
     public function usesImplicitBindingViaTypehints()
     {
         $goodyear = Binder::createInjector()->getInstance(Goodyear::class);
-        assert($goodyear, isInstanceOf(Goodyear::class));
+        assertThat($goodyear, isInstanceOf(Goodyear::class));
     }
 
     /**
@@ -104,7 +103,7 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
     {
         $injector = Binder::createInjector();
         $obj      = $injector->getInstance(ImplicitDependency::class);
-        assert($obj->getGoodyearByConstructor(), isInstanceOf(Goodyear::class));
+        assertThat($obj->getGoodyearByConstructor(), isInstanceOf(Goodyear::class));
     }
 
     /**
@@ -129,7 +128,7 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
                 }
         );
         $obj      = $injector->getInstance(ImplicitOptionalDependency::class);
-        assert($obj->getGoodyear(), isInstanceOf(Goodyear::class));
+        assertThat($obj->getGoodyear(), isInstanceOf(Goodyear::class));
     }
 
     /**
@@ -173,7 +172,7 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
     {
         $injector = Binder::createInjector();
         $bike     = $injector->getInstance(BikeWithOptionalTire::class);
-        assert($bike->tire, isInstanceOf(Goodyear::class));
+        assertThat($bike->tire, isInstanceOf(Goodyear::class));
     }
 
     /**
@@ -189,6 +188,6 @@ class InjectorBasicTest extends \PHPUnit_Framework_TestCase
                 }
         );
         $bike = $injector->getInstance(BikeWithOptionalOtherParam::class);
-        assert($bike->other, equals('foo'));
+        assertThat($bike->other, equals('foo'));
     }
 }

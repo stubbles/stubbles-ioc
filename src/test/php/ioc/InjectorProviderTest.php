@@ -5,17 +5,16 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\AnotherQuestion;
 use stubbles\test\ioc\Answer;
 use stubbles\test\ioc\MyProviderClass;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
@@ -25,7 +24,7 @@ use function bovigo\callmap\verify;
  *
  * @group  ioc
  */
-class InjectorProviderTest extends \PHPUnit_Framework_TestCase
+class InjectorProviderTest extends TestCase
 {
     /**
      * @test
@@ -35,11 +34,11 @@ class InjectorProviderTest extends \PHPUnit_Framework_TestCase
         $binder   = new Binder();
         $answer   = new Answer();
         $provider = NewInstance::of(InjectionProvider::class)
-                ->mapCalls(['get' => $answer]);
+                ->returns(['get' => $answer]);
         $binder->bind(Answer::class)->toProvider($provider);
         $question = $binder->getInjector()
                 ->getInstance(AnotherQuestion::class);
-        assert($question->getAnswer(), isSameAs($answer));
+        assertThat($question->getAnswer(), isSameAs($answer));
         verify($provider, 'get')->received('answer');
     }
 
@@ -66,7 +65,7 @@ class InjectorProviderTest extends \PHPUnit_Framework_TestCase
                 ->toProviderClass(MyProviderClass::class);
         $question = $binder->getInjector()
                 ->getInstance(AnotherQuestion::class);
-        assert($question->getAnswer(), isInstanceOf(Answer::class));
+        assertThat($question->getAnswer(), isInstanceOf(Answer::class));
     }
 
     /**
@@ -81,6 +80,6 @@ class InjectorProviderTest extends \PHPUnit_Framework_TestCase
                 );
         $question = $binder->getInjector()
                 ->getInstance(AnotherQuestion::class);
-        assert($question->getAnswer(), isInstanceOf(Answer::class));
+        assertThat($question->getAnswer(), isInstanceOf(Answer::class));
     }
 }

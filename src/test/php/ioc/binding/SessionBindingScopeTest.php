@@ -5,14 +5,13 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc\binding;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\InjectionProvider;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
@@ -24,7 +23,7 @@ use function stubbles\reflect\reflect;
  * @group  ioc
  * @group  ioc_binding
  */
-class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
+class SessionBindingScopeTest extends TestCase
 {
     /**
      * instance to test
@@ -45,10 +44,7 @@ class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
      */
     private $provider;
 
-    /**
-     * set up test enviroment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->session      = NewInstance::of(Session::class);
         $this->sessionScope = new SessionBindingScope();
@@ -62,7 +58,7 @@ class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareSession(array $callmap)
     {
-        $this->session->mapCalls($callmap);
+        $this->session->returns($callmap);
         $this->sessionScope->setSession($this->session);
     }
 
@@ -73,7 +69,7 @@ class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new \stdClass();
         $this->prepareSession(['hasValue' => true, 'value' => $instance]);
-        assert(
+        assertThat(
                 $this->sessionScope->getInstance(
                         reflect(\stdClass::class),
                         $this->provider
@@ -90,8 +86,8 @@ class SessionBindingScopeTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new \stdClass();
         $this->prepareSession(['hasValue' => false]);
-        $this->provider->mapCalls(['get' => $instance]);
-        assert(
+        $this->provider->returns(['get' => $instance]);
+        assertThat(
                 $this->sessionScope->getInstance(
                         reflect(\stdClass::class),
                         $this->provider

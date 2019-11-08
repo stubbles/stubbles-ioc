@@ -5,10 +5,9 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
+use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
 use stubbles\ioc\binding\Binding;
 use stubbles\ioc\binding\ClassBinding;
@@ -18,7 +17,7 @@ use stubbles\ioc\binding\MapBinding;
 use stubbles\values\Properties;
 use bovigo\callmap\NewInstance;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
@@ -27,7 +26,7 @@ use function bovigo\assert\predicate\isSameAs;
  *
  * @group  ioc
  */
-class BinderTest extends \PHPUnit_Framework_TestCase
+class BinderTest extends TestCase
 {
     /**
      * instance to test
@@ -36,10 +35,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
      */
     private $binder;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->binder = new Binder();
     }
@@ -51,7 +47,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     public function addBindingReturnsAddedBinding()
     {
         $binding = NewInstance::of(Binding::class);
-        assert($this->binder->addBinding($binding), isSameAs($binding));
+        assertThat($this->binder->addBinding($binding), isSameAs($binding));
     }
 
     /**
@@ -60,7 +56,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
      */
     public function bindCreatesClassBinding()
     {
-        assert(
+        assertThat(
                 $this->binder->bind('example\MyInterface'),
                 isInstanceOf(ClassBinding::class)
         );
@@ -72,7 +68,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
      */
     public function bindConstantCreatesBinding()
     {
-        assert(
+        assertThat(
                 $this->binder->bindConstant('foo'),
                 isInstanceOf(ConstantBinding::class)
         );
@@ -84,7 +80,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
      */
     public function bindListCreatesBinding()
     {
-        assert($this->binder->bindList('foo'), isInstanceOf(ListBinding::class));
+        assertThat($this->binder->bindList('foo'), isInstanceOf(ListBinding::class));
     }
 
     /**
@@ -93,7 +89,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
      */
     public function bindMapCreatesBinding()
     {
-        assert($this->binder->bindMap('foo'), isInstanceOf(MapBinding::class));
+        assertThat($this->binder->bindMap('foo'), isInstanceOf(MapBinding::class));
     }
 
     /**
@@ -104,7 +100,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     {
         $binder = new Binder();
         $injector = $binder->getInjector();
-        assert($injector->getInstance(Injector::class), isSameAs($injector));
+        assertThat($injector->getInstance(Injector::class), isSameAs($injector));
     }
 
     /**
@@ -114,7 +110,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     public function bindPropertiesCreatesBinding()
     {
         $properties = new Properties([]);
-        assert(
+        assertThat(
                 $this->binder->bindProperties($properties, 'PROD'),
                 isSameAs($properties)
         );
@@ -130,7 +126,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
                 ->withContent("[config]\nfoo=bar")
                 ->at(vfsStream::setup());
         $properties = new Properties(['config' => ['foo' => 'bar']]);
-        assert(
+        assertThat(
                 $this->binder->bindPropertiesFromFile($file->url(), 'PROD'),
                 equals($properties)
         );

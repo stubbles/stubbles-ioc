@@ -5,15 +5,14 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc\binding;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\Injector;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertEmptyArray;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
@@ -24,7 +23,7 @@ use function bovigo\assert\predicate\equals;
  * @group  ioc
  * @group  ioc_binding
  */
-class MapBindingTest extends \PHPUnit_Framework_TestCase
+class MapBindingTest extends TestCase
 {
     /**
      * instance to test
@@ -39,10 +38,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     private $injector;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->injector   = NewInstance::of(Injector::class);
         $this->mapBinding = new MapBinding('foo');
@@ -53,7 +49,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function getKeyReturnsUniqueListKey()
     {
-        assert($this->mapBinding->getKey(), equals(MapBinding::TYPE . '#foo'));
+        assertThat($this->mapBinding->getKey(), equals(MapBinding::TYPE . '#foo'));
     }
 
     /**
@@ -82,7 +78,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->mapBinding->withEntry('x', 303)
                         ->getInstance($this->injector, 'int'),
                 equals(['x' => 303])
@@ -95,7 +91,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     public function valueIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->mapBinding->withEntry('x', $value)
                         ->getInstance(
                                 $this->injector,
@@ -111,8 +107,8 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     public function classNameIsAddedToTypedList()
     {
         $value = new \stdClass();
-        $this->injector->mapCalls(['getInstance' => $value]);
-        assert(
+        $this->injector->returns(['getInstance' => $value]);
+        assertThat(
                 $this->mapBinding->withEntry('x', \stdClass::class)
                         ->getInstance(
                                 $this->injector,
@@ -159,7 +155,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     private function createInjectionProvider($value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
-                ->mapCalls(['get' => $value]);
+                ->returns(['get' => $value]);
     }
 
     /**
@@ -167,7 +163,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueFromProviderIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromProvider(
                         'x',
                         $this->createInjectionProvider(303)
@@ -182,7 +178,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     public function valueFromProviderIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromProvider(
                         'x',
                         $this->createInjectionProvider($value)
@@ -235,7 +231,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromProvider('x', get_class($provider))
                         ->getInstance($this->injector, 'int'),
                 equals(['x' => 303])
@@ -250,7 +246,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
         $value    = new \stdClass();
         $provider = $this->createInjectionProvider($value);
         $this->prepareInjector($provider);
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromProvider('x', get_class($provider))
                         ->getInstance(
                                 $this->injector,
@@ -299,7 +295,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareInjector(InjectionProvider $provider)
     {
-        $this->injector->mapCalls(['getInstance' => $provider]);
+        $this->injector->returns(['getInstance' => $provider]);
     }
 
     /**
@@ -308,7 +304,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     public function addInvalidProviderClassThrowsBindingException()
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
-        $this->injector->mapCalls(['getInstance' => \stdClass::class]);
+        $this->injector->returns(['getInstance' => \stdClass::class]);
         $mapBinding = $this->mapBinding->withEntryFromProvider('x', $providerClass);
         expect(function() use ($mapBinding) {
                 $mapBinding->getInstance(
@@ -335,7 +331,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
      */
     public function valueFromClosureIsAddedToList()
     {
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromClosure('x', function() { return 303; })
                         ->getInstance($this->injector, 'int'),
                 equals(['x' => 303])
@@ -350,7 +346,7 @@ class MapBindingTest extends \PHPUnit_Framework_TestCase
     public function valueFromClosureIsAddedToTypedList()
     {
         $value = new \stdClass();
-        assert(
+        assertThat(
                 $this->mapBinding->withEntryFromClosure(
                         'x',
                         function() use($value) { return $value; }

@@ -5,15 +5,14 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use org\bovigo\vfs\vfsStream;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
@@ -25,7 +24,7 @@ use function bovigo\callmap\verify;
  *
  * @group  app
  */
-class RuntimeTest extends \PHPUnit_Framework_TestCase
+class RuntimeTest extends TestCase
 {
     /**
      * mocked mode instance
@@ -40,21 +39,15 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
      */
     private $root;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->root        = vfsStream::setup('projects');
         $this->environment = NewInstance::of(Environment::class)
-                ->mapCalls(['name' => 'TEST']);
+                ->returns(['name' => 'TEST']);
         Runtime::reset();
     }
 
-    /**
-     * clean up test environment
-     */
-    public function tearDown()
+    protected function tearDown(): void
     {
         Runtime::reset();
     }
@@ -99,7 +92,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $runtime = new Runtime($this->environment);
         $binder  = new Binder();
         $runtime->configure($binder, $this->root->url());
-        assert(
+        assertThat(
                 $binder->getInjector()->getInstance(Environment::class),
                 isSameAs($this->environment)
         );
@@ -115,7 +108,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         try {
             $runtime->configure($binder, $this->root->url());
             $injector = $binder->getInjector();
-            assert($injector->getInstance(Environment::class)->name(), equals('PROD'));
+            assertThat($injector->getInstance(Environment::class)->name(), equals('PROD'));
         } finally {
             restore_error_handler();
             restore_exception_handler();
@@ -131,7 +124,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $runtime = new Runtime(function() { return $this->environment; });
         $binder  = new Binder();
         $runtime->configure($binder, $this->root->url());
-        assert(
+        assertThat(
                 $binder->getInjector()->getInstance(Environment::class),
                 isSameAs($this->environment)
         );
@@ -161,7 +154,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $binder = NewInstance::of(Binder::class);
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        verify($binder, 'bindProperties')->wasNeverCalled();
+        assertTrue(verify($binder, 'bindProperties')->wasNeverCalled());
     }
 
     /**
@@ -179,7 +172,7 @@ stubbles.webapp.xml.serializeMode=true")
         $binder  = NewInstance::of(Binder::class);
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        verify($binder, 'bindProperties')->wasCalledOnce();
+        assertTrue(verify($binder, 'bindProperties')->wasCalledOnce());
     }
 
     /**
@@ -190,7 +183,7 @@ stubbles.webapp.xml.serializeMode=true")
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        assert(
+        assertThat(
                 $binder->getInjector()->getConstant('stubbles.project.path'),
                 equals($this->root->url())
         );
@@ -219,7 +212,7 @@ stubbles.webapp.xml.serializeMode=true")
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        assert(
+        assertThat(
                 $binder->getInjector()->getConstant($constantName),
                 equals($this->getProjectPath($pathPart))
         );
@@ -249,7 +242,7 @@ stubbles.webapp.xml.serializeMode=true")
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
         $runtime->addPathType('user')->configure($binder, $this->root->url());
-        assert(
+        assertThat(
                 $binder->getInjector()->getConstant($constantName),
                 equals($this->getProjectPath($pathPart))
         );

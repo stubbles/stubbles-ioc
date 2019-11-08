@@ -5,11 +5,10 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
 
 use function bovigo\callmap\verify;
@@ -19,7 +18,7 @@ use function bovigo\callmap\verify;
  * @group  environments
  * @group  environments_exceptionhandler
  */
-class ProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class ProdModeExceptionHandlerTest extends TestCase
 {
     /**
      * root path for log files
@@ -28,10 +27,7 @@ class ProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $root;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
@@ -46,7 +42,7 @@ class ProdModeExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $prodModeExceptionHandler = NewInstance::of(
                 ProdModeExceptionHandler::class,
                 [vfsStream::url('root'), $sapi]
-        )->mapCalls(['header' => false, 'writeBody' => false]);
+        )->returns(['header' => false, 'writeBody' => false]);
         return $prodModeExceptionHandler->disableLogging();
     }
 

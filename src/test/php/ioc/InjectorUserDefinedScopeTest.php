@@ -5,14 +5,13 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingScope;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -20,7 +19,7 @@ use function bovigo\assert\predicate\isSameAs;
  *
  * @group  ioc
  */
-class InjectorUserDefinedScopeTest extends \PHPUnit_Framework_TestCase
+class InjectorUserDefinedScopeTest extends TestCase
 {
     /**
      * @test
@@ -44,9 +43,9 @@ class InjectorUserDefinedScopeTest extends \PHPUnit_Framework_TestCase
         $binder->bind(\stdClass::class)
                 ->to(\stdClass::class)
                 ->in(NewInstance::of(BindingScope::class)
-                        ->mapCalls(['getInstance' => $instance])
+                        ->returns(['getInstance' => $instance])
         );
-        assert(
+        assertThat(
                 $binder->getInjector()->getInstance(\stdClass::class),
                 isSameAs($instance)
         );

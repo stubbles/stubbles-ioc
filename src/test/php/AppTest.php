@@ -5,10 +5,9 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
 use stubbles\test\AppClassWithBindings;
@@ -16,7 +15,7 @@ use stubbles\test\AppClassWithInvalidBindingModule;
 use stubbles\test\AppClassWithoutBindings;
 use stubbles\test\AppUsingBindingModule;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
@@ -27,12 +26,9 @@ use function bovigo\assert\predicate\isSameAs;
  *
  * @group  app
  */
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends TestCase
 {
-    /**
-     * clean up test environment
-     */
-    public function tearDown()
+    protected function tearDown(): void
     {
         restore_error_handler();
         restore_exception_handler();
@@ -45,7 +41,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
     public function createCreatesInstanceUsingBindings()
     {
         $appCommandWithBindings = AppClassWithBindings::create('projectPath');
-        assert($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
+        assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
     }
 
     /**
@@ -57,7 +53,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
                 AppClassWithBindings::class,
                 'projectPath'
         );
-        assert($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
+        assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
     }
 
     /**
@@ -65,7 +61,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
      */
     public function createInstanceCreatesInstanceWithoutBindings()
     {
-        assert(
+        assertThat(
                 App::createInstance(
                         AppClassWithoutBindings::class,
                         'projectPath'
@@ -80,7 +76,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
      */
     public function projectPathIsBoundWithExplicitBindings()
     {
-        assert(
+        assertThat(
                 AppClassWithBindings::create('projectPath')->projectPath,
                 equals('projectPath')
         );
@@ -92,7 +88,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
      */
     public function projectPathIsBoundWithoutExplicitBindings()
     {
-        assert(
+        assertThat(
                 AppClassWithoutBindings::create('projectPath')->projectPath,
                 equals('projectPath')
         );
@@ -104,7 +100,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateRuntime()
     {
-        assert(
+        assertThat(
                 AppUsingBindingModule::callBindRuntime(),
                 isInstanceOf(Runtime::class)
         );
@@ -117,7 +113,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
      */
     public function dynamicBindingViaClosure()
     {
-        assert(
+        assertThat(
                 AppClassWithBindings::create('projectPath')->wasBoundBy(),
                 equals('closure')
         );
@@ -175,7 +171,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
             [function(Injector $injector) { assertTrue($injector->hasBinding('foo')); }],
             [function(Injector $injector) { assertTrue($injector->hasBinding('bar')); }],
             [function(Injector $injector) { assertTrue($injector->hasBinding(Injector::class)); }],
-            [function(Injector $injector) { assert($injector->getInstance(Injector::class), isSameAs($injector)); }]
+            [function(Injector $injector) { assertThat($injector->getInstance(Injector::class), isSameAs($injector)); }]
         ];
     }
 

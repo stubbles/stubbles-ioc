@@ -5,14 +5,13 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
@@ -23,7 +22,7 @@ use function bovigo\callmap\verify;
  * @group  environments
  * @group  environments_exceptionhandler
  */
-class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class AbstractExceptionHandlerTest extends TestCase
 {
     /**
      * instance to test
@@ -38,17 +37,13 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $root;
 
-
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->root             = vfsStream::setup();
         $this->exceptionHandler = NewInstance::of(
                 AbstractExceptionHandler::class,
                 [vfsStream::url('root')]
-        )->mapCalls([
+        )->returns([
                 'header'             => null,
                 'createResponseBody' => '',
                 'writeBody'          => null
@@ -102,9 +97,9 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->exceptionHandler->disableLogging()
                 ->handleException($throwable);
-        verify($this->exceptionHandler, 'header')->wasCalledOnce();
-        verify($this->exceptionHandler, 'createResponseBody')->wasCalledOnce();
-        verify($this->exceptionHandler, 'writeBody')->wasCalledOnce();
+        assertTrue(verify($this->exceptionHandler, 'header')->wasCalledOnce());
+        assertTrue(verify($this->exceptionHandler, 'createResponseBody')->wasCalledOnce());
+        assertTrue(verify($this->exceptionHandler, 'writeBody')->wasCalledOnce());
     }
 
     /**
@@ -115,7 +110,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->exceptionHandler->handleException($throwable);
         $line = __LINE__ - 1;
-        assert(
+        assertThat(
                 substr(
                         $this->root->getChild(
                                 'log/errors/' . date('Y') . '/' . date('m')
@@ -140,7 +135,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
         $exception = new \Exception('chained exception', 303, $throwable);
         $line      = __LINE__ - 1;
         $this->exceptionHandler->handleException($exception);
-        assert(
+        assertThat(
                 substr(
                         $this->root->getChild(
                                 'log/errors/' . date('Y') . '/' . date('m')
@@ -163,7 +158,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     public function createsLogDirectoryWithDefaultPermissionsIfNotExists($throwable)
     {
         $this->exceptionHandler->handleException($throwable);
-        assert(
+        assertThat(
                 $this->root->getChild(
                         'log/errors/' . date('Y') . '/' . date('m')
                 )->getPermissions(),
@@ -178,7 +173,7 @@ class AbstractExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     public function createLogDirectoryWithChangedPermissionsIfNotExists($throwable)
     {
         $this->exceptionHandler->setFilemode(0777)->handleException($throwable);
-        assert(
+        assertThat(
                 $this->root->getChild(
                         'log/errors/' . date('Y') . '/' . date('m')
                 )->getPermissions(),

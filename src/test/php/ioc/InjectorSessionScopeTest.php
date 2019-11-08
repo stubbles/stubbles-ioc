@@ -5,16 +5,15 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\Session;
 use stubbles\test\ioc\Mikey;
 use stubbles\test\ioc\Person2;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
@@ -24,7 +23,7 @@ use function bovigo\assert\predicate\isSameAs;
  *
  * @group  ioc
  */
-class InjectorSessionScopeTest extends \PHPUnit_Framework_TestCase
+class InjectorSessionScopeTest extends TestCase
 {
     /**
      * binder instance to be used in tests
@@ -33,10 +32,7 @@ class InjectorSessionScopeTest extends \PHPUnit_Framework_TestCase
      */
     private $injector;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $binder = new Binder();
         $binder->bind(Person2::class)
@@ -72,8 +68,8 @@ class InjectorSessionScopeTest extends \PHPUnit_Framework_TestCase
     public function requestSessionScopedWithSessionReturnsInstance()
     {
         $session = NewInstance::of(Session::class)
-                ->mapCalls(['hasValue' => false]);
-        assert(
+                ->returns(['hasValue' => false]);
+        assertThat(
                 $this->injector->setSession($session)
                         ->getInstance(Person2::class),
                 isInstanceOf(Mikey::class)
@@ -101,7 +97,7 @@ class InjectorSessionScopeTest extends \PHPUnit_Framework_TestCase
     public function setSessionAddsBindingForSessionAsSingleton()
     {
         $session = NewInstance::of(Session::class);
-        assert(
+        assertThat(
                 $this->injector->setSession(
                         $session,
                         Session::class

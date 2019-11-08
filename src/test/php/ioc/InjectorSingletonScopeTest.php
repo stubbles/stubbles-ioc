@@ -5,16 +5,15 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles
  */
 namespace stubbles\ioc;
+use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\Number;
 use stubbles\test\ioc\Random;
 use stubbles\test\ioc\RandomSingleton;
 use stubbles\test\ioc\SlotMachine;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -22,7 +21,7 @@ use function bovigo\assert\predicate\isSameAs;
  *
  * @group  ioc
  */
-class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
+class InjectorSingletonScopeTest extends TestCase
 {
     /**
      * @test
@@ -34,7 +33,7 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
                ->to(Random::class)
                ->asSingleton();
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
-        assert(
+        assertThat(
                 $slot->number1,
                 isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
@@ -52,7 +51,7 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
                 ->toClosure(function() { return new Random(); })
                 ->asSingleton();
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
-        assert(
+        assertThat(
                 $slot->number1,
                 isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
@@ -66,7 +65,7 @@ class InjectorSingletonScopeTest extends \PHPUnit_Framework_TestCase
         $binder = new Binder();
         $binder->bind(Number::class)->to(RandomSingleton::class);
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
-        assert(
+        assertThat(
                 $slot->number1,
                 isInstanceOf(RandomSingleton::class)->and(isSameAs($slot->number2))
         );
