@@ -119,7 +119,7 @@ abstract class MultiBinding implements Binding
             $value = $bindingValue($injector, $this->name, $key);
             if ($this->isTypeMismatch($type, $value)) {
                 $valueType = ((is_object($value)) ? (get_class($value)) : (gettype($value)));
-                throw new BindingException('Value of type ' . $valueType . ' for ' . ((is_int($key)) ? ('list') : ('map')) . ' named ' . $this->name . ' at position ' . $key . ' is not of type ' . $type->getName());
+                throw new BindingException('Value of type ' . $valueType . ' for ' . ((is_int($key)) ? ('list') : ('map')) . ' named ' . $this->name . ' at position ' . $key . ' is not of type ' . $type);
             }
 
             $resolved[$key] = $value;
