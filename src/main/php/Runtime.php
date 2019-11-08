@@ -106,7 +106,7 @@ class Runtime implements BindingModule
      *
      * @api
      * @param   string  $pathType
-     * @return  \stubbles\ioc\module\Runtime
+     * @return  \stubbles\Runtime
      */
     public function addPathType(string $pathType): self
     {

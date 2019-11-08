@@ -129,7 +129,7 @@ trait Handler
      * @param   string|object  $class        name or instance of error handler class
      * @param   string         $methodName   name of error handler method
      * @param   string         $projectPath  path to project
-     * @return  callback
+     * @return  callable
      */
     private function createCallback($class, string $methodName, string $projectPath): callable
     {
