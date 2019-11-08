@@ -83,7 +83,9 @@ class Binder
      */
     public function bind($interface): ClassBinding
     {
-        return $this->addBinding(new ClassBinding($interface, $this->scopes));
+        $c = new ClassBinding($interface, $this->scopes);
+        $this->addBinding($c);
+        return $c;
     }
 
     /**
@@ -140,7 +142,9 @@ class Binder
      */
     public function bindConstant(string $name): ConstantBinding
     {
-        return $this->addBinding(new ConstantBinding($name));
+        $b = new ConstantBinding($name);
+        $this->addBinding($b);
+        return $b;
     }
 
     /**

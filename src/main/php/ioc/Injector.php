@@ -237,7 +237,7 @@ class Injector
      * @param   string  $name
      * @return  \stubbles\ioc\binding\Binding
      */
-    private function findBinding(string $type, $name)
+    private function findBinding(string $type, $name): ?Binding
     {
         $bindingName = $this->bindingName($name);
         if (null !== $bindingName && isset($this->index[$type . '#' . $bindingName])) {
@@ -336,7 +336,7 @@ class Injector
      * @param   \ReflectionClass  $class
      * @return  \stubbles\ioc\binding\Binding
      */
-    private function getImplicitBinding(\ReflectionClass $class)
+    private function getImplicitBinding(\ReflectionClass $class): ?Binding
     {
         if (!$class->isInterface()) {
             return $this->bind($class->getName())->to($class);
