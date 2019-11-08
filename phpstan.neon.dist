@@ -6,6 +6,8 @@ parameters:
       # False positive
       - '#Call to an undefined method stubbles\\reflect\\annotation\\Annotation::get#'
       - '#Call to an undefined method bovigo\\callmap\\ClassProxy::disableLogging\(\).#'
+      - '#Access to an undefined property stubbles\\App::\$#'
+      - '#Call to an undefined method stubbles\\App::wasBoundBy\(\).#'
       -
           message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
           path: src/main/php/environments/Production.php
