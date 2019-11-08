@@ -1,0 +1,10 @@
+parameters:
+  level: 7
+  paths:
+      - ./src
+  ignoreErrors:
+      # False positive
+      - '#Call to an undefined method stubbles\\reflect\\annotation\\Annotation::get#'
+      -
+          message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
+          path: src/main/php/environments/Production.php
