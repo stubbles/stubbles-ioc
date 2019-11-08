@@ -45,10 +45,10 @@ class PluginHandler
     /**
      * constructor
      *
-     * @param  scalar[]                    $list1       list of config values
-     * @param  scalar[]                    $configMap   map of config values
-     * @param  stubbles\test\ioc\Plugin[]  $pluginList  list of plugins
-     * @param  stubbles\test\ioc\Plugin[]  $pluginMap   map of plugins
+     * @param  scalar[]                     $list1       list of config values
+     * @param  scalar[]                     $configMap   map of config values
+     * @param  \stubbles\test\ioc\Plugin[]  $pluginList  list of plugins
+     * @param  \stubbles\test\ioc\Plugin[]  $pluginMap   map of plugins
      * @List{configList}('listConfig')
      * @Map{configMap}('mapConfig')
      * @List{pluginList}(stubbles\test\ioc\Plugin.class)

@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 namespace stubbles\test;
 use stubbles\App;
+use stubbles\Environment;
 use stubbles\Runtime;
 /**
  * Helper class to test binding module creations.

@@ -35,7 +35,7 @@ class ProdModeExceptionHandlerTest extends TestCase
     /**
      * creates instance to test
      *
-     * @return  stubbles\environments\exceptionhandler\ProdModExceptionHandler
+     * @return  \stubbles\environments\exceptionhandler\ProdModeExceptionHandler
      */
     public function createExceptionHandler($sapi)
     {

@@ -22,25 +22,6 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function stubbles\reflect\reflect;
 /**
- * Class used for tests.
- *
- * @since  4.1.3
- */
-class Example
-{
-    public $password;
-    /**
-     * constructor
-     *
-     * @param  \stubbles\values\Secret  $password
-     * @Property('example.password')
-     */
-    public function __construct(Secret $password)
-    {
-        $this->password = $password;
-    }
-}
-/**
  * Test for stubbles\ioc\binding\PropertyBinding.
  *
  * @since  3.4.0

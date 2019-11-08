@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 use function bovigo\callmap\verify;
 /**
- * Tests for stubbles\environments\exceptionhandler\DisplayExceptionHandler.
+ * Tests for stubbles\environments\exceptionhandler\DisplayException.
  *
  * @group  environments
  * @group  environments_exceptionhandler
@@ -22,7 +22,7 @@ class DisplayExceptionTest extends TestCase
     /**
      * creates instance to test
      *
-     * @return  \stubbles\environments\exceptionhandler\DisplayExceptionHandler
+     * @return  \stubbles\environments\exceptionhandler\DisplayException
      */
     public function createExceptionHandler($sapi)
     {

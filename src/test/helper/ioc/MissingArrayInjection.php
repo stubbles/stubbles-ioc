@@ -13,6 +13,7 @@ namespace stubbles\test\ioc;
  */
 class MissingArrayInjection
 {
+    private $data;
     /**
      * constructor
      *
@@ -21,6 +22,6 @@ class MissingArrayInjection
      */
     public function __construct(array $data)
     {
-        // intentionally empty
+        $this->data = $data;
     }
 }
