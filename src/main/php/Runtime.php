@@ -120,7 +120,7 @@ class Runtime implements BindingModule
      * @param  \stubbles\ioc\Binder  $binder
      * @param  string                $projectPath  optional  project base path
      */
-    public function configure(Binder $binder, string $projectPath = null)
+    public function configure(Binder $binder, string $projectPath)
     {
         $this->environment->registerErrorHandler($projectPath);
         $this->environment->registerExceptionHandler($projectPath);

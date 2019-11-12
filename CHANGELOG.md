@@ -1,5 +1,11 @@
 # Changelog
 
+## 9.0.0 (2019-11-??)
+
+### BC breaks
+
+* param `$projectPath` of `stubbles\ioc\module\BindingModule::configure()` is not optional anymore
+
 ## 8.0.1 (2016-07-30)
 
 * fixed bug that typed map bindings lead to a `\TypeError`
