@@ -108,7 +108,7 @@ abstract class MultiBinding implements Binding
      * creates the instance
      *
      * @param   \stubbles\ioc\Injector  $injector
-     * @param   string    $type
+     * @param   string|\ReflectionClass|null $type
      * @return  array
      * @throws  \stubbles\ioc\binding\BindingException
      */
@@ -135,7 +135,7 @@ abstract class MultiBinding implements Binding
      * an instance of the class defined with $type. In any other case there's no
      * type mismatch
      *
-     * @param   string|\ReflectionClass  $type
+     * @param   string|\ReflectionClass|null  $type
      * @param   mixed                    $value
      * @return  bool
      */
