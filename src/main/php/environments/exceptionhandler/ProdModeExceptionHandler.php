@@ -25,7 +25,10 @@ class ProdModeExceptionHandler extends AbstractExceptionHandler
     protected function createResponseBody(\Throwable $exception): string
     {
         if (file_exists($this->projectPath . '/docroot/500.html')) {
-            return file_get_contents($this->projectPath . '/docroot/500.html');
+            $content = file_get_contents($this->projectPath . '/docroot/500.html');
+            if (false !== $content) {
+              return $content;
+            }
         }
 
         return "I'm sorry but I can not fulfill your request. Somewhere someone messed something up.";
