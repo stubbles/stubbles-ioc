@@ -17,3 +17,9 @@ parameters:
       -
           message: '#Cannot access offset 0 on callable\(\): mixed#'
           path: src/main/php/environments/Handler.php
+      -
+          message: '#Call to function method_exists\(\) with string and #'
+          path: src/main/php/App.php
+      -
+          message: '#Result of && is always false#'
+          path: src/main/php/ioc/binding/ClassBinding.php

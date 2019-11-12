@@ -102,7 +102,7 @@ abstract class App
      *
      * @internal  must not be used by applications
      * @param   string  $className    full qualified class name of class to create an instance of
-     * @return  \stubbles\ioc\module\BindingModule[]
+     * @return  array<string|\stubbles\ioc\module\BindingModule[]>
      * @since   1.3.0
      */
     protected static function getBindingsForApp(string $className): array
