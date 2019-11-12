@@ -6,9 +6,9 @@
     "description": "Dependency injection.",
     "require": {
         "php": "^7.0",
-        "stubbles/sequence": "^8.1",
-        "stubbles/values": "^8.0",
-        "stubbles/reflect": "^8.0.1"
+        "stubbles/sequence": "^9.0",
+        "stubbles/values": "^9.0",
+        "stubbles/reflect": "^9.0"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
