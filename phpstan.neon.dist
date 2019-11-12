@@ -30,3 +30,15 @@ parameters:
       -
           message: '#Result of && is always false#'
           path: src/main/php/ioc/binding/ClassBinding.php
+      -
+          message: '#function file_exists expects string, array\|string given#'
+          path: src/main/php/ExceptionLogger.php
+      -
+          message: '#function mkdir expects string, array\|string given#'
+          path: src/main/php/ExceptionLogger.php
+      -
+          message: '#should return string but returns array\|string#'
+          path: src/main/php/ExceptionLogger.php
+      -
+          message: '#should return string but returns array\|string#'
+          path: src/main/php/environments/errorhandler/LogErrorHandler.php
