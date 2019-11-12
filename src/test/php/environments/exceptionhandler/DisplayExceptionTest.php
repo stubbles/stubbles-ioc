@@ -24,7 +24,7 @@ class DisplayExceptionTest extends TestCase
      *
      * @return  \stubbles\environments\exceptionhandler\DisplayException
      */
-    public function createExceptionHandler($sapi)
+    public function createExceptionHandler($sapi): DisplayException
     {
         $displayExceptionHandler = NewInstance::of(
                 DisplayException::class,
