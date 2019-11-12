@@ -14,6 +14,10 @@ parameters:
       - '#expects bovigo\\callmap\\Proxy, stubbles\\environments\\exceptionhandler\\ProdModeExceptionHandler given#'
       - '#Method stubbles\\App::createInstance\(\) should return stubbles\\App but returns object#'
       - '#Method stubbles\\ioc\\MultibindingTest::createPluginHandler\(\) should return stubbles\\test\\ioc\\PluginHandler but returns object#'
+      - '#Call to an undefined method object::#'
+      - '#Access to an undefined property object::#'
+      - '#should return callable but returns array<int, mixed>#'
+      - '#environment of class stubbles\\Runtime constructor expects \(callable\)\|stubbles\\Environment\|null, stdClass given#'
       -
           message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
           path: src/main/php/environments/Production.php
