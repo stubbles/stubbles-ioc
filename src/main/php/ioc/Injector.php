@@ -98,12 +98,16 @@ class Injector
      *
      * @api
      * @param   string   $type
-     * @param   string   $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  boolean
      */
     public function hasBinding(string $type, $name = null): bool
     {
         if (PropertyBinding::TYPE === $type) {
+            if (null === $name || $name instanceof \ReflectionClass) {
+                throw new \InvalidArgumentException('$name must be a string for type ' . PropertyBinding::TYPE);
+            }
+
             return $this->hasProperty($name);
         }
 
@@ -134,12 +138,16 @@ class Injector
      *
      * @api
      * @param   string   $type
-     * @param   string   $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  boolean
      */
     public function hasExplicitBinding(string $type, $name = null): bool
     {
         if (PropertyBinding::TYPE === $type) {
+            if (null === $name || $name instanceof \ReflectionClass) {
+              throw new \InvalidArgumentException('$name must be a string for type ' . PropertyBinding::TYPE);
+            }
+
             return $this->hasProperty($name);
         }
 
@@ -160,7 +168,7 @@ class Injector
      *
      * @api
      * @param   string  $type
-     * @param   string  $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  object
      */
     public function getInstance(string $type, $name = null)
@@ -216,7 +224,7 @@ class Injector
      * gets a binding
      *
      * @param   string  $type
-     * @param   string  $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  \stubbles\ioc\binding\Binding
      * @throws  \stubbles\ioc\binding\BindingException
      */
@@ -234,7 +242,7 @@ class Injector
      * tries to find a binding
      *
      * @param   string  $type
-     * @param   string  $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  \stubbles\ioc\binding\Binding
      */
     private function findBinding(string $type, $name): ?Binding
@@ -259,7 +267,7 @@ class Injector
     /**
      * parses binding name from given name
      *
-     * @param   string|\ReflectionClass  $name
+     * @param   string|\ReflectionClass|null  $name
      * @return  string|null
      */
     private function bindingName($name)

@@ -177,7 +177,7 @@ class DefaultInjectionProvider implements InjectionProvider
      *
      * @param   \ReflectionParameter  $param
      * @param   string                $default
-     * @return  string|\ReflectionClass
+     * @return  string|\ReflectionClass|null
      */
     private function detectBindingName(\ReflectionParameter $param, string $default = null)
     {
