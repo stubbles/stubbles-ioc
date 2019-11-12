@@ -9,6 +9,11 @@ parameters:
       - '#Access to an undefined property stubbles\\App::\$#'
       - '#Call to an undefined method stubbles\\App::wasBoundBy\(\).#'
       - '#but returns bovigo\\callmap\\ClassProxy#'
+      - '#Method stubbles\\App::createInstance\(\) should return stubbles\\App but returns object#'
+      - '#Method stubbles\\ioc\\MultibindingTest::createPluginHandler\(\) should return stubbles\\test\\ioc\\PluginHandler but returns object#'
       -
           message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
           path: src/main/php/environments/Production.php
+      -
+          message: '#Cannot access offset 0 on callable\(\): mixed#'
+          path: src/main/php/environments/Handler.php
