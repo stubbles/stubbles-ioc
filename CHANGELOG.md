@@ -4,7 +4,12 @@
 
 ### BC breaks
 
+* raised minimum required PHP version to 7.3
 * param `$projectPath` of `stubbles\ioc\module\BindingModule::configure()` is not optional anymore
+
+### Other changes
+
+* fixed various type issues
 
 ## 8.0.1 (2016-07-30)
 
