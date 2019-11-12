@@ -115,7 +115,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   \ReflectionMethod  $method
      * @return  string|null
      */
-    private function methodBindingName(\ReflectionMethod $method)
+    private function methodBindingName(\ReflectionMethod $method): ?string
     {
         $annotations = annotationsOf($method);
         if ($annotations->contain('List')) {
@@ -175,11 +175,11 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * detects name for binding
      *
-     * @param   \ReflectionParameter     $param
-     * @param   string|\ReflectionClass  $default
+     * @param   \ReflectionParameter  $param
+     * @param   string                $default
      * @return  string|\ReflectionClass
      */
-    private function detectBindingName(\ReflectionParameter $param, $default = null)
+    private function detectBindingName(\ReflectionParameter $param, string $default = null)
     {
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {
@@ -204,13 +204,21 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * creates the complete type message
      *
-     * @param   string  $type  type to create message for
-     * @param   string  $name  name of named parameter
+     * @param   string                   $type  type to create message for
+     * @param   string|\ReflectionClass  $name  name of named parameter
      * @return  string
      */
-    private function createTypeMessage(string $type, string $name = null): string
+    private function createTypeMessage(string $type, $name = null): string
     {
-        return ((null !== $name) ? ($type . ' (named "' . $name . '")') : ($type));
+        if (null === $name) {
+            return $type;
+        }
+
+        if (is_string($name)) {
+           return $type . ' (named "' . $name . '")';
+        }
+
+        return $type . ' (named "' . $name->getName() . '")';
     }
 
     /**
