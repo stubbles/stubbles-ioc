@@ -10,6 +10,7 @@ namespace stubbles;
 use bovigo\callmap\NewInstance;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
+use stubbles\environments\Production;
 use org\bovigo\vfs\vfsStream;
 
 use function bovigo\assert\assertThat;
@@ -17,6 +18,7 @@ use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
+use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
 /**
@@ -108,7 +110,7 @@ class RuntimeTest extends TestCase
         try {
             $runtime->configure($binder, $this->root->url());
             $injector = $binder->getInjector();
-            assertThat($injector->getInstance(Environment::class)->name(), equals('PROD'));
+            assertThat($injector->getInstance(Environment::class), isInstanceOf(Production::class));
         } finally {
             restore_error_handler();
             restore_exception_handler();
