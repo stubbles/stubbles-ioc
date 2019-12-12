@@ -40,9 +40,9 @@ class ProdModeExceptionHandlerTest extends TestCase
     public function createExceptionHandler(string $sapi): ProdModeExceptionHandler
     {
         $prodModeExceptionHandler = NewInstance::of(
-                ProdModeExceptionHandler::class,
-                [vfsStream::url('root'), $sapi]
-        )->returns(['header' => false, 'writeBody' => false]);
+            ProdModeExceptionHandler::class,
+            [vfsStream::url('root'), $sapi]
+        )->stub('header', 'writeBody');
         $prodModeExceptionHandler->disableLogging();
         return $prodModeExceptionHandler;
     }

@@ -21,5 +21,5 @@ interface ExceptionHandler
      *
      * @param  \Throwable  $exception  the uncatched exception
      */
-    public function handleException(\Throwable $exception);
+    public function handleException(\Throwable $exception): void;
 }

@@ -38,7 +38,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * logger for exceptions
      *
-     * @var  \stubbles\environments\ExceptionLogger
+     * @var  \stubbles\ExceptionLogger
      */
     private $exceptionLogger;
 
@@ -83,7 +83,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @param  \Throwable  $exception  the uncatched exception
      */
-    public function handleException(\Throwable $exception)
+    public function handleException(\Throwable $exception): void
     {
         if ($this->loggingEnabled) {
             $this->exceptionLogger->log($exception);
@@ -111,7 +111,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @param  string  $header
      */
-    protected function header(string $header)
+    protected function header(string $header): void
     {
         header($header);
     }
@@ -121,7 +121,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
      *
      * @param  string  $body
      */
-    protected function writeBody(string $body)
+    protected function writeBody(string $body): void
     {
         echo $body;
         flush();

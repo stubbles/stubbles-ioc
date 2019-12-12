@@ -40,14 +40,9 @@ class AbstractExceptionHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->root             = vfsStream::setup();
-        $this->exceptionHandler = NewInstance::of(
-                AbstractExceptionHandler::class,
-                [vfsStream::url('root')]
-        )->returns([
-                'header'             => null,
-                'createResponseBody' => '',
-                'writeBody'          => null
-        ]);
+        $this->exceptionHandler = NewInstance::of(AbstractExceptionHandler::class, [vfsStream::url('root')])
+            ->returns(['createResponseBody' => ''])
+            ->stub('header', 'writeBody');
     }
 
     /**

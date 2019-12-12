@@ -27,9 +27,9 @@ class DisplayExceptionTest extends TestCase
     public function createExceptionHandler(string $sapi): DisplayException
     {
         $displayExceptionHandler = NewInstance::of(
-                DisplayException::class,
-                ['/tmp', $sapi]
-        )->returns(['header' => false, 'writeBody' => false]);
+            DisplayException::class,
+            ['/tmp', $sapi]
+        )->stub('header', 'writeBody');
         $displayExceptionHandler->disableLogging();
         return $displayExceptionHandler;
     }
