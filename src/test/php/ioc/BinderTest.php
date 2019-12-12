@@ -31,7 +31,7 @@ class BinderTest extends TestCase
     /**
      * instance to test
      *
-     * @type  Binder
+     * @var  Binder
      */
     private $binder;
 
@@ -44,7 +44,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function addBindingReturnsAddedBinding()
+    public function addBindingReturnsAddedBinding(): void
     {
         $binding = NewInstance::of(Binding::class);
         assertThat($this->binder->addBinding($binding), isSameAs($binding));
@@ -54,7 +54,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function bindCreatesClassBinding()
+    public function bindCreatesClassBinding(): void
     {
         assertThat(
                 $this->binder->bind('example\MyInterface'),
@@ -66,7 +66,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function bindConstantCreatesBinding()
+    public function bindConstantCreatesBinding(): void
     {
         assertThat(
                 $this->binder->bindConstant('foo'),
@@ -78,7 +78,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function bindListCreatesBinding()
+    public function bindListCreatesBinding(): void
     {
         assertThat($this->binder->bindList('foo'), isInstanceOf(ListBinding::class));
     }
@@ -87,7 +87,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function bindMapCreatesBinding()
+    public function bindMapCreatesBinding(): void
     {
         assertThat($this->binder->bindMap('foo'), isInstanceOf(MapBinding::class));
     }
@@ -96,7 +96,7 @@ class BinderTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function createdInjectorCanRetrieveItself()
+    public function createdInjectorCanRetrieveItself(): void
     {
         $binder = new Binder();
         $injector = $binder->getInjector();
@@ -107,7 +107,7 @@ class BinderTest extends TestCase
      * @since  3.4.0
      * @test
      */
-    public function bindPropertiesCreatesBinding()
+    public function bindPropertiesCreatesBinding(): void
     {
         $properties = new Properties([]);
         assertThat(
@@ -120,7 +120,7 @@ class BinderTest extends TestCase
      * @since  4.0.0
      * @test
      */
-    public function bindPropertiesFromFileCreatesBinding()
+    public function bindPropertiesFromFileCreatesBinding(): void
     {
         $file = vfsStream::newFile('config.ini')
                 ->withContent("[config]\nfoo=bar")

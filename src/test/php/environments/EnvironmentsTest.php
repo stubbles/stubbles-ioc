@@ -23,7 +23,7 @@ class EnvironmentsTest extends TestCase
     /**
      * @test
      */
-    public function cacheIsEnabledInProduction()
+    public function cacheIsEnabledInProduction(): void
     {
         assertTrue((new Production())->isCacheEnabled());
     }
@@ -31,7 +31,7 @@ class EnvironmentsTest extends TestCase
     /**
      * @test
      */
-    public function cacheIsDisabledInDevelopment()
+    public function cacheIsDisabledInDevelopment(): void
     {
         assertFalse((new Development())->isCacheEnabled());
     }
@@ -39,7 +39,7 @@ class EnvironmentsTest extends TestCase
     /**
      * @test
      */
-    public function developmentHasNoErrorHandlerByDefault()
+    public function developmentHasNoErrorHandlerByDefault(): void
     {
         assertFalse((new Development())->registerErrorHandler('/tmp'));
     }

@@ -25,21 +25,21 @@ class LogErrorHandlerTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\environments\errorhandler\LogErrorHandler
+     * @var  \stubbles\environments\errorhandler\LogErrorHandler
      */
     private $logErrorHandler;
     /**
      * root path for log files
      *
-     * @type  org\bovigo\vfs\vfsStreamDirectory
+     * @var  \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
     /**
-     * @type  string
+     * @var  string
      */
     private static $logPath;
     /**
-     * @type  string
+     * @var  string
      */
     private static $logFile;
 
@@ -61,7 +61,7 @@ class LogErrorHandlerTest extends TestCase
     /**
      * @test
      */
-    public function isAlwaysResponsible()
+    public function isAlwaysResponsible(): void
     {
         assertTrue($this->logErrorHandler->isResponsible(E_NOTICE, 'foo'));
     }
@@ -69,7 +69,7 @@ class LogErrorHandlerTest extends TestCase
     /**
      * @test
      */
-    public function isNeverSupressable()
+    public function isNeverSupressable(): void
     {
         assertFalse($this->logErrorHandler->isSupressable(E_NOTICE, 'foo'));
     }
@@ -77,18 +77,18 @@ class LogErrorHandlerTest extends TestCase
     /**
      * @test
      */
-    public function stopsErrorHandlingWhenHandled()
+    public function stopsErrorHandlingWhenHandled(): void
     {
         assertThat(
-                $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__),
-                equals(ErrorHandler::STOP_ERROR_HANDLING)
+            $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__),
+            equals(ErrorHandler::STOP_ERROR_HANDLING)
         );
     }
 
     /**
      * @test
      */
-    public function handleErrorCreatesLogfile()
+    public function handleErrorCreatesLogfile(): void
     {
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__);
         assertTrue($this->root->hasChild(self::$logPath . '/' . self::$logFile));
@@ -97,42 +97,40 @@ class LogErrorHandlerTest extends TestCase
     /**
      * @test
      */
-    public function handleErrorShouldLogTheError()
+    public function handleErrorShouldLogTheError(): void
     {
         $line = __LINE__;
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, $line);
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
-                substr(
-                        $this->root->getChild(self::$logPath . '/' . self::$logFile)
-                                ->getContent(),
-                        19
-                ),
-                equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "\n")
+            substr($logfile->getContent(), 19),
+            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "\n")
         );
     }
 
     /**
      * @test
      */
-    public function handleShouldCreateLogDirectoryWithDefaultPermissionsIfNotExists()
+    public function handleShouldCreateLogDirectoryWithDefaultPermissionsIfNotExists(): void
     {
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__);
         assertThat(
-                $this->root->getChild(self::$logPath)->getPermissions(),
-                equals(0700)
+            $this->root->getChild(self::$logPath)->getPermissions(),
+            equals(0700)
         );
     }
 
     /**
      * @test
      */
-    public function handleShouldCreateLogDirectoryWithChangedPermissionsIfNotExists()
+    public function handleShouldCreateLogDirectoryWithChangedPermissionsIfNotExists(): void
     {
         $this->logErrorHandler->setFilemode(0777)
-                ->handle(E_WARNING, 'message', __FILE__, __LINE__);
+            ->handle(E_WARNING, 'message', __FILE__, __LINE__);
         assertThat(
-                $this->root->getChild(self::$logPath)->getPermissions(),
-                equals(0777)
+            $this->root->getChild(self::$logPath)->getPermissions(),
+            equals(0777)
         );
     }
 }

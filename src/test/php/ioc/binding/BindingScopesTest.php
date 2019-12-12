@@ -24,7 +24,7 @@ class BindingScopesTest extends TestCase
     /**
      * @test
      */
-    public function createsSingletonScopeIfNonePassed()
+    public function createsSingletonScopeIfNonePassed(): void
     {
         $bindingScopes = new BindingScopes();
         assertThat(
@@ -36,7 +36,7 @@ class BindingScopesTest extends TestCase
     /**
      * @test
      */
-    public function usesPassedSingletonScope()
+    public function usesPassedSingletonScope(): void
     {
         $singletonScope = NewInstance::of(BindingScope::class);
         $bindingScopes  = new BindingScopes($singletonScope);
@@ -46,7 +46,7 @@ class BindingScopesTest extends TestCase
     /**
      * @test
      */
-    public function usesPassedSessionScope()
+    public function usesPassedSessionScope(): void
     {
         $sessionScope  = NewInstance::of(BindingScope::class);
         $bindingScopes = new BindingScopes(null, $sessionScope);

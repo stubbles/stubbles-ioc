@@ -28,13 +28,13 @@ class MapBindingTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\ioc\binding\MapBinding
+     * @var  \stubbles\ioc\binding\MapBinding
      */
     private $mapBinding;
     /**
      * mocked injector
      *
-     * @type  \bovigo\callmap\Proxy
+     * @var  Injector&\bovigo\callmap\ClassProxy
      */
     private $injector;
 
@@ -47,7 +47,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function getKeyReturnsUniqueListKey()
+    public function getKeyReturnsUniqueListKey(): void
     {
         assertThat($this->mapBinding->getKey(), equals(MapBinding::TYPE . '#foo'));
     }
@@ -55,7 +55,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsEmptyListIfNothingAdded()
+    public function returnsEmptyListIfNothingAdded(): void
     {
         assertEmptyArray($this->mapBinding->getInstance($this->injector, 'int'));
     }
@@ -63,7 +63,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsTypedEmptyListIfNothingAdded()
+    public function returnsTypedEmptyListIfNothingAdded(): void
     {
         assertEmptyArray(
                 $this->mapBinding->getInstance(
@@ -76,7 +76,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueIsAddedToList()
+    public function valueIsAddedToList(): void
     {
         assertThat(
                 $this->mapBinding->withEntry('x', 303)
@@ -88,7 +88,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueIsAddedToTypedList()
+    public function valueIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -104,7 +104,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function classNameIsAddedToTypedList()
+    public function classNameIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         $this->injector->returns(['getInstance' => $value]);
@@ -121,7 +121,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueAddedToTypedListThrowsBindingException()
+    public function invalidValueAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntry('x', 303);
         expect(function() use ($mapBinding) {
@@ -135,7 +135,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectAddedToTypedListThrowsBindingException()
+    public function invalidObjectAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntry('x', new \stdClass());
         expect(function() use ($mapBinding) {
@@ -161,7 +161,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderIsAddedToList()
+    public function valueFromProviderIsAddedToList(): void
     {
         assertThat(
                 $this->mapBinding->withEntryFromProvider(
@@ -175,7 +175,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderIsAddedToTypedList()
+    public function valueFromProviderIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -193,7 +193,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueFromProviderAddedToTypedListThrowsBindingException()
+    public function invalidValueFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromProvider(
                 'x',
@@ -210,7 +210,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectFromProviderAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromProvider(
                 'x',
@@ -227,7 +227,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderClassIsAddedToList()
+    public function valueFromProviderClassIsAddedToList(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
@@ -241,7 +241,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderClassIsAddedToTypedList()
+    public function valueFromProviderClassIsAddedToTypedList(): void
     {
         $value    = new \stdClass();
         $provider = $this->createInjectionProvider($value);
@@ -259,7 +259,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException()
+    public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
@@ -275,7 +275,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
         $provider = $this->createInjectionProvider(new \stdClass());
         $this->prepareInjector($provider);
@@ -293,7 +293,7 @@ class MapBindingTest extends TestCase
      *
      * @param  InjectionProvider  $provider
      */
-    private function prepareInjector(InjectionProvider $provider)
+    private function prepareInjector(InjectionProvider $provider): void
     {
         $this->injector->returns(['getInstance' => $provider]);
     }
@@ -301,7 +301,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function addInvalidProviderClassThrowsBindingException()
+    public function addInvalidProviderClassThrowsBindingException(): void
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
         $this->injector->returns(['getInstance' => \stdClass::class]);
@@ -317,7 +317,7 @@ class MapBindingTest extends TestCase
     /**
      * @test
      */
-    public function addInvalidProviderValueThrowsIlegalArgumentException()
+    public function addInvalidProviderValueThrowsIlegalArgumentException(): void
     {
         expect(function() {
                 $this->mapBinding->withEntryFromProvider('x', new \stdClass());
@@ -329,7 +329,7 @@ class MapBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function valueFromClosureIsAddedToList()
+    public function valueFromClosureIsAddedToList(): void
     {
         assertThat(
                 $this->mapBinding->withEntryFromClosure('x', function() { return 303; })
@@ -343,7 +343,7 @@ class MapBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function valueFromClosureIsAddedToTypedList()
+    public function valueFromClosureIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -363,7 +363,7 @@ class MapBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function invalidValueFromClosureAddedToTypedListThrowsBindingException()
+    public function invalidValueFromClosureAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromClosure(
                 'x',
@@ -382,7 +382,7 @@ class MapBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function invalidObjectFromClosureAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromClosureAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromClosure(
                 'x',

@@ -91,8 +91,8 @@ abstract class MultiBinding implements Binding
     /**
      * returns the created instance
      *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string                  $name
+     * @param   \stubbles\ioc\Injector   $injector
+     * @param   string|\ReflectionClass  $name
      * @return  mixed
      */
     public function getInstance(Injector $injector, $name = null)

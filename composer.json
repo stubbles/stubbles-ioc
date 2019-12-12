@@ -7,14 +7,14 @@
     "require": {
         "php": "^7.3",
         "stubbles/sequence": "^9.0",
-        "stubbles/values": "^9.0",
-        "stubbles/reflect": "^9.0"
+        "stubbles/values": "^9.1",
+        "stubbles/reflect": "^9.1"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
         "phpunit/phpunit": "^8.4",
-        "bovigo/callmap": "^5.0.1",
-        "bovigo/assert": "^5.0",
+        "bovigo/callmap": "^5.2.1",
+        "bovigo/assert": "^5.1.1",
         "stubbles/streams": "^9.0"
     },
     "autoload": {

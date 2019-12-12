@@ -26,7 +26,7 @@ class InjectorSingletonScopeTest extends TestCase
     /**
      * @test
      */
-    public function assigningSingletonScopeToBindingWillReuseInitialInstance()
+    public function assigningSingletonScopeToBindingWillReuseInitialInstance(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)
@@ -44,7 +44,7 @@ class InjectorSingletonScopeTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function assigningSingletonScopeToClosureBindingWillReuseInitialInstance()
+    public function assigningSingletonScopeToClosureBindingWillReuseInitialInstance(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)
@@ -60,7 +60,7 @@ class InjectorSingletonScopeTest extends TestCase
     /**
      * @test
      */
-    public function classAnnotatedWithSingletonWillOnlyBeCreatedOnce()
+    public function classAnnotatedWithSingletonWillOnlyBeCreatedOnce(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)->to(RandomSingleton::class);

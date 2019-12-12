@@ -28,13 +28,13 @@ class ListBindingTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\ioc\binding\ListBinding
+     * @var  \stubbles\ioc\binding\ListBinding
      */
     private $listBinding;
     /**
      * mocked injector
      *
-     * @type  \bovigo\callmap\Proxy
+     * @var  Injector&\bovigo\callmap\ClassProxy
      */
     private $injector;
 
@@ -47,7 +47,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function getKeyReturnsUniqueListKey()
+    public function getKeyReturnsUniqueListKey(): void
     {
         assertThat($this->listBinding->getKey(), equals(ListBinding::TYPE . '#foo'));
     }
@@ -55,7 +55,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsEmptyListIfNothingAdded()
+    public function returnsEmptyListIfNothingAdded(): void
     {
         assertEmptyArray($this->listBinding->getInstance($this->injector, 'int'));
     }
@@ -63,7 +63,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsTypedEmptyListIfNothingAdded()
+    public function returnsTypedEmptyListIfNothingAdded(): void
     {
         assertEmptyArray(
                 $this->listBinding->getInstance(
@@ -76,7 +76,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueIsAddedToList()
+    public function valueIsAddedToList(): void
     {
         assertThat(
                 $this->listBinding->withValue(303)
@@ -88,7 +88,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueIsAddedToTypedList()
+    public function valueIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -104,7 +104,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function classNameIsAddedToTypedList()
+    public function classNameIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         $this->injector->returns(['getInstance' => $value]);
@@ -121,7 +121,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueAddedToTypedListThrowsBindingException()
+    public function invalidValueAddedToTypedListThrowsBindingException(): void
     {
         expect(function() {
                 $this->listBinding->withValue(303)->getInstance(
@@ -134,7 +134,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectAddedToTypedListThrowsBindingException()
+    public function invalidObjectAddedToTypedListThrowsBindingException(): void
     {
         expect(function() {
             $this->listBinding->withValue(new \stdClass())->getInstance(
@@ -159,7 +159,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderIsAddedToList()
+    public function valueFromProviderIsAddedToList(): void
     {
         assertThat(
                 $this->listBinding
@@ -172,7 +172,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderIsAddedToTypedList()
+    public function valueFromProviderIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -189,7 +189,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueFromProviderAddedToTypedListThrowsBindingException()
+    public function invalidValueFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $listBinding = $this->listBinding->withValueFromProvider(
                 $this->createInjectionProvider(303)
@@ -205,7 +205,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectFromProviderAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $listBinding = $this->listBinding->withValueFromProvider(
                 $this->createInjectionProvider(new \stdClass())
@@ -221,7 +221,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderClassIsAddedToList()
+    public function valueFromProviderClassIsAddedToList(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
@@ -235,7 +235,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function valueFromProviderClassIsAddedToTypedList()
+    public function valueFromProviderClassIsAddedToTypedList(): void
     {
         $value    = new \stdClass();
         $provider = $this->createInjectionProvider($value);
@@ -253,7 +253,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException()
+    public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
@@ -269,7 +269,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
         $provider = $this->createInjectionProvider(new \stdClass());
         $this->prepareInjector($provider);
@@ -287,7 +287,7 @@ class ListBindingTest extends TestCase
      *
      * @param  InjectionProvider  $provider
      */
-    private function prepareInjector(InjectionProvider $provider)
+    private function prepareInjector(InjectionProvider $provider): void
     {
         $this->injector->returns(['getInstance' => $provider]);
     }
@@ -295,7 +295,7 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function addInvalidProviderClassThrowsBindingException()
+    public function addInvalidProviderClassThrowsBindingException(): void
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
         $this->injector->returns(['getInstance' => \stdClass::class]);
@@ -311,10 +311,10 @@ class ListBindingTest extends TestCase
     /**
      * @test
      */
-    public function addInvalidProviderValueThrowsIlegalArgumentException()
+    public function addInvalidProviderValueThrowsIlegalArgumentException(): void
     {
         expect(function() {
-                $this->listBinding->withValueFromProvider(new \stdClass());
+            $this->listBinding->withValueFromProvider(new \stdClass());
         })->throws(\InvalidArgumentException::class);
     }
 
@@ -323,7 +323,7 @@ class ListBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function valueFromClosureIsAddedToList()
+    public function valueFromClosureIsAddedToList(): void
     {
         assertThat(
                 $this->listBinding->withValueFromClosure(function() { return 303; })
@@ -337,7 +337,7 @@ class ListBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function valueFromClosureIsAddedToTypedList()
+    public function valueFromClosureIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
@@ -356,7 +356,7 @@ class ListBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function invalidValueFromClosureAddedToTypedListThrowsBindingException()
+    public function invalidValueFromClosureAddedToTypedListThrowsBindingException(): void
     {
         $listBinding = $this->listBinding->withValueFromClosure(
                 function() { return 303; }
@@ -374,7 +374,7 @@ class ListBindingTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function invalidObjectFromClosureAddedToTypedListThrowsBindingException()
+    public function invalidObjectFromClosureAddedToTypedListThrowsBindingException(): void
     {
         $listBinding = $this->listBinding->withValueFromClosure(
                 function() { return new \stdClass(); }

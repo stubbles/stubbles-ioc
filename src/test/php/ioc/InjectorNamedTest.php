@@ -29,7 +29,7 @@ class InjectorNamedTest extends TestCase
     /**
      * @test
      */
-    public function namedBindingIsKnownWhenSpecified()
+    public function namedBindingIsKnownWhenSpecified(): void
     {
         $binder = new Binder();
         $binder->bind(Employee::class)->named('schst')->to(Boss::class);
@@ -40,7 +40,7 @@ class InjectorNamedTest extends TestCase
     /**
      * @test
      */
-    public function namedBindingIsNotUsedWhenNoGenericBindingSpecified()
+    public function namedBindingIsNotUsedWhenNoGenericBindingSpecified(): void
     {
         $binder = new Binder();
         $binder->bind(Employee::class)->named('schst')->to(Boss::class);
@@ -53,7 +53,7 @@ class InjectorNamedTest extends TestCase
      *
      * @test
      */
-    public function namedConstructorInjectionWithMultipleParamAndOneNamedParam()
+    public function namedConstructorInjectionWithMultipleParamAndOneNamedParam(): void
     {
         $binder = new Binder();
         $binder->bind(Employee::class)->named('schst')->to(Boss::class);
@@ -72,7 +72,7 @@ class InjectorNamedTest extends TestCase
     /**
      * @test
      */
-    public function namedConstructorInjectionWithMultipleParamAndOneNamedConstantParam()
+    public function namedConstructorInjectionWithMultipleParamAndOneNamedConstantParam(): void
     {
         $binder = new Binder();
         $binder->bindConstant('boss')->to('role:boss');
@@ -91,7 +91,7 @@ class InjectorNamedTest extends TestCase
     /**
      * @test
      */
-    public function namedConstructorInjectionWithMultipleParamAndNamedParamGroup()
+    public function namedConstructorInjectionWithMultipleParamAndNamedParamGroup(): void
     {
         $binder = new Binder();
         $binder->bind(Employee::class)->named('schst')->to(Boss::class);

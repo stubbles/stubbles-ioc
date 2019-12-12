@@ -28,19 +28,19 @@ class SessionBindingScopeTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\ioc\binding\SessionBindingScope
+     * @var  \stubbles\ioc\binding\SessionBindingScope
      */
     private $sessionScope;
     /**
      * mocked session id
      *
-     * @type  \stubbles\ioc\binding\Session
+     * @var  Session&\bovigo\callmap\ClassProxy
      */
     private $session;
     /**
      * mocked injection provider
      *
-     * @type  \stubbles\ioc\InjectionProvider
+     * @var  InjectionProvider&\bovigo\callmap\ClassProxy
      */
     private $provider;
 
@@ -54,9 +54,9 @@ class SessionBindingScopeTest extends TestCase
     /**
      * prepares session with given callmap
      *
-     * @param  array  $callmap
+     * @param  array<string,mixed>  $callmap
      */
-    private function prepareSession(array $callmap)
+    private function prepareSession(array $callmap): void
     {
         $this->session->returns($callmap);
         $this->sessionScope->setSession($this->session);
@@ -65,7 +65,7 @@ class SessionBindingScopeTest extends TestCase
     /**
      * @test
      */
-    public function returnsInstanceFromSessionIfPresent()
+    public function returnsInstanceFromSessionIfPresent(): void
     {
         $instance = new \stdClass();
         $this->prepareSession(['hasValue' => true, 'value' => $instance]);
@@ -82,7 +82,7 @@ class SessionBindingScopeTest extends TestCase
     /**
      * @test
      */
-    public function createsInstanceIfNotPresent()
+    public function createsInstanceIfNotPresent(): void
     {
         $instance = new \stdClass();
         $this->prepareSession(['hasValue' => false]);
@@ -99,7 +99,7 @@ class SessionBindingScopeTest extends TestCase
     /**
      * @test
      */
-    public function throwsRuntimeExceptionWhenCreatedWithoutSession()
+    public function throwsRuntimeExceptionWhenCreatedWithoutSession(): void
     {
         expect(function() {
                 $this->sessionScope->getInstance(

@@ -30,15 +30,15 @@ class AppTest extends TestCase
 {
     protected function tearDown(): void
     {
-        restore_error_handler();
-        restore_exception_handler();
+        \restore_error_handler();
+        \restore_exception_handler();
     }
 
     /**
      * @since  2.0.0
      * @test
      */
-    public function createCreatesInstanceUsingBindings()
+    public function createCreatesInstanceUsingBindings(): void
     {
         $appCommandWithBindings = AppClassWithBindings::create('projectPath');
         assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
@@ -47,7 +47,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function createInstanceCreatesInstanceUsingBindings()
+    public function createInstanceCreatesInstanceUsingBindings(): void
     {
         $appCommandWithBindings = App::createInstance(
                 AppClassWithBindings::class,
@@ -59,7 +59,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function createInstanceCreatesInstanceWithoutBindings()
+    public function createInstanceCreatesInstanceWithoutBindings(): void
     {
         assertThat(
                 App::createInstance(
@@ -74,7 +74,7 @@ class AppTest extends TestCase
      * @test
      * @since  5.0.0
      */
-    public function projectPathIsBoundWithExplicitBindings()
+    public function projectPathIsBoundWithExplicitBindings(): void
     {
         assertThat(
                 AppClassWithBindings::create('projectPath')->pathOfProject,
@@ -86,7 +86,7 @@ class AppTest extends TestCase
      * @test
      * @since  5.0.0
      */
-    public function projectPathIsBoundWithoutExplicitBindings()
+    public function projectPathIsBoundWithoutExplicitBindings(): void
     {
         assertThat(
                 AppClassWithoutBindings::create('projectPath')->pathOfProject,
@@ -98,7 +98,7 @@ class AppTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function canCreateRuntime()
+    public function canCreateRuntime(): void
     {
         assertThat(
                 AppUsingBindingModule::callBindRuntime(),
@@ -111,7 +111,7 @@ class AppTest extends TestCase
      * @group  issue_33
      * @test
      */
-    public function dynamicBindingViaClosure()
+    public function dynamicBindingViaClosure(): void
     {
         assertThat(
                 AppClassWithBindings::create('projectPath')->wasBoundBy(),
@@ -123,7 +123,7 @@ class AppTest extends TestCase
      * @test
      * @since  3.4.0
      */
-    public function bindCurrentWorkingDirectory()
+    public function bindCurrentWorkingDirectory(): void
     {
         $binder = new Binder();
         $module = AppUsingBindingModule::currentWorkingDirectoryModule();
@@ -131,6 +131,9 @@ class AppTest extends TestCase
         assertTrue($binder->getInjector()->hasConstant('stubbles.cwd'));
     }
 
+    /**
+     * @return  array<string[]>
+     */
     public function hostnameKeys(): array
     {
         return [
@@ -144,7 +147,7 @@ class AppTest extends TestCase
      * @since  3.4.0
      * @dataProvider  hostnameKeys
      */
-    public function bindHostname($key)
+    public function bindHostname(string $key): void
     {
         $binder = new Binder();
         $module = AppUsingBindingModule::bindHostnameModule();
@@ -155,7 +158,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function invalidBindingModuleThrowsIllegalArgumentException()
+    public function invalidBindingModuleThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 App::createInstance(
@@ -165,6 +168,9 @@ class AppTest extends TestCase
         })->throws(\InvalidArgumentException::class);
     }
 
+    /**
+     * @return  array<callable[]>
+     */
     public function assertions(): array
     {
         return [
@@ -179,7 +185,7 @@ class AppTest extends TestCase
      * @test
      * @dataProvider  assertions
      */
-    public function bindingModulesAreProcessed(callable $assertion)
+    public function bindingModulesAreProcessed(callable $assertion): void
     {
         $injector = App::createInstance(
                 AppClassWithBindings::class,

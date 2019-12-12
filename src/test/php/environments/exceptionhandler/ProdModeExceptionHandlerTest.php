@@ -23,7 +23,7 @@ class ProdModeExceptionHandlerTest extends TestCase
     /**
      * root path for log files
      *
-     * @type  org\bovigo\vfs\vfsStreamDirectory
+     * @var  \org\bovigo\vfs\vfsStreamDirectory
      */
     protected $root;
 
@@ -35,17 +35,21 @@ class ProdModeExceptionHandlerTest extends TestCase
     /**
      * creates instance to test
      *
-     * @return  \stubbles\environments\exceptionhandler\ProdModeExceptionHandler
+     * @return  ProdModeExceptionHandler&\bovigo\callmap\ClassProxy
      */
-    public function createExceptionHandler($sapi)
+    public function createExceptionHandler(string $sapi): ProdModeExceptionHandler
     {
         $prodModeExceptionHandler = NewInstance::of(
                 ProdModeExceptionHandler::class,
                 [vfsStream::url('root'), $sapi]
         )->returns(['header' => false, 'writeBody' => false]);
-        return $prodModeExceptionHandler->disableLogging();
+        $prodModeExceptionHandler->disableLogging();
+        return $prodModeExceptionHandler;
     }
 
+    /**
+     * @return  array<\Throwable[]>
+     */
     public function throwables(): array
     {
         return [
@@ -58,7 +62,7 @@ class ProdModeExceptionHandlerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function createsFallbackErrorMessageIfNoError500FilePresent($throwable)
+    public function createsFallbackErrorMessageIfNoError500FilePresent(\Throwable $throwable): void
     {
         $prodModeExceptionHandler = $this->createExceptionHandler('cgi');
         $prodModeExceptionHandler->handleException($throwable);
@@ -72,7 +76,7 @@ class ProdModeExceptionHandlerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function returnsContentOfError500FileIfPresent($throwable)
+    public function returnsContentOfError500FileIfPresent(\Throwable $throwable): void
     {
         vfsStream::newFile('docroot/500.html')
                 ->withContent('An error occurred')

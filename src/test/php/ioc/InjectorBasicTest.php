@@ -37,7 +37,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function injectorHasBindingsWhenSpecified()
+    public function injectorHasBindingsWhenSpecified(): void
     {
         $injector = Binder::createInjector(
                 function(Binder $binder)
@@ -53,7 +53,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function constructorInjection()
+    public function constructorInjection(): void
     {
         $injector = Binder::createInjector(
                 function(Binder $binder)
@@ -71,7 +71,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function doesNotHaveExplicitBindingWhenNotDefined()
+    public function doesNotHaveExplicitBindingWhenNotDefined(): void
     {
         $injector = Binder::createInjector();
         assertFalse($injector->hasExplicitBinding(Goodyear::class));
@@ -80,7 +80,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function usesImplicitBindingViaTypehints()
+    public function usesImplicitBindingViaTypehints(): void
     {
         $goodyear = Binder::createInjector()->getInstance(Goodyear::class);
         assertThat($goodyear, isInstanceOf(Goodyear::class));
@@ -89,7 +89,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function implicitBindingTurnsIntoExplicitBindingAfterFirstUsage()
+    public function implicitBindingTurnsIntoExplicitBindingAfterFirstUsage(): void
     {
         $injector = Binder::createInjector();
         $injector->getInstance(Goodyear::class);
@@ -99,7 +99,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function implicitBindingAsDependency()
+    public function implicitBindingAsDependency(): void
     {
         $injector = Binder::createInjector();
         $obj      = $injector->getInstance(ImplicitDependency::class);
@@ -109,7 +109,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function optionalImplicitDependencyWillNotBeSetIfNotBound()
+    public function optionalImplicitDependencyWillNotBeSetIfNotBound(): void
     {
         $injector = Binder::createInjector();
         $obj      = $injector->getInstance(ImplicitOptionalDependency::class);
@@ -119,7 +119,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function optionalImplicitDependencyWillBeSetIfBound()
+    public function optionalImplicitDependencyWillBeSetIfBound(): void
     {
         $injector = Binder::createInjector(
                 function(Binder $binder)
@@ -134,7 +134,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function missingBindingThrowsBindingException()
+    public function missingBindingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -145,7 +145,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function missingBindingOnInjectionHandlingThrowsBindingException()
+    public function missingBindingOnInjectionHandlingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -156,7 +156,7 @@ class InjectorBasicTest extends TestCase
     /**
      * @test
      */
-    public function missingConstantBindingOnInjectionHandlingThrowsBindingException()
+    public function missingConstantBindingOnInjectionHandlingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -168,7 +168,7 @@ class InjectorBasicTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function optionalConstructorInjection()
+    public function optionalConstructorInjection(): void
     {
         $injector = Binder::createInjector();
         $bike     = $injector->getInstance(BikeWithOptionalTire::class);
@@ -179,7 +179,7 @@ class InjectorBasicTest extends TestCase
      * @test
      * @since  5.1.0
      */
-    public function constructorInjectionWithOptionalSecondParam()
+    public function constructorInjectionWithOptionalSecondParam(): void
     {
         $injector = Binder::createInjector(
                 function(Binder $binder)

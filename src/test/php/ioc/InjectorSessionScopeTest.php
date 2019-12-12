@@ -28,7 +28,7 @@ class InjectorSessionScopeTest extends TestCase
     /**
      * binder instance to be used in tests
      *
-     * @type  \stubbles\ioc\Injector
+     * @var  \stubbles\ioc\Injector
      */
     private $injector;
 
@@ -45,7 +45,7 @@ class InjectorSessionScopeTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function canBindToSessionScopeWithoutSession()
+    public function canBindToSessionScopeWithoutSession(): void
     {
         assertTrue($this->injector->hasBinding(Person2::class));
     }
@@ -54,7 +54,7 @@ class InjectorSessionScopeTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function requestSessionScopedWithoutSessionThrowsRuntimeException()
+    public function requestSessionScopedWithoutSessionThrowsRuntimeException(): void
     {
         expect(function() {
                 $this->injector->getInstance(Person2::class);
@@ -65,7 +65,7 @@ class InjectorSessionScopeTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function requestSessionScopedWithSessionReturnsInstance()
+    public function requestSessionScopedWithSessionReturnsInstance(): void
     {
         $session = NewInstance::of(Session::class)
                 ->returns(['hasValue' => false]);
@@ -80,7 +80,7 @@ class InjectorSessionScopeTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function setSessionAddsBindingForSession()
+    public function setSessionAddsBindingForSession(): void
     {
         assertTrue(
                 $this->injector->setSession(
@@ -94,7 +94,7 @@ class InjectorSessionScopeTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function setSessionAddsBindingForSessionAsSingleton()
+    public function setSessionAddsBindingForSessionAsSingleton(): void
     {
         $session = NewInstance::of(Session::class);
         assertThat(

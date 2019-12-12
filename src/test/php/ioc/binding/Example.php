@@ -15,6 +15,9 @@ use stubbles\values\Secret;
  */
 class Example
 {
+    /**
+     * @var  Secret
+     */
     public $password;
     /**
      * constructor

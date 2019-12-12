@@ -29,7 +29,7 @@ class InjectorProviderTest extends TestCase
     /**
      * @test
      */
-    public function injectWithProviderInstance()
+    public function injectWithProviderInstance(): void
     {
         $binder   = new Binder();
         $answer   = new Answer();
@@ -45,7 +45,7 @@ class InjectorProviderTest extends TestCase
     /**
      * @test
      */
-    public function injectWithInvalidProviderClassThrowsException()
+    public function injectWithInvalidProviderClassThrowsException(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)->toProviderClass(\stdClass::class);
@@ -58,7 +58,7 @@ class InjectorProviderTest extends TestCase
     /**
      * @test
      */
-    public function injectWithProviderClassName()
+    public function injectWithProviderClassName(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)
@@ -71,7 +71,7 @@ class InjectorProviderTest extends TestCase
     /**
      * @test
      */
-    public function injectWithProviderClass()
+    public function injectWithProviderClass(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)

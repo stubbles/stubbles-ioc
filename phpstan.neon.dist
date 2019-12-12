@@ -1,23 +1,37 @@
+includes:
+  - vendor/bovigo/assert/src/main/resources/phpstan/bovigo-assert.neon
 parameters:
+  inferPrivatePropertyTypeFromConstructor: true
   level: 7
   paths:
-      - ./src
+      - ./src/main/php
+      - ./src/test/php
   ignoreErrors:
       # False positive
+      - '#Access to an undefined property object::#'
+      - '#Call to an undefined method object::#'
       - '#Call to an undefined method stubbles\\reflect\\annotation\\Annotation::get#'
-      - '#Call to an undefined method bovigo\\callmap\\ClassProxy::disableLogging\(\).#'
       - '#Access to an undefined property stubbles\\App::\$#'
       - '#Call to an undefined method stubbles\\App::wasBoundBy\(\).#'
-      - '#but returns bovigo\\callmap\\ClassProxy#'
-      - '#bovigo\\callmap\\ClassProxy given#'
-      - '#expects bovigo\\callmap\\Proxy, stubbles\\environments\\exceptionhandler\\DisplayException given#'
-      - '#expects bovigo\\callmap\\Proxy, stubbles\\environments\\exceptionhandler\\ProdModeExceptionHandler given#'
       - '#Method stubbles\\App::createInstance\(\) should return stubbles\\App but returns object#'
       - '#Method stubbles\\ioc\\MultibindingTest::createPluginHandler\(\) should return stubbles\\test\\ioc\\PluginHandler but returns object#'
-      - '#Call to an undefined method object::#'
-      - '#Access to an undefined property object::#'
-      - '#should return callable but returns array<int, mixed>#'
-      - '#environment of class stubbles\\Runtime constructor expects \(callable\)\|stubbles\\Environment\|null, stdClass given#'
+      # Explicit tests
+      -
+          message: '#class stubbles\\Runtime constructor expects \(callable\(\): mixed\)|stubbles\\Environment|null, stdClass given#'
+          path: src/test/php/RuntimeTest.php
+      -
+          message: '#method stubbles\\ioc\\binding\\ListBinding::withValueFromProvider\(\) expects string|stubbles\\ioc\\InjectionProvider, stdClass given#'
+          path: src/test/php/ioc/binding/ListBindingTest.php
+      -
+          message: '#method stubbles\\ioc\\binding\\MapBinding::withEntryFromProvider\(\) expects string|stubbles\\ioc\\InjectionProvider, stdClass given#'
+          path: src/test/php/ioc/binding/MapBindingTest.php
+      # phpstan can't handle methods included by trait
+      -
+          message: '#Call to an undefined method stubbles\\Environment::useErrorHandler\(\)#'
+          path: src/test/php/environments/ErrorHandlerTest.php
+      -
+          message: '#Call to an undefined method stubbles\\Environment::useExceptionHandler\(\)#'
+          path: src/test/php/environments/ExceptionHandlerTest.php
       -
           message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
           path: src/main/php/environments/Production.php
@@ -25,20 +39,9 @@ parameters:
           message: '#Cannot access offset 0 on callable\(\): mixed#'
           path: src/main/php/environments/Handler.php
       -
-          message: '#Call to function method_exists\(\) with string and #'
-          path: src/main/php/App.php
-      -
           message: '#Result of && is always false#'
           path: src/main/php/ioc/binding/ClassBinding.php
+      # phpstan can't resolve return value based on input parameter
       -
-          message: '#function file_exists expects string, array\|string given#'
-          path: src/main/php/ExceptionLogger.php
-      -
-          message: '#function mkdir expects string, array\|string given#'
-          path: src/main/php/ExceptionLogger.php
-      -
-          message: '#should return string but returns array\|string#'
-          path: src/main/php/ExceptionLogger.php
-      -
-          message: '#should return string but returns array\|string#'
-          path: src/main/php/environments/errorhandler/LogErrorHandler.php
+          message: '#method stubbles\\ioc\\binding\\SessionBindingScope::getInstance\(\) expects ReflectionClass, ReflectionClass<stdClass>|ReflectionFunction|ReflectionMethod|ReflectionObject<stdClass> given#'
+          path: src/test/php/ioc/binding/SessionBindingScopeTest.php

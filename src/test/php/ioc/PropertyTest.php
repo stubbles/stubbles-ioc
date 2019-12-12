@@ -28,7 +28,7 @@ class PropertyTest extends TestCase
     /**
      * properties to be bound
      *
-     * @type  \stubbles\values\Properties
+     * @var  \stubbles\values\Properties
      */
     private $properties;
 
@@ -49,7 +49,7 @@ class PropertyTest extends TestCase
      * @param   string  $environment  optional
      * @return  \stubbles\ioc\Injector
      */
-    private function createInjector($environment = 'PROD'): Injector
+    private function createInjector(string $environment = 'PROD'): Injector
     {
         $binder = new Binder();
         $binder->bindProperties($this->properties, $environment);
@@ -60,7 +60,7 @@ class PropertyTest extends TestCase
     /**
      * @test
      */
-    public function setsCorrectPropertiesInRuntimeModeWithSpecificProperties()
+    public function setsCorrectPropertiesInRuntimeModeWithSpecificProperties(): void
     {
         $propertyReceiver = $this->createInjector('PROD')
                 ->getInstance(PropertyReceiver::class);
@@ -71,7 +71,7 @@ class PropertyTest extends TestCase
     /**
      * @test
      */
-    public function setsCorrectPropertiesInRuntimeModeWithDefaultProperties()
+    public function setsCorrectPropertiesInRuntimeModeWithDefaultProperties(): void
     {
         $propertyReceiver = $this->createInjector('DEV')
                 ->getInstance(PropertyReceiver::class);
@@ -82,7 +82,7 @@ class PropertyTest extends TestCase
     /**
      * @test
      */
-    public function instanceCreationThrowsBindingExceptionWhenNoPropertiesBound()
+    public function instanceCreationThrowsBindingExceptionWhenNoPropertiesBound(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -99,7 +99,7 @@ class PropertyTest extends TestCase
      * @test
      * @since  5.1.0
      */
-    public function propertyInstanceIsBound()
+    public function propertyInstanceIsBound(): void
     {
         assertThat(
                 $this->createInjector()->getInstance(

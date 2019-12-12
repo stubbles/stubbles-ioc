@@ -30,7 +30,7 @@ class InjectorConstantTest extends TestCase
      *
      * @param  Injector  $injector
      */
-    private function assertConstantInjection(Injector $injector)
+    private function assertConstantInjection(Injector $injector): void
     {
         $question = $injector->getInstance(Question::class);
         assertThat($question, equals(new Question(42)));
@@ -39,7 +39,7 @@ class InjectorConstantTest extends TestCase
     /**
      * @test
      */
-    public function injectConstant()
+    public function injectConstant(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')->to(42);
@@ -49,7 +49,7 @@ class InjectorConstantTest extends TestCase
     /**
      * @test
      */
-    public function checkForNonExistingConstantReturnsFalse()
+    public function checkForNonExistingConstantReturnsFalse(): void
     {
         assertFalse(Binder::createInjector()->hasConstant('answer'));
     }
@@ -57,7 +57,7 @@ class InjectorConstantTest extends TestCase
     /**
      * @test
      */
-    public function retrieveNonExistingConstantThrowsBindingException()
+    public function retrieveNonExistingConstantThrowsBindingException(): void
     {
         expect(function() {
                 Binder::createInjector()->getConstant('answer');
@@ -68,7 +68,7 @@ class InjectorConstantTest extends TestCase
      * @test
      * @since  1.1.0
      */
-    public function checkForExistingConstantReturnsTrue()
+    public function checkForExistingConstantReturnsTrue(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')->to(42);
@@ -79,7 +79,7 @@ class InjectorConstantTest extends TestCase
      * @test
      * @since  1.1.0
      */
-    public function retrieveExistingConstantReturnsValue()
+    public function retrieveExistingConstantReturnsValue(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')->to(42);
@@ -91,7 +91,7 @@ class InjectorConstantTest extends TestCase
      * @group  ioc_constantprovider
      * @since  1.6.0
      */
-    public function constantViaInjectionProviderInstance()
+    public function constantViaInjectionProviderInstance(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
@@ -110,7 +110,7 @@ class InjectorConstantTest extends TestCase
      * @group  ioc_constantprovider
      * @since  1.6.0
      */
-    public function constantViaInvalidInjectionProviderClassThrowsBindingException()
+    public function constantViaInvalidInjectionProviderClassThrowsBindingException(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
@@ -125,7 +125,7 @@ class InjectorConstantTest extends TestCase
      * @group  ioc_constantprovider
      * @since  1.6.0
      */
-    public function constantViaInjectionProviderClass()
+    public function constantViaInjectionProviderClass(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
@@ -143,7 +143,7 @@ class InjectorConstantTest extends TestCase
      * @group  ioc_constantprovider
      * @since  1.6.0
      */
-    public function constantViaInjectionProviderClassName()
+    public function constantViaInjectionProviderClassName(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
@@ -159,7 +159,7 @@ class InjectorConstantTest extends TestCase
      * @test
      * @group  issue_31
      */
-    public function injectConstantViaClosure()
+    public function injectConstantViaClosure(): void
     {
         $binder = new Binder();
         $binder->bindConstant('answer')->toClosure(function() { return 42; });

@@ -25,7 +25,7 @@ class InjectorProvidedByTest extends TestCase
      * @test
      * @group  bug226
      */
-    public function annotatedProviderClassIsUsedWhenNoExplicitBindingSpecified()
+    public function annotatedProviderClassIsUsedWhenNoExplicitBindingSpecified(): void
     {
         assertThat(
                 Binder::createInjector()->getInstance(Person2::class),
@@ -36,7 +36,7 @@ class InjectorProvidedByTest extends TestCase
     /**
      * @test
      */
-    public function explicitBindingOverwritesProvidedByAnnotation()
+    public function explicitBindingOverwritesProvidedByAnnotation(): void
     {
         $binder = new Binder();
         $binder->bind(Person2::class)->to(Mikey::class);

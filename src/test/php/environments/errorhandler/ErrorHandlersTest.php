@@ -26,25 +26,25 @@ class ErrorHandlersTest extends TestCase
     /**
      * instance to test
      *
-     * @type  ErrorHandlers
+     * @var  ErrorHandlers
      */
     protected $errorHandlers;
     /**
      * a mocked error handler
      *
-     * @type  \stubbles\environments\errorhandler\ErrorHandler
+     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
      */
     protected $errorHandler1;
     /**
      * a mocked error handler
      *
-     * @type  \stubbles\environments\errorhandler\ErrorHandler
+     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
      */
     protected $errorHandler2;
     /**
      * a mocked error handler
      *
-     * @type  \stubbles\environments\errorhandler\ErrorHandler
+     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
      */
     protected $errorHandler3;
 
@@ -62,7 +62,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function isResponsibleDoesOnlyCallErrorHandlersUntilResponsibleOneFound()
+    public function isResponsibleDoesOnlyCallErrorHandlersUntilResponsibleOneFound(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
         $this->errorHandler2->returns(['isResponsible' => true]);
@@ -73,7 +73,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function isResponsibleReturnsFalseIfNoHandlerIsResponsible()
+    public function isResponsibleReturnsFalseIfNoHandlerIsResponsible(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
         $this->errorHandler2->returns(['isResponsible' => false]);
@@ -84,7 +84,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function isSupressableReturnsFalseAsSoonAsOneHandlerDeniesSupressability()
+    public function isSupressableReturnsFalseAsSoonAsOneHandlerDeniesSupressability(): void
     {
         $this->errorHandler1->returns(['isSupressable' => true]);
         $this->errorHandler2->returns(['isSupressable' => false]);
@@ -95,7 +95,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function isSupressableReturnsOnlyTrueIfAllHandlerAllowSupressability()
+    public function isSupressableReturnsOnlyTrueIfAllHandlerAllowSupressability(): void
     {
         $this->errorHandler1->returns(['isSupressable' => true]);
         $this->errorHandler2->returns(['isSupressable' => true]);
@@ -106,7 +106,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function handleSignalsDefaultStrategyIfNoErrorHandlerIsResponsible()
+    public function handleSignalsDefaultStrategyIfNoErrorHandlerIsResponsible(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
         $this->errorHandler2->returns(['isResponsible' => false]);
@@ -120,7 +120,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function handleSignalsStopIfErrorIsSuppressableAndSuppressedByGlobalErrorReporting()
+    public function handleSignalsStopIfErrorIsSuppressableAndSuppressedByGlobalErrorReporting(): void
     {
         $oldLevel = error_reporting(0);
         try {
@@ -140,7 +140,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingDisabled()
+    public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingDisabled(): void
     {
         $oldLevel = error_reporting(0);
         try {
@@ -164,7 +164,7 @@ class ErrorHandlersTest extends TestCase
     /**
      * @test
      */
-    public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingEnabled()
+    public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingEnabled(): void
     {
         $oldLevel = error_reporting(E_ALL);
         try {

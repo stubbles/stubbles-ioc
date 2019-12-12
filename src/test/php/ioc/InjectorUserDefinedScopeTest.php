@@ -24,7 +24,7 @@ class InjectorUserDefinedScopeTest extends TestCase
     /**
      * @test
      */
-    public function hasBindingWhenBoundToOtherScope()
+    public function hasBindingWhenBoundToOtherScope(): void
     {
         $binder = new Binder();
         $binder->bind(\stdClass::class)
@@ -36,7 +36,7 @@ class InjectorUserDefinedScopeTest extends TestCase
     /**
      * @test
      */
-    public function otherScopeIsUsedToCreateInstance()
+    public function otherScopeIsUsedToCreateInstance(): void
     {
         $binder   = new Binder();
         $instance = new \stdClass();

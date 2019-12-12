@@ -28,7 +28,7 @@ class ExceptionHandlerTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\Environment
+     * @var  \stubbles\Environment
      */
     protected $environment;
 
@@ -38,7 +38,11 @@ class ExceptionHandlerTest extends TestCase
         {
             use Handler;
 
-            public function useExceptionHandler($class)
+            /**
+             * @param   class-string<ExceptionHandler>|ExceptionHandler  $class
+             * @return  Environment
+             */
+            public function useExceptionHandler($class): Environment
             {
                 return $this->setExceptionHandler($class, 'handleException');
             }
@@ -57,7 +61,7 @@ class ExceptionHandlerTest extends TestCase
     /**
      * @test
      */
-    public function registerExceptionHandlerWithInvalidClassThrowsIllegalArgumentException()
+    public function registerExceptionHandlerWithInvalidClassThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->environment->useExceptionHandler(404);
@@ -67,7 +71,7 @@ class ExceptionHandlerTest extends TestCase
     /**
      * @test
      */
-    public function registerExceptionHandlerWithClassNameReturnsCreatedInstance()
+    public function registerExceptionHandlerWithClassNameReturnsCreatedInstance(): void
     {
         $exceptionHandlerClass = NewInstance::classname(ExceptionHandler::class);
         assertThat(
@@ -80,7 +84,7 @@ class ExceptionHandlerTest extends TestCase
     /**
      * @test
      */
-    public function registerExceptionHandlerWithInstanceReturnsGivenInstance()
+    public function registerExceptionHandlerWithInstanceReturnsGivenInstance(): void
     {
         $exceptionHandler = NewInstance::of(ExceptionHandler::class);
         assertThat(

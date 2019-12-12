@@ -18,6 +18,7 @@ use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
+use function bovigo\assert\fail;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function stubbles\reflect\reflect;
@@ -33,7 +34,7 @@ class PropertyBindingTest extends TestCase
     /**
      * mocked injector
      *
-     * @type  \stubbles\ioc\Injector
+     * @var  Injector&\bovigo\callmap\ClassProxy
      */
     private $injector;
 
@@ -68,7 +69,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function hasValueForRuntimeMode()
+    public function hasValueForRuntimeMode(): void
     {
         assertTrue($this->createPropertyBinding()->hasProperty('foo.bar'));
     }
@@ -76,7 +77,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsProdValueForRuntimeMode()
+    public function returnsProdValueForRuntimeMode(): void
     {
         assertThat(
                 $this->createPropertyBinding()->getInstance($this->injector, 'foo.bar'),
@@ -87,7 +88,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function hasValueForDifferentRuntimeMode()
+    public function hasValueForDifferentRuntimeMode(): void
     {
         assertTrue($this->createPropertyBinding('DEV')->hasProperty('foo.bar'));
     }
@@ -95,7 +96,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsConfigValueForDifferentRuntimeMode()
+    public function returnsConfigValueForDifferentRuntimeMode(): void
     {
         assertThat(
                 $this->createPropertyBinding('DEV')->getInstance($this->injector, 'foo.bar'),
@@ -106,7 +107,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function hasValueWhenNoSpecificForRuntimeModeSet()
+    public function hasValueWhenNoSpecificForRuntimeModeSet(): void
     {
         assertTrue($this->createPropertyBinding()->hasProperty('other'));
     }
@@ -114,7 +115,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function returnsConfigValueWhenNoSpecificForRuntimeModeSet()
+    public function returnsConfigValueWhenNoSpecificForRuntimeModeSet(): void
     {
         assertThat(
                 $this->createPropertyBinding()->getInstance($this->injector, 'other'),
@@ -125,7 +126,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function doesNotHaveValueWhenPropertyNotSet()
+    public function doesNotHaveValueWhenPropertyNotSet(): void
     {
         assertFalse($this->createPropertyBinding()->hasProperty('does.not.exist'));
     }
@@ -133,7 +134,7 @@ class PropertyBindingTest extends TestCase
     /**
      * @test
      */
-    public function throwsBindingExceptionWhenPropertyNotSet()
+    public function throwsBindingExceptionWhenPropertyNotSet(): void
     {
         $properyBinding = $this->createPropertyBinding();
         expect(function() use ($properyBinding) {
@@ -147,7 +148,7 @@ class PropertyBindingTest extends TestCase
      * @test
      * @since  4.1.0
      */
-    public function returnsParsedValuesForModeSpecificProperties()
+    public function returnsParsedValuesForModeSpecificProperties(): void
     {
         assertThat(
                 $this->createPropertyBinding()->getInstance($this->injector, 'baz'),
@@ -159,7 +160,7 @@ class PropertyBindingTest extends TestCase
      * @test
      * @since  4.1.0
      */
-    public function returnsParsedValuesForCommonProperties()
+    public function returnsParsedValuesForCommonProperties(): void
     {
         assertThat(
                 $this->createPropertyBinding('DEV')->getInstance($this->injector, 'baz'),
@@ -171,16 +172,19 @@ class PropertyBindingTest extends TestCase
      * @test
      * @since  4.1.3
      */
-    public function propertyBindingUsedWhenParamHasTypeHintButIsAnnotated()
+    public function propertyBindingUsedWhenParamHasTypeHintButIsAnnotated(): void
     {
+        $binder     = new Binder();
+        $properties = new Properties([
+            'config' => ['example.password' => 'somePassword']
+        ]);
+        $binder->bindProperties($properties, 'PROD');
+        $injector = $binder->getInjector();
         try {
-            $binder     = new Binder();
-            $properties = new Properties(
-                        ['config' => ['example.password' => 'somePassword']]
-                    );
-            $binder->bindProperties($properties, 'PROD');
-            $example = $binder->getInjector()->getInstance(Example::class);
+            $example = $injector->getInstance(Example::class);
             assertThat($example->password, isInstanceOf(Secret::class));
+        } catch (\Throwable $e) {
+            fail($e->getMessage());
         } finally {
             // ensure all references are removed to clean up environment
             unset($properties);

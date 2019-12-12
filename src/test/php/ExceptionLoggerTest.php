@@ -26,21 +26,21 @@ class ExceptionLoggerTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\ExceptionLogger
+     * @var  \stubbles\ExceptionLogger
      */
     private $exceptionLogger;
     /**
      * root path for log files
      *
-     * @type  org\bovigo\vfs\vfsStreamDirectory
+     * @var  \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
     /**
-     * @type  string
+     * @var  string
      */
     private static $logPath;
     /**
-     * @type  string
+     * @var  string
      */
     private static $logFile;
 
@@ -63,7 +63,7 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @since  5.4.0
      */
-    public function annotationsPresentOnClass()
+    public function annotationsPresentOnClass(): void
     {
         assertTrue(annotationsOf($this->exceptionLogger)->contain('Singleton'));
     }
@@ -72,7 +72,7 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @since  3.3.1
      */
-    public function annotationsPresentOnConstructor()
+    public function annotationsPresentOnConstructor(): void
     {
         $annotations = annotationsOfConstructor($this->exceptionLogger);
         assertTrue($annotations->contain('Named'));
@@ -82,6 +82,9 @@ class ExceptionLoggerTest extends TestCase
         );
     }
 
+    /**
+     * @return  array<\Throwable[]>
+     */
     public function throwables(): array
     {
         return [
@@ -94,7 +97,7 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function logsExceptionDataCreatesLogfile($throwable)
+    public function logsExceptionDataCreatesLogfile(\Throwable $throwable): void
     {
         $this->exceptionLogger->log($throwable);
         assertTrue($this->root->hasChild(self::$logPath . '/' . self::$logFile));
@@ -104,20 +107,18 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function logsExceptionData($throwable)
+    public function logsExceptionData(\Throwable $throwable): void
     {
         $this->exceptionLogger->log($throwable);
         $line = __LINE__ - 1;
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
-                substr(
-                        $this->root->getChild(self::$logPath . '/' . self::$logFile)
-                                ->getContent(),
-                        19
-                ),
-                equals(
-                        '|' . get_class($throwable) . '|failure message|'
-                        . __FILE__ . '|' . $throwable->getLine() . "||||\n"
-                )
+            substr($logfile->getContent(), 19),
+            equals(
+                '|' . get_class($throwable) . '|failure message|'
+                . __FILE__ . '|' . $throwable->getLine() . "||||\n"
+            )
         );
 
     }
@@ -126,22 +127,20 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function logsExceptionDataOfChainedAndCause($throwable)
+    public function logsExceptionDataOfChainedAndCause(\Throwable $throwable): void
     {
         $exception = new \Exception('chained exception', 303, $throwable);
         $line      = __LINE__ - 1;
         $this->exceptionLogger->log($exception);
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
-                substr(
-                        $this->root->getChild(self::$logPath . '/' . self::$logFile)
-                                ->getContent(),
-                        19
-                ),
-                equals(
-                        '|Exception|chained exception|' . __FILE__ . '|' . $line
-                        . '|' . get_class($throwable) . '|failure message|'
-                        . __FILE__ . '|' . $throwable->getLine() . "\n"
-                )
+            substr($logfile->getContent(), 19),
+            equals(
+                '|Exception|chained exception|' . __FILE__ . '|' . $line
+                . '|' . get_class($throwable) . '|failure message|'
+                . __FILE__ . '|' . $throwable->getLine() . "\n"
+            )
         );
     }
 
@@ -149,7 +148,7 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function createsLogDirectoryWithDefaultModeIfNotExists($throwable)
+    public function createsLogDirectoryWithDefaultModeIfNotExists(\Throwable $throwable): void
     {
         $this->exceptionLogger->log($throwable);
         assertThat(
@@ -162,7 +161,7 @@ class ExceptionLoggerTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function createsLogDirectoryWithChangedModeIfNotExists($throwable)
+    public function createsLogDirectoryWithChangedModeIfNotExists(\Throwable $throwable): void
     {
         $this->exceptionLogger->setFilemode(0777)->log($throwable);
         assertThat(

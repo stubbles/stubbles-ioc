@@ -31,13 +31,13 @@ class RuntimeTest extends TestCase
     /**
      * mocked mode instance
      *
-     * @type  \stubbles\Environment
+     * @var  Environment&\bovigo\callmap\ClassProxy
      */
     private $environment;
     /**
      * root path
      *
-     * @type  org\bovigo\vfs\vfsStreamDirectory
+     * @var  \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
@@ -58,7 +58,7 @@ class RuntimeTest extends TestCase
      * @test
      * @since  5.0.0
      */
-    public function runtimeIsNotInitializedWhenNoInstanceCreated()
+    public function runtimeIsNotInitializedWhenNoInstanceCreated(): void
     {
         assertFalse(Runtime::initialized());
     }
@@ -67,7 +67,7 @@ class RuntimeTest extends TestCase
      * @test
      * @since  5.0.0
      */
-    public function runtimeIsInitializedAfterFirstInstanceCreation()
+    public function runtimeIsInitializedAfterFirstInstanceCreation(): void
     {
         new Runtime();
         assertTrue(Runtime::initialized());
@@ -76,7 +76,7 @@ class RuntimeTest extends TestCase
     /**
      * @test
      */
-    public function registerMethodsShouldBeCalledWithGivenProjectPath()
+    public function registerMethodsShouldBeCalledWithGivenProjectPath(): void
     {
         $runtime = new Runtime($this->environment);
         $runtime->configure(new Binder(), $this->root->url());
@@ -89,7 +89,7 @@ class RuntimeTest extends TestCase
     /**
      * @test
      */
-    public function givenEnvironmentShouldBeBound()
+    public function givenEnvironmentShouldBeBound(): void
     {
         $runtime = new Runtime($this->environment);
         $binder  = new Binder();
@@ -103,7 +103,7 @@ class RuntimeTest extends TestCase
     /**
      * @test
      */
-    public function noEnvironmentGivenDefaultsToProdEnvironment()
+    public function noEnvironmentGivenDefaultsToProdEnvironment(): void
     {
         $runtime = new Runtime();
         $binder  = new Binder();
@@ -121,7 +121,7 @@ class RuntimeTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function bindsEnvironmentProvidedViaCallable()
+    public function bindsEnvironmentProvidedViaCallable(): void
     {
         $runtime = new Runtime(function() { return $this->environment; });
         $binder  = new Binder();
@@ -140,30 +140,31 @@ class RuntimeTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function createWithNonEnvironmentThrowsIllegalArgumentException()
+    public function createWithNonEnvironmentThrowsIllegalArgumentException(): void
     {
-        expect(function() {
-                new Runtime(new \stdClass());
-        })->throws(\InvalidArgumentException::class);
+        expect(function() { new Runtime(new \stdClass()); })
+            ->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @test
+     * @doesNotPerformAssertions
      * @since  3.4.0
      */
-    public function doesNotBindPropertiesWhenConfigFileIsMissing()
+    public function doesNotBindPropertiesWhenConfigFileIsMissing(): void
     {
         $binder = NewInstance::of(Binder::class);
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        assertTrue(verify($binder, 'bindProperties')->wasNeverCalled());
+        verify($binder, 'bindProperties')->wasNeverCalled();
     }
 
     /**
      * @test
+     * @doesNotPerformAssertions
      * @since  3.4.0
      */
-    public function bindsPropertiesWhenConfigFilePresent()
+    public function bindsPropertiesWhenConfigFilePresent(): void
     {
         vfsStream::newFile('config/config.ini')
                  ->withContent("[config]
@@ -174,13 +175,13 @@ stubbles.webapp.xml.serializeMode=true")
         $binder  = NewInstance::of(Binder::class);
         $runtime = new Runtime($this->environment);
         $runtime->configure($binder, $this->root->url());
-        assertTrue(verify($binder, 'bindProperties')->wasCalledOnce());
+        verify($binder, 'bindProperties')->wasCalledOnce();
     }
 
     /**
      * @test
      */
-    public function projectPathIsBound()
+    public function projectPathIsBound(): void
     {
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
@@ -191,6 +192,9 @@ stubbles.webapp.xml.serializeMode=true")
         );
     }
 
+    /**
+     * @return  array<string,string[]>
+     */
     public function getConstants(): array
     {
         return ['config' => ['config', 'stubbles.config.path'],
@@ -209,7 +213,7 @@ stubbles.webapp.xml.serializeMode=true")
      * @test
      * @dataProvider  getConstants
      */
-    public function pathesShouldBeBoundAsConstant($pathPart, $constantName)
+    public function pathesShouldBeBoundAsConstant(string $pathPart, string $constantName): void
     {
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
@@ -223,9 +227,9 @@ stubbles.webapp.xml.serializeMode=true")
     /**
      * returns constant names and values
      *
-     * @return  array
+     * @return  array<string,string[]>
      */
-    public function getWithAdditionalConstants()
+    public function getWithAdditionalConstants(): array
     {
         return array_merge(
                 $this->getConstants(),
@@ -239,7 +243,7 @@ stubbles.webapp.xml.serializeMode=true")
      * @test
      * @dataProvider  getWithAdditionalConstants
      */
-    public function additionalPathTypesShouldBeBound($pathPart, $constantName)
+    public function additionalPathTypesShouldBeBound(string $pathPart, string $constantName): void
     {
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);

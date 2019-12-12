@@ -30,7 +30,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function createsList()
+    public function createsList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
@@ -45,7 +45,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorReturnsFalseForNonAddedListOnCheck()
+    public function injectorReturnsFalseForNonAddedListOnCheck(): void
     {
         assertFalse(
                 Binder::createInjector()
@@ -56,7 +56,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorReturnsTrueForAddedListOnCheck()
+    public function injectorReturnsTrueForAddedListOnCheck(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
@@ -72,7 +72,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorRetrievesNonAddedListThrowsBindingException()
+    public function injectorRetrievesNonAddedListThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -83,7 +83,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorRetrievesAddedList()
+    public function injectorRetrievesAddedList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
@@ -99,7 +99,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function bindListMoreThanOnceAddsToSameList()
+    public function bindListMoreThanOnceAddsToSameList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
@@ -119,7 +119,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorReturnsFalseForNonAddedMapOnCheck()
+    public function injectorReturnsFalseForNonAddedMapOnCheck(): void
     {
         assertFalse(
                 Binder::createInjector()->hasBinding(MapBinding::TYPE, 'mapConfig')
@@ -129,7 +129,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorReturnsTrueForAddedMapOnCheck()
+    public function injectorReturnsTrueForAddedMapOnCheck(): void
     {
         $binder = new Binder();
         $binder->bindMap('mapConfig')
@@ -144,7 +144,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorRetrievesNonAddedMapThrowsBindingException()
+    public function injectorRetrievesNonAddedMapThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
@@ -155,7 +155,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function injectorRetrievesAddedMap()
+    public function injectorRetrievesAddedMap(): void
     {
         $binder = new Binder();
         $binder->bindMap('mapConfig')
@@ -171,7 +171,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function createsMap()
+    public function createsMap(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
@@ -189,7 +189,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function bindMapMoreThanOnceAddsToSameMap()
+    public function bindMapMoreThanOnceAddsToSameMap(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
@@ -209,7 +209,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function createTypedList()
+    public function createTypedList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
         $plugin2 = NewInstance::of(Plugin::class);
@@ -233,7 +233,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function bindTypedListMoreThanOnceAddsToSameList()
+    public function bindTypedListMoreThanOnceAddsToSameList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
         $plugin2 = NewInstance::of(Plugin::class);
@@ -259,7 +259,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function createTypedMap()
+    public function createTypedMap(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
         $plugin2 = NewInstance::of(Plugin::class);
@@ -287,7 +287,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function bindTypedMapMoreThanOnceAddsToSameList()
+    public function bindTypedMapMoreThanOnceAddsToSameList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
         $plugin2 = NewInstance::of(Plugin::class);
@@ -317,7 +317,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function typedListWithInvalidValueThrowsBindingException()
+    public function typedListWithInvalidValueThrowsBindingException(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
@@ -331,7 +331,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function typedMapWithInvalidValueThrowsBindingException()
+    public function typedMapWithInvalidValueThrowsBindingException(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
@@ -345,7 +345,7 @@ class MultibindingTest extends TestCase
     /**
      * @test
      */
-    public function mixedAnnotations()
+    public function mixedAnnotations(): void
     {
         $plugin = NewInstance::of(Plugin::class);
         $binder = new Binder();

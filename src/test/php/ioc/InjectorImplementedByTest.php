@@ -28,7 +28,7 @@ class InjectorImplementedByTest extends TestCase
     /**
      * @test
      */
-    public function createsInstanceFromImplementedByAnnotationIfNoExplicitBindingsSet()
+    public function createsInstanceFromImplementedByAnnotationIfNoExplicitBindingsSet(): void
     {
         assertThat(
                 Binder::createInjector()->getInstance(Person::class),
@@ -39,7 +39,7 @@ class InjectorImplementedByTest extends TestCase
     /**
      * @test
      */
-    public function explicitBindingOverwritesImplementedByAnnotation()
+    public function explicitBindingOverwritesImplementedByAnnotation(): void
     {
         $binder = new Binder();
         $binder->bind(Person::class)->to(Mikey::class);
@@ -53,7 +53,7 @@ class InjectorImplementedByTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function fallsBackToDefaultImplementedByIfNoEnvironmentSet()
+    public function fallsBackToDefaultImplementedByIfNoEnvironmentSet(): void
     {
         assertThat(
                 Binder::createInjector()->getInstance(Person3::class),
@@ -65,7 +65,7 @@ class InjectorImplementedByTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function usesFallbackIfNoSpecialImplementationDefinedForMode()
+    public function usesFallbackIfNoSpecialImplementationDefinedForMode(): void
     {
 
         $binder = new Binder();
@@ -81,7 +81,7 @@ class InjectorImplementedByTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function usesImplementationSpecifiedForMode()
+    public function usesImplementationSpecifiedForMode(): void
     {
 
         $binder = new Binder();
@@ -97,7 +97,7 @@ class InjectorImplementedByTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function throwsBindingExceptionWhenNoFallbackSpecified()
+    public function throwsBindingExceptionWhenNoFallbackSpecified(): void
     {
         $injector = (new Binder())
                 ->setEnvironment('PROD')
@@ -111,7 +111,7 @@ class InjectorImplementedByTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function throwsBindingExceptionWhenNoFallbackSpecifiedAndNoModeSet()
+    public function throwsBindingExceptionWhenNoFallbackSpecifiedAndNoModeSet(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {

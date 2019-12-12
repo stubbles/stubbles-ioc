@@ -26,7 +26,7 @@ class InjectorClosureTest extends TestCase
     /**
      * @test
      */
-    public function injectWithClosure()
+    public function injectWithClosure(): void
     {
         $binder = new Binder();
         $answer = new Answer();

@@ -22,17 +22,21 @@ class DisplayExceptionTest extends TestCase
     /**
      * creates instance to test
      *
-     * @return  \stubbles\environments\exceptionhandler\DisplayException
+     * @return  DisplayException&\bovigo\callmap\ClassProxy
      */
-    public function createExceptionHandler($sapi): DisplayException
+    public function createExceptionHandler(string $sapi): DisplayException
     {
         $displayExceptionHandler = NewInstance::of(
                 DisplayException::class,
                 ['/tmp', $sapi]
         )->returns(['header' => false, 'writeBody' => false]);
-        return $displayExceptionHandler->disableLogging();
+        $displayExceptionHandler->disableLogging();
+        return $displayExceptionHandler;
     }
 
+    /**
+     * @return  array<\Throwable[]>
+     */
     public function throwables(): array
     {
         return [
@@ -45,7 +49,7 @@ class DisplayExceptionTest extends TestCase
      * @test
      * @dataProvider  throwables
      */
-    public function writesMessageAndTraceForInternalException($throwable)
+    public function writesMessageAndTraceForInternalException(\Throwable $throwable): void
     {
         $displayExceptionHandler = $this->createExceptionHandler('cgi');
         $displayExceptionHandler->handleException($throwable);
