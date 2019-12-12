@@ -36,13 +36,14 @@ class ConstantBinding implements Binding
     /**
      * provider to use for this binding
      *
-     * @var  \stubbles\ioc\InjectionProvider
+     * @var  \stubbles\ioc\InjectionProvider<scalar>
      */
     private $provider      = null;
     /**
      * provider class to use for this binding (will be created via injector)
      *
-     * @var  string|\ReflectionClass<object>
+     * actually class-string<\stubbles\ioc\InjectionProvider<scalar>> but phpstan can't parse this
+     * @var  class-string
      */
     private $providerClass = null;
 
@@ -76,7 +77,7 @@ class ConstantBinding implements Binding
      * 'toProviderClass()' method.
      *
      * @api
-     * @param   \stubbles\ioc\InjectionProvider  $provider
+     * @param   \stubbles\ioc\InjectionProvider<scalar>  $provider
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */
@@ -93,7 +94,7 @@ class ConstantBinding implements Binding
      * 'toProvider()' method.
      *
      * @api
-     * @param   string|\ReflectionClass<object>  $providerClass
+     * @param   class-string<InjectionProvider<scalar>>|\ReflectionClass<InjectionProvider<scalar>>  $providerClass
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */
@@ -133,7 +134,7 @@ class ConstantBinding implements Binding
      *
      * @param   \stubbles\ioc\Injector  $injector
      * @param   string                  $name
-     * @return  mixed
+     * @return  scalar
      */
     public function getInstance(Injector $injector, $name = null)
     {

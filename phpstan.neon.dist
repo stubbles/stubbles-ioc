@@ -32,6 +32,12 @@ parameters:
       -
           message: '#Call to an undefined method stubbles\\Environment::useExceptionHandler\(\)#'
           path: src/test/php/environments/ExceptionHandlerTest.php
+      -
+          message: '#method stubbles\\ioc\\binding\\ConstantBinding::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>, string given#'
+          path: src/test/php/ioc/InjectorConstantTest.php
+      -
+          message: '#method stubbles\\ioc\\binding\\ClassBinding<object,mixed>::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<mixed>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<mixed>>, string given#'
+          path: src/test/php/ioc/InjectorProviderTest.php
       # phpstan can't deal with callables in array form
       -
           message: '#Cannot access offset 0 on callable\(\): mixed#'
