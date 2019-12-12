@@ -27,7 +27,7 @@ class SecurityPlugin implements Plugin
 }
 ```
 
-````php
+```php
 class AnotherCoolPlugin implements Plugin
 {
    // Implementation
