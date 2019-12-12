@@ -31,49 +31,49 @@ class ClassBinding implements Binding
     /**
      * type for this binding
      *
-     * @type  string
+     * @var  string
      */
     private $type;
     /**
      * class that implements this binding
      *
-     * @type  string|\ReflectionClass
+     * @var  string|\ReflectionClass
      */
     private $impl;
     /**
      * Annotated with a name
      *
-     * @type  string
+     * @var  string
      */
     private $name;
     /**
      * scope of the binding
      *
-     * @type  \stubbles\ioc\binding\BindingScope
+     * @var  \stubbles\ioc\binding\BindingScope
      */
     private $scope;
     /**
      * instance this type is bound to
      *
-     * @type  object
+     * @var  object
      */
     private $instance;
     /**
      * provider to use for this binding
      *
-     * @type  \stubbles\ioc\InjectionProvider
+     * @var  \stubbles\ioc\InjectionProvider
      */
     private $provider;
     /**
      * provider class to use for this binding (will be created via injector)
      *
-     * @type  string
+     * @var  string
      */
     private $providerClass;
     /**
      * list of available binding scopes
      *
-     * @type  \stubbles\ioc\binding\BindingScopes
+     * @var  \stubbles\ioc\binding\BindingScopes
      */
     private $scopes;
 

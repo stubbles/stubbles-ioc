@@ -23,7 +23,7 @@ class MapBinding extends MultiBinding
     /**
      * list of bindings for the map values
      *
-     * @type  array
+     * @var  array
      */
     private $bindings = [];
 

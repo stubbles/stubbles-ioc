@@ -15,7 +15,7 @@ class AnotherQuestion
     /**
      * answer
      *
-     * @type  Answer
+     * @var  Answer
      */
     private $answer;
 

@@ -20,7 +20,7 @@ class Runtime implements BindingModule
     /**
      * marker whether runtime was already initialized
      *
-     * @type  bool
+     * @var  bool
      */
     private static $initialized = false;
 
@@ -48,13 +48,13 @@ class Runtime implements BindingModule
     /**
      * different path types
      *
-     * @type  string[]
+     * @var  string[]
      */
     private $pathTypes   = ['config', 'log'];
     /**
      * current environment we are running in
      *
-     * @type  \stubbles\Environment
+     * @var  \stubbles\Environment
      */
     protected $environment;
 

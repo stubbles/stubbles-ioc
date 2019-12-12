@@ -21,14 +21,14 @@ abstract class MultiBinding implements Binding
     /**
      * name of the list or map
      *
-     * @type  string
+     * @var  string
      */
     private $name;
 
     /**
      * created multi binding
      *
-     * @type  array
+     * @var  array
      */
     private $array = null;
 

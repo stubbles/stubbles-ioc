@@ -14,31 +14,31 @@ class PluginHandler
     /**
      * list of config values
      *
-     * @type  scalar[]
+     * @var  scalar[]
      */
     private $configList;
     /**
      * map of config values
      *
-     * @type  scalar[]
+     * @var  scalar[]
      */
     private $pluginList;
     /**
      * some passed arguments
      *
-     * @type  array
+     * @var  array
      */
     private $args;
     /**
      * list of plugins
      *
-     * @type  Plugin[]
+     * @var  Plugin[]
      */
     private $configMap;
     /**
      * map of plugins
      *
-     * @type  Plugin[]
+     * @var  Plugin[]
      */
     private $pluginMap;
 

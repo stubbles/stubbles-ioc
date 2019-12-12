@@ -17,7 +17,7 @@ class SessionBindingScope implements BindingScope
     /**
      * simulate session, sufficient for purpose of this test
      *
-     * @type  array
+     * @var  array
      */
     public static $instances = array();
 

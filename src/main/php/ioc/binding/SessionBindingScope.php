@@ -25,7 +25,7 @@ class SessionBindingScope implements BindingScope
     /**
      * session instance to store instances in
      *
-     * @type  \stubbles\ioc\binding\Session
+     * @var  \stubbles\ioc\binding\Session
      */
     private $session;
 

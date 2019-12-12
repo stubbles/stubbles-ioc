@@ -14,13 +14,13 @@ class Convertible implements Vehicle
     /**
      * injected tire instance
      *
-     * @type  Tire
+     * @var  Tire
      */
     public $tire;
     /**
      * injected roof instance
      *
-     * @type   Roof
+     * @var   Roof
      */
     public $roof;
 

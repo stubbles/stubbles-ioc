@@ -28,13 +28,13 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * injector to use for dependencies
      *
-     * @type  \stubbles\ioc\Injector
+     * @var  \stubbles\ioc\Injector
      */
     private $injector;
     /**
      * concrete implementation to use
      *
-     * @type  \ReflectionClass
+     * @var  \ReflectionClass
      */
     private $class;
 

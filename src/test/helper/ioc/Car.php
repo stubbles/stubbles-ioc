@@ -14,7 +14,7 @@ class Car implements Vehicle
     /**
      * injected tire instance
      *
-     * @type  Tire
+     * @var  Tire
      */
     public $tire;
 

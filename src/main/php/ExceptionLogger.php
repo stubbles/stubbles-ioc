@@ -20,13 +20,13 @@ class ExceptionLogger
     /**
      * directory to log errors into
      *
-     * @type  string
+     * @var  string
      */
     private $logDir;
     /**
      * mode for new directories
      *
-     * @type  int
+     * @var  int
      */
     private $filemode = 0700;
 

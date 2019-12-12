@@ -43,7 +43,7 @@ abstract class App
     /**
      * project path, set when instance is created
      *
-     * @type  string
+     * @var  string
      */
     private static $projectPath;
 

@@ -23,7 +23,7 @@ class LogErrorHandler implements ErrorHandler
     /**
      * list of error levels and their string representation
      *
-     * @type  string[]
+     * @var  string[]
      */
     private static $levelStrings  = [
             E_ERROR             => 'E_ERROR',
@@ -44,13 +44,13 @@ class LogErrorHandler implements ErrorHandler
     /**
      * directory to log errors into
      *
-     * @type  string
+     * @var  string
      */
     private $logDir;
     /**
      * mode for new directories
      *
-     * @type  int
+     * @var  int
      */
     private $filemode  = 0700;
 

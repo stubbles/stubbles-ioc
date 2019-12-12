@@ -20,7 +20,7 @@ class SingletonBindingScope implements BindingScope
     /**
      * instances in this scope
      *
-     * @type  object[]
+     * @var  object[]
      */
     protected $instances = [];
 

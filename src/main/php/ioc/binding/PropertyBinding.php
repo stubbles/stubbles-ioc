@@ -25,13 +25,13 @@ class PropertyBinding implements Binding
     /**
      * actual properties
      *
-     * @type  \stubbles\values\Properties
+     * @var  \stubbles\values\Properties
      */
     private $properties;
     /**
      * current environment
      *
-     * @type  string
+     * @var  string
      */
     private $environment;
 

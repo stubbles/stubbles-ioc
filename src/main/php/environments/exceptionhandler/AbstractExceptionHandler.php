@@ -20,25 +20,25 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * path to project
      *
-     * @type  string
+     * @var  string
      */
     protected $projectPath;
     /**
      * current php sapi
      *
-     * @type  string
+     * @var  string
      */
     private $sapi;
     /**
      * switch whether logging is enabled or not
      *
-     * @type  bool
+     * @var  bool
      */
     private $loggingEnabled = true;
     /**
      * logger for exceptions
      *
-     * @type  \stubbles\environments\ExceptionLogger
+     * @var  \stubbles\environments\ExceptionLogger
      */
     private $exceptionLogger;
 

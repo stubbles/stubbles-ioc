@@ -14,7 +14,7 @@ class ImplicitOptionalDependency
     /**
      * instance from setter injection
      *
-     * @type  Goodyear
+     * @var  Goodyear
      */
     protected $goodyearBySetter;
 

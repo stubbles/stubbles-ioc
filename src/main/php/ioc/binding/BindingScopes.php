@@ -19,13 +19,13 @@ class BindingScopes
     /**
      * scope for singleton objects
      *
-     * @type  \stubbles\ioc\binding\BindingScope
+     * @var  \stubbles\ioc\binding\BindingScope
      */
     private $singletonScope;
     /**
      * scope for session resources
      *
-     * @type  \stubbles\ioc\binding\BindingScope
+     * @var  \stubbles\ioc\binding\BindingScope
      */
     private $sessionScope;
 

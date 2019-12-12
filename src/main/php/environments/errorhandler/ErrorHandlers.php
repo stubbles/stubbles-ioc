@@ -17,7 +17,7 @@ class ErrorHandlers implements ErrorHandler
     /**
      * list of registered error handlers
      *
-     * @type  \stubbles\environments\ErrorHandler[]
+     * @var  \stubbles\environments\ErrorHandler[]
      */
     private $errorHandlers = [];
 

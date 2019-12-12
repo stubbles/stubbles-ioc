@@ -14,7 +14,7 @@ class Question
     /**
      * the answer
      *
-     * @type  mixed
+     * @var  mixed
      */
     private $answer;
 

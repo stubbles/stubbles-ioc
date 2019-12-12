@@ -24,25 +24,25 @@ class ConstantBinding implements Binding
     /**
      * annotated with a name
      *
-     * @type  string
+     * @var  string
      */
     private $name          = null;
     /**
      * value to provide
      *
-     * @type  mixed
+     * @var  mixed
      */
     private $value;
     /**
      * provider to use for this binding
      *
-     * @type  \stubbles\ioc\InjectionProvider
+     * @var  \stubbles\ioc\InjectionProvider
      */
     private $provider      = null;
     /**
      * provider class to use for this binding (will be created via injector)
      *
-     * @type  string
+     * @var  string
      */
     private $providerClass = null;
 

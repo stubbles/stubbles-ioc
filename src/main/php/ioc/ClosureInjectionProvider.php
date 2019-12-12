@@ -20,7 +20,7 @@ class ClosureInjectionProvider implements InjectionProvider
     /**
      * closure to use
      *
-     * @type  \Closure
+     * @var  \Closure
      */
     private $closure;
 

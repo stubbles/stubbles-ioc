@@ -29,7 +29,7 @@ use function stubbles\reflect\annotationsOf;
 class Injector
 {
     /**
-     * @type  string
+     * @var  string
      */
     private $environment;
     /**
@@ -39,19 +39,19 @@ class Injector
      * index is a requirement because the key for a binding is not necessarily
      * complete when the binding is added to the injector.
      *
-     * @type  \stubbles\ioc\binding\Binding[]
+     * @var  \stubbles\ioc\binding\Binding[]
      */
     private $index    = [];
     /**
      * list of available binding scopes
      *
-     * @type  \stubbles\ioc\binding\BindingScopes
+     * @var  \stubbles\ioc\binding\BindingScopes
      */
     private $scopes;
     /**
      * denotes how deep in the object graph the current injection takes place
      *
-     * @type  string[]
+     * @var  string[]
      */
     private $injectionStack = [];
 

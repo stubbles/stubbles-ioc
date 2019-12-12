@@ -25,31 +25,31 @@ use stubbles\values\Properties;
 class Binder
 {
     /**
-     * @type  string
+     * @var  string
      */
     private $environment;
     /**
      * list of available binding scopes
      *
-     * @type  \stubbles\ioc\binding\BindingScopes
+     * @var  \stubbles\ioc\binding\BindingScopes
      */
     private $scopes;
     /**
      * added bindings that are in the index not yet
      *
-     * @type  \stubbles\ioc\binding\Binding[]
+     * @var  \stubbles\ioc\binding\Binding[]
      */
     private $bindings = [];
     /**
      * map of list bindings
      *
-     * @type  \stubbles\ioc\binding\ListBinding[]
+     * @var  \stubbles\ioc\binding\ListBinding[]
      */
     private $listBindings = [];
     /**
      * map of map bindings
      *
-     * @type  \stubbles\ioc\binding\MapBinding[]
+     * @var  \stubbles\ioc\binding\MapBinding[]
      */
     private $mapBindings  = [];
 

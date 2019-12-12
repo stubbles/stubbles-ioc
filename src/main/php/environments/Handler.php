@@ -21,13 +21,13 @@ trait Handler
     /**
      * exception handler to be used in the mode
      *
-     * @type  array
+     * @var  array
      */
     private $exceptionHandler = null;
     /**
      * error handler to be used in the mode
      *
-     * @type  array
+     * @var  array
      */
     private $errorHandler     = null;
 

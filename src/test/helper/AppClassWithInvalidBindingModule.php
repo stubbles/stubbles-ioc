@@ -16,7 +16,7 @@ class AppClassWithInvalidBindingModule extends App
     /**
      * bound by value for retrieval
      *
-     * @type  string
+     * @var  string
      */
     private $boundBy;
 

@@ -14,7 +14,7 @@ class ImplicitDependency
     /**
      * instance from constructor injection
      *
-     * @type  Goodyear
+     * @var  Goodyear
      */
     private $goodyearByConstructor;
 

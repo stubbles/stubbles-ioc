@@ -14,7 +14,7 @@ class Random implements Number
     /**
      * value of the number
      *
-     * @type  int
+     * @var  int
      */
     private $value;
 

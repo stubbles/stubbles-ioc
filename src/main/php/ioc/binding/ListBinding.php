@@ -23,7 +23,7 @@ class ListBinding extends MultiBinding
     /**
      * list of bindings for the list values
      *
-     * @type  array
+     * @var  array
      */
     private $bindings = [];
 

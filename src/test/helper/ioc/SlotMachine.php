@@ -14,13 +14,13 @@ class SlotMachine
     /**
      * selected number 1
      *
-     * @type  Number
+     * @var  Number
      */
     public $number1;
     /**
      * selected number 2
      *
-     * @type  Number
+     * @var  Number
      */
     public $number2;
 

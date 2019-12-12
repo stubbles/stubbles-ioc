@@ -16,11 +16,11 @@ class BikeWithOptionalOtherParam implements Vehicle
     /**
      * injected tire instance
      *
-     * @type  Tire
+     * @var  Tire
      */
     public $tire;
     /**
-     * @type  string
+     * @var  string
      */
     public $other;
 
