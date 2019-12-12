@@ -160,7 +160,8 @@ class Binder
     public function bindList(string $name): ListBinding
     {
         if (!isset($this->listBindings[$name])) {
-            $this->listBindings[$name] = $this->addBinding(new ListBinding($name));
+            $this->listBindings[$name] = new ListBinding($name);
+            $this->addBinding($this->listBindings[$name]);
         }
 
         return $this->listBindings[$name];
@@ -179,7 +180,8 @@ class Binder
     public function bindMap(string $name): MapBinding
     {
         if (!isset($this->mapBindings[$name])) {
-            $this->mapBindings[$name] = $this->addBinding(new MapBinding($name));
+            $this->mapBindings[$name] = new MapBinding($name);
+            $this->addBinding($this->mapBindings[$name]);
         }
 
         return $this->mapBindings[$name];
