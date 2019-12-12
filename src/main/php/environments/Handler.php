@@ -16,31 +16,35 @@ use stubbles\Environment;
  * The main reason for the trait is that stubbles\Environment must be an
  * interface to maintain backwards compatibility.
  */
-trait Handler
+abstract class Handler
 {
     /**
-     * exception handler to be used in the mode
-     *
-     * @var  array
+     * @var  class-string|object
      */
-    private $exceptionHandler = null;
+    private $exceptionHandler;
     /**
-     * error handler to be used in the mode
-     *
-     * @var  array
+     * @var  string
      */
-    private $errorHandler     = null;
+    private $exceptionHandlerMethod;
+    /**
+     * @var  class-string|object
+     */
+    private $errorHandler ;
+    /**
+     * @var  string
+     */
+    private $errorHandlerMethod;
 
     /**
      * sets the exception handler to given class and method name
      *
      * To register the new exception handler call registerExceptionHandler().
      *
-     * @param   string|object  $class        name or instance of exception handler class
-     * @param   string         $methodName   name of exception handler method
-     * @return  \stubbles\Environment
+     * @param   class-string|object  $class        name or instance of exception handler class
+     * @param   string               $methodName   name of exception handler method
+     * @return  self
      */
-    protected function setExceptionHandler($class, string $methodName = 'handleException'): Environment
+    protected function setExceptionHandler($class, string $methodName = 'handleException'): self
     {
         if (!is_string($class) && !is_object($class)) {
             throw new \InvalidArgumentException(
@@ -48,7 +52,8 @@ trait Handler
             );
         }
 
-        $this->exceptionHandler = ['class' => $class, 'method' => $methodName];
+        $this->exceptionHandler = $class;
+        $this->exceptionHandlerMethod = $methodName;
         return $this;
     }
 
@@ -69,9 +74,9 @@ trait Handler
         }
 
         $callback = $this->createCallback(
-                $this->exceptionHandler['class'],
-                $this->exceptionHandler['method'],
-                $projectPath
+            $this->exceptionHandler,
+            $this->exceptionHandlerMethod,
+            $projectPath
         );
         set_exception_handler($callback);
         return $callback[0];
@@ -82,11 +87,11 @@ trait Handler
      *
      * To register the new error handler call registerErrorHandler().
      *
-     * @param   string|object  $class        name or instance of error handler class
-     * @param   string         $methodName   name of error handler method
-     * @return  \stubbles\Environment
+     * @param   class-string|object  $class        name or instance of error handler class
+     * @param   string               $methodName   name of error handler method
+     * @return  self
      */
-    protected function setErrorHandler($class, string $methodName = 'handle'): Environment
+    protected function setErrorHandler($class, string $methodName = 'handle'): self
     {
         if (!is_string($class) && !is_object($class)) {
             throw new \InvalidArgumentException(
@@ -94,7 +99,8 @@ trait Handler
             );
         }
 
-        $this->errorHandler = ['class' => $class, 'method' => $methodName];
+        $this->errorHandler = $class;
+        $this->errorHandlerMethod = $methodName;
         return $this;
     }
 
@@ -115,9 +121,9 @@ trait Handler
         }
 
         $callback = $this->createCallback(
-                $this->errorHandler['class'],
-                $this->errorHandler['method'],
-                $projectPath
+            $this->errorHandler,
+            $this->errorHandlerMethod,
+            $projectPath
         );
         set_error_handler($callback);
         return $callback[0];
@@ -126,14 +132,15 @@ trait Handler
     /**
      * helper method to create the callback from the handler data
      *
-     * @param   string|object  $class        name or instance of error handler class
-     * @param   string         $methodName   name of error handler method
-     * @param   string         $projectPath  path to project
+     * @param   class-string|object  $class        name or instance of error handler class
+     * @param   string               $methodName   name of error handler method
+     * @param   string               $projectPath  path to project
      * @return  callable
      */
     private function createCallback($class, string $methodName, string $projectPath): callable
     {
         $instance = ((is_string($class)) ? (new $class($projectPath)) : ($class));
-        return [$instance, $methodName];
+        $callback = [$instance, $methodName];
+        return $callback;
     }
 }

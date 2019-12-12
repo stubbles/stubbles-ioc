@@ -21,10 +21,8 @@ use stubbles\environments\exceptionhandler\ProdModeExceptionHandler;
  * @api
  * @since  7.0.0
  */
-class Production implements Environment
+class Production extends Handler implements Environment
 {
-    use Handler;
-
     /**
      * constructor
      */

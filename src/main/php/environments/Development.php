@@ -19,10 +19,8 @@ use stubbles\environments\exceptionhandler\DisplayException;
  * @api
  * @since  7.0.0
  */
-class Development implements Environment
+class Development extends Handler implements Environment
 {
-    use Handler;
-
     /**
      * constructor
      */

@@ -34,17 +34,16 @@ class ExceptionHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->environment = new class() implements Environment
+        $this->environment = new class() extends Handler implements Environment
         {
-            use Handler;
-
             /**
              * @param   class-string<ExceptionHandler>|ExceptionHandler  $class
-             * @return  Environment
+             * @return  self
              */
-            public function useExceptionHandler($class): Environment
+            public function useExceptionHandler($class): self
             {
-                return $this->setExceptionHandler($class, 'handleException');
+                $this->setExceptionHandler($class, 'handleException');
+                return $this;
             }
 
             public function name(): string { return 'TEST'; }

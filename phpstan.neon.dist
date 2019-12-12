@@ -32,11 +32,18 @@ parameters:
       -
           message: '#Call to an undefined method stubbles\\Environment::useExceptionHandler\(\)#'
           path: src/test/php/environments/ExceptionHandlerTest.php
-      -
-          message: '#Call to an undefined method stubbles\\Environment::setErrorHandler\(\).#'
-          path: src/main/php/environments/Production.php
+      # phpstan can't deal with callables in array form
       -
           message: '#Cannot access offset 0 on callable\(\): mixed#'
+          path: src/main/php/environments/Handler.php
+      -
+          message: '#Method stubbles\\environments\\Handler::createCallback\(\) should return callable\(\): mixed but returns array\(mixed, string\)#'
+          path: src/main/php/environments/Handler.php
+      -
+          message: '#exception_handler of function set_exception_handler expects \(callable\(Throwable\): void\)|null, callable\(\): mixed given#'
+          path: src/main/php/environments/Handler.php
+      -
+          message: '#Result of && is always false#'
           path: src/main/php/environments/Handler.php
       -
           message: '#Result of && is always false#'

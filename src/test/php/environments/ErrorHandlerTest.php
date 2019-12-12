@@ -34,17 +34,16 @@ class ErrorHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->environment = new class() implements Environment
+        $this->environment = new class() extends Handler implements Environment
         {
-            use Handler;
-
             /**
              * @param   class-string<ErrorHandler>|ErrorHandler  $class
-             * @return  Environment
+             * @return  self
              */
-            public function useErrorHandler($class): Environment
+            public function useErrorHandler($class): self
             {
-                return $this->setErrorHandler($class, 'handle');
+                $this->setErrorHandler($class, 'handle');
+                return $this;
             }
 
             public function name(): string { return 'TEST'; }
