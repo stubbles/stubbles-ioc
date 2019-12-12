@@ -375,7 +375,7 @@ class MultibindingTest extends TestCase
      * creates mocked provider
      *
      * @param   mixed  $value
-     * @return  \stubbles\ioc\InjectionProvider
+     * @return  \stubbles\ioc\InjectionProvider<mixed>
      */
     private function createProviderForValue($value): InjectionProvider
     {

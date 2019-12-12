@@ -44,15 +44,20 @@ class SessionBindingScope implements BindingScope
     /**
      * returns the requested instance from the scope
      *
-     * @param   \ReflectionClass                 $impl      concrete implementation
-     * @param   \stubbles\ioc\InjectionProvider  $provider
-     * @return  object
+     * @template T of object
+     * @param   \ReflectionClass<T>                 $impl      concrete implementation
+     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
+     * @return  T
      * @throws  \RuntimeException
      */
     public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
     {
         if (null === $this->session) {
-            throw new \RuntimeException('Can not create session-scoped instance for ' . $impl->getName() . ', no session set in session scope');
+            throw new \RuntimeException(
+                'Can not create session-scoped instance for '
+                . $impl->getName()
+                . ', no session set in session scope'
+            );
         }
 
         $key = self::SESSION_KEY . $impl->getName();

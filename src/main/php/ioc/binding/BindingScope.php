@@ -20,8 +20,9 @@ interface BindingScope
     /**
      * returns the requested instance from the scope
      *
-     * @param   \ReflectionClass                 $impl      concrete implementation
-     * @param   \stubbles\ioc\InjectionProvider  $provider
+     * @template T of object
+     * @param   \ReflectionClass<T>                 $impl      concrete implementation
+     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
      * @return  object
      */
     public function getInstance(\ReflectionClass $impl, InjectionProvider $provider);

@@ -150,7 +150,7 @@ class MapBindingTest extends TestCase
      * creates mocked injection provider which returns given value
      *
      * @param   mixed  $value
-     * @return  \stubbles\ioc\InjectionProvider
+     * @return  \stubbles\ioc\InjectionProvider<mixed>
      */
     private function createInjectionProvider($value): InjectionProvider
     {
@@ -291,7 +291,7 @@ class MapBindingTest extends TestCase
     /**
      * prepares injector to return mock provider instance
      *
-     * @param  InjectionProvider  $provider
+     * @param  InjectionProvider<\stdClass>  $provider
      */
     private function prepareInjector(InjectionProvider $provider): void
     {

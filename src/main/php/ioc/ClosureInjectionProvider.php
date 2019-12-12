@@ -14,6 +14,7 @@ namespace stubbles\ioc;
  *
  * @internal
  * @since     2.1.0
+ * @implements InjectionProvider<mixed>
  */
 class ClosureInjectionProvider implements InjectionProvider
 {

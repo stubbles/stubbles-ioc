@@ -20,9 +20,10 @@ interface Binding
     /**
      * returns the created instance
      *
+     * @template T
      * @param   \stubbles\ioc\Injector  $injector
      * @param   string|\ReflectionClass|null  $name
-     * @return  mixed
+     * @return  T
      */
     public function getInstance(Injector $injector, $name = null);
 

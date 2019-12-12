@@ -14,22 +14,23 @@ use stubbles\ioc\InjectionProvider;
  * Ensures that an object instance is only created once.
  *
  * @internal
+ * @template T of object
  */
 class SingletonBindingScope implements BindingScope
 {
     /**
      * instances in this scope
      *
-     * @var  object[]
+     * @var  T[]
      */
     protected $instances = [];
 
     /**
      * returns the requested instance from the scope
      *
-     * @param   \ReflectionClass                 $impl      concrete implementation
-     * @param   \stubbles\ioc\InjectionProvider  $provider
-     * @return  object
+     * @param   \ReflectionClass<T>                 $impl      concrete implementation
+     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
+     * @return  T
      */
     public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
     {

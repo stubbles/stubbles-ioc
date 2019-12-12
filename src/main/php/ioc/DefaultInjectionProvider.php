@@ -22,6 +22,8 @@ use function stubbles\reflect\annotationsOf;
  * Creates objects and injects all dependencies via the default injector.
  *
  * @internal
+ * @implements InjectionProvider<object>
+ * @template T of object
  */
 class DefaultInjectionProvider implements InjectionProvider
 {
@@ -34,7 +36,7 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * concrete implementation to use
      *
-     * @var  \ReflectionClass
+     * @var  \ReflectionClass<T>
      */
     private $class;
 
@@ -42,7 +44,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * constructor
      *
      * @param  \stubbles\ioc\Injector  $injector
-     * @param  \ReflectionClass        $impl
+     * @param  \ReflectionClass<T>     $impl
      */
     public function __construct(Injector $injector, \ReflectionClass $impl)
     {
@@ -54,7 +56,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * returns the value to provide
      *
      * @param   string  $name
-     * @return  mixed
+     * @return  T
      */
     public function get(string $name = null)
     {
@@ -75,7 +77,7 @@ class DefaultInjectionProvider implements InjectionProvider
      * returns a list of all injection values for given method
      *
      * @param   \ReflectionMethod  $method
-     * @return  array
+     * @return  array<int,mixed>
      * @throws  \stubbles\ioc\binding\BindingException
      */
     private function injectionValuesForMethod(\ReflectionMethod $method): array
@@ -177,7 +179,7 @@ class DefaultInjectionProvider implements InjectionProvider
      *
      * @param   \ReflectionParameter  $param
      * @param   string                $default
-     * @return  string|\ReflectionClass|null
+     * @return  string|\ReflectionClass<object>|null
      */
     private function detectBindingName(\ReflectionParameter $param, string $default = null)
     {
@@ -204,8 +206,8 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * creates the complete type message
      *
-     * @param   string                   $type  type to create message for
-     * @param   string|\ReflectionClass  $name  name of named parameter
+     * @param   string                           $type  type to create message for
+     * @param   string|\ReflectionClass<object>  $name  name of named parameter
      * @return  string
      */
     private function createTypeMessage(string $type, $name = null): string

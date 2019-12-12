@@ -40,7 +40,7 @@ class SessionBindingScopeTest extends TestCase
     /**
      * mocked injection provider
      *
-     * @var  InjectionProvider&\bovigo\callmap\ClassProxy
+     * @var  InjectionProvider<object>&\bovigo\callmap\ClassProxy
      */
     private $provider;
 
