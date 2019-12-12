@@ -114,7 +114,7 @@ class InjectorConstantTest extends TestCase
     {
         $binder = new Binder();
         $binder->bindConstant('answer')
-               ->toProviderClass('\stdClass');
+               ->toProviderClass(\stdClass::class);
         expect(function() use ($binder) {
                 $binder->getInjector()->getConstant('answer');
         })->throws(BindingException::class);
