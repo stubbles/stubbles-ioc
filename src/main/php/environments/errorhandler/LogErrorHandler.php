@@ -87,15 +87,13 @@ class LogErrorHandler implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true
      */
     public function isResponsible(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         return true;
@@ -111,15 +109,13 @@ class LogErrorHandler implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error is supressable, else false
      */
     public function isSupressable(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         return false;
@@ -132,15 +128,13 @@ class LogErrorHandler implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error message should populate $php_errormsg, else false
      */
     public function handle(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         $logData  = date('Y-m-d H:i:s') . '|' . $level;
@@ -166,7 +160,7 @@ class LogErrorHandler implements ErrorHandler
      *
      * @return  string
      */
-    private function buildLogDir()
+    private function buildLogDir(): string
     {
         return str_replace('{Y}', date('Y'), str_replace('{M}', date('m'), $this->logDir));
     }

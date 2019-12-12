@@ -32,15 +32,13 @@ interface ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error handler is responsible, else false
      */
     public function isResponsible(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool;
 
     /**
@@ -53,15 +51,13 @@ interface ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error is supressable, else false
      */
     public function isSupressable(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool;
 
     /**
@@ -71,14 +67,12 @@ interface ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error message should populate $php_errormsg, else false
      */
     public function handle(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool;
 }

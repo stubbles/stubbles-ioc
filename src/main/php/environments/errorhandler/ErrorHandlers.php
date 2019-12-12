@@ -17,16 +17,16 @@ class ErrorHandlers implements ErrorHandler
     /**
      * list of registered error handlers
      *
-     * @var  \stubbles\environments\ErrorHandler[]
+     * @var  ErrorHandler[]
      */
     private $errorHandlers = [];
 
     /**
      * adds an error handler to the collection
      *
-     * @param  \stubbles\environments\errorhandler\ErrorHandler  $errorHandler
+     * @param  ErrorHandler  $errorHandler
      */
-    public function addErrorHandler(ErrorHandler $errorHandler)
+    public function addErrorHandler(ErrorHandler $errorHandler): void
     {
         $this->errorHandlers[] = $errorHandler;
     }
@@ -41,19 +41,17 @@ class ErrorHandlers implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error handler is responsible, else false
      */
     public function isResponsible(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
-            if ($errorHandler->isResponsible($level, $message, $file, $line, $context) == true) {
+            if ($errorHandler->isResponsible($level, $message, $file, $line) == true) {
                 return true;
             }
         }
@@ -68,19 +66,17 @@ class ErrorHandlers implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error is supressable, else false
      */
     public function isSupressable(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
-            if ($errorHandler->isSupressable($level, $message, $file, $line, $context) == false) {
+            if ($errorHandler->isSupressable($level, $message, $file, $line) == false) {
                 return false;
             }
         }
@@ -95,26 +91,24 @@ class ErrorHandlers implements ErrorHandler
      * @param   string  $message  error message
      * @param   string  $file     filename that the error was raised in
      * @param   int     $line     line number the error was raised at
-     * @param   array   $context  array of every variable that existed in the scope the error was triggered in
      * @return  bool    true if error message should populate $php_errormsg, else false
      */
     public function handle(
             int $level,
             string $message,
             string $file = null,
-            int $line = null,
-            array $context = []
+            int $line = null
     ): bool
     {
         $errorReporting = error_reporting();
         foreach ($this->errorHandlers as $errorHandler) {
-            if ($errorHandler->isResponsible($level, $message, $file, $line, $context)) {
+            if ($errorHandler->isResponsible($level, $message, $file, $line)) {
                 // if function/method was called with prepended @ and error is supressable
-                if (0 == $errorReporting && $errorHandler->isSupressable($level, $message, $file, $line, $context)) {
+                if (0 == $errorReporting && $errorHandler->isSupressable($level, $message, $file, $line)) {
                     return ErrorHandler::STOP_ERROR_HANDLING;
                 }
 
-                return $errorHandler->handle($level, $message, $file, $line, $context);
+                return $errorHandler->handle($level, $message, $file, $line);
             }
         }
 

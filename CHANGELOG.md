@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.0.0 (2019-12-12)
+
+### BC breaks
+
+* removed parameter `$context` from all methods of `stubbles\environments\errorhandler\ErrorHandler`, parameter is deprecated since PHP 7.2
+
 ## 9.0.0 (2019-11-12)
 
 ### BC breaks
