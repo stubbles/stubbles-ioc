@@ -39,5 +39,5 @@ interface Session
      * @param  string  $key
      * @param  mixed   $value
      */
-    public function putValue(string $key, $value);
+    public function putValue(string $key, $value): void;
 }

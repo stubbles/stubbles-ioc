@@ -22,7 +22,7 @@ abstract class App
      * @api
      * @since  2.0.0
      */
-    public abstract function run();
+    public abstract function run(): void;
 
     /**
      * creates an object via injection

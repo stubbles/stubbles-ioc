@@ -4,6 +4,11 @@
 
 ### BC breaks
 
+* added return type `void` to various methods:
+  * `stubbles\App\run()`
+  * `stubbles\ioc\module\BindingModule::configure()`
+  * `stubbles\ioc\binding\Session::putValue()`
+  * `stubbles\environments\exceptionhandler\ExceptionHandler::handleException()`
 * removed parameter `$context` from all methods of `stubbles\environments\errorhandler\ErrorHandler`, parameter is deprecated since PHP 7.2
 
 ## 9.0.0 (2019-11-12)

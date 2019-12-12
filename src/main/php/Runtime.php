@@ -40,7 +40,7 @@ class Runtime implements BindingModule
      *
      * @internal
      */
-    public static function reset()
+    public static function reset(): void
     {
         self::$initialized = false;
     }
@@ -120,7 +120,7 @@ class Runtime implements BindingModule
      * @param  \stubbles\ioc\Binder  $binder
      * @param  string                $projectPath  optional  project base path
      */
-    public function configure(Binder $binder, string $projectPath)
+    public function configure(Binder $binder, string $projectPath): void
     {
         $this->environment->registerErrorHandler($projectPath);
         $this->environment->registerExceptionHandler($projectPath);
@@ -154,7 +154,7 @@ class Runtime implements BindingModule
      * appends directory separator if necessary
      *
      * @param   string  $projectPath
-     * @return  array
+     * @return  array<string,string>
      */
     private function buildPathes(string $projectPath): array
     {

@@ -29,5 +29,5 @@ class AppClassWithoutBindings extends App
     /**
      * runs the command
      */
-    public function run() { }
+    public function run(): void { }
 }

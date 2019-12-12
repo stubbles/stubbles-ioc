@@ -42,7 +42,7 @@ class ConstantBinding implements Binding
     /**
      * provider class to use for this binding (will be created via injector)
      *
-     * @var  string
+     * @var  string|\ReflectionClass<object>
      */
     private $providerClass = null;
 
@@ -93,7 +93,7 @@ class ConstantBinding implements Binding
      * 'toProvider()' method.
      *
      * @api
-     * @param   string|\ReflectionClass  $providerClass
+     * @param   string|\ReflectionClass<object>  $providerClass
      * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */

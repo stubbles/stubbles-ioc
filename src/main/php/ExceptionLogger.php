@@ -66,7 +66,7 @@ class ExceptionLogger
      *
      * @param  \Throwable  $throwable  exception to log
      */
-    public function log(\Throwable $throwable)
+    public function log(\Throwable $throwable): void
     {
         $logData  = date('Y-m-d H:i:s');
         $logData .= $this->fieldsOf($throwable);
