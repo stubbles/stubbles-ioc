@@ -23,7 +23,7 @@ class ListBinding extends MultiBinding
     /**
      * list of bindings for the list values
      *
-     * @var  array
+     * @var  array<int,callable>
      */
     private $bindings = [];
 
@@ -43,8 +43,11 @@ class ListBinding extends MultiBinding
     /**
      * adds a value to the list created by an injection provider
      *
+     * Note: class-string should actually be class-string<<InjectionProvider<mixed>>,
+     * but phpstan trips up about that.
+     *
      * @api
-     * @param   string|\stubbles\ioc\InjectionProvider  $provider
+     * @param   class-string|\stubbles\ioc\InjectionProvider<mixed>  $provider
      * @return  \stubbles\ioc\binding\ListBinding
      */
     public function withValueFromProvider($provider): self
@@ -70,7 +73,7 @@ class ListBinding extends MultiBinding
     /**
      * returns list of bindings for the list to create
      *
-     * @return  array
+     * @return  array<int,callable>
      */
     protected function getBindings(): array
     {

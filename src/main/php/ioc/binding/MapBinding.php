@@ -23,7 +23,7 @@ class MapBinding extends MultiBinding
     /**
      * list of bindings for the map values
      *
-     * @var  array
+     * @var  array<string,callable>
      */
     private $bindings = [];
 
@@ -44,9 +44,12 @@ class MapBinding extends MultiBinding
     /**
      * adds an entry to the map created by an injection provider
      *
+     * Note: class-string should actually be class-string<<InjectionProvider<mixed>>,
+     * but phpstan trips up about that.
+     *
      * @api
      * @param   string                    $key
-     * @param   string|\stubbles\ioc\InjectionProvider  $provider
+     * @param   class-string|\stubbles\ioc\InjectionProvider<mixed>  $provider
      * @return  \stubbles\ioc\binding\MapBinding
      */
     public function withEntryFromProvider(string $key, $provider): self
@@ -73,7 +76,7 @@ class MapBinding extends MultiBinding
     /**
      * returns list of bindings for the map to create
      *
-     * @return  array
+     * @return  array<string,callable>
      */
     protected function getBindings(): array
     {

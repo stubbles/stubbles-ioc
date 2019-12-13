@@ -20,10 +20,10 @@ parameters:
           message: '#class stubbles\\Runtime constructor expects \(callable\(\): mixed\)|stubbles\\Environment|null, stdClass given#'
           path: src/test/php/RuntimeTest.php
       -
-          message: '#method stubbles\\ioc\\binding\\ListBinding::withValueFromProvider\(\) expects string|stubbles\\ioc\\InjectionProvider, stdClass given#'
+          message: '#method stubbles\\ioc\\binding\\ListBinding::withValueFromProvider\(\) expects class-string|stubbles\\ioc\\InjectionProvider<mixed>, stdClass given#'
           path: src/test/php/ioc/binding/ListBindingTest.php
       -
-          message: '#method stubbles\\ioc\\binding\\MapBinding::withEntryFromProvider\(\) expects string|stubbles\\ioc\\InjectionProvider, stdClass given#'
+          message: '#method stubbles\\ioc\\binding\\MapBinding::withEntryFromProvider\(\) expects class-string|stubbles\\ioc\\InjectionProvider<mixed>, stdClass given#'
           path: src/test/php/ioc/binding/MapBindingTest.php
       # phpstan can't handle methods included by trait
       -

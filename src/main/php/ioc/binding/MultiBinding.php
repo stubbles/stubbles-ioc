@@ -24,11 +24,10 @@ abstract class MultiBinding implements Binding
      * @var  string
      */
     private $name;
-
     /**
      * created multi binding
      *
-     * @var  array
+     * @var  array<string,mixed>
      */
     private $array = null;
 
@@ -60,7 +59,10 @@ abstract class MultiBinding implements Binding
     /**
      * creates a closure which uses the given provider to create the value
      *
-     * @param   string|\stubbles\ioc\InjectionProvider  $provider
+     * Note: class-string should actually be class-string<<InjectionProvider<mixed>>,
+     * but phpstan trips up about that.
+     *
+     * @param   class-string|InjectionProvider<mixed>  $provider
      * @return  \Closure
      * @throws  \InvalidArgumentException
      */
@@ -91,9 +93,9 @@ abstract class MultiBinding implements Binding
     /**
      * returns the created instance
      *
-     * @param   \stubbles\ioc\Injector   $injector
-     * @param   string|\ReflectionClass  $name
-     * @return  mixed
+     * @param   \stubbles\ioc\Injector                $injector
+     * @param   string|\ReflectionClass<object>|null  $name
+     * @return  array<mixed>
      */
     public function getInstance(Injector $injector, $name = null)
     {
@@ -107,9 +109,9 @@ abstract class MultiBinding implements Binding
     /**
      * creates the instance
      *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string|\ReflectionClass|null $type
-     * @return  array
+     * @param   \stubbles\ioc\Injector               $injector
+     * @param   string|\ReflectionClass<object>|null $type
+     * @return  array<mixed>
      * @throws  \stubbles\ioc\binding\BindingException
      */
     private function resolve(Injector $injector, $type): array
@@ -135,8 +137,8 @@ abstract class MultiBinding implements Binding
      * an instance of the class defined with $type. In any other case there's no
      * type mismatch
      *
-     * @param   string|\ReflectionClass|null  $type
-     * @param   mixed                    $value
+     * @param   string|\ReflectionClass<object>|null  $type
+     * @param   mixed                                 $value
      * @return  bool
      */
     private function isTypeMismatch($type, $value): bool
@@ -155,7 +157,7 @@ abstract class MultiBinding implements Binding
     /**
      * returns list of bindings for the array to create
      *
-     * @return  array
+     * @return  array<int|string,callable>
      */
     protected abstract function getBindings(): array;
 
