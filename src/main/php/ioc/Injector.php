@@ -80,7 +80,7 @@ class Injector
      * name.
      *
      * @param   \stubbles\ioc\binding\Session  $session
-     * @param   string                         $sessionInterface  optional
+     * @param   class-string                   $sessionInterface  optional
      * @return  \stubbles\ioc\Injector
      * @since   5.4.0
      */
@@ -97,8 +97,8 @@ class Injector
      * check whether a binding for a type is available (explicit and implicit)
      *
      * @api
-     * @param   string   $type
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string|class-string<object>           $type
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  boolean
      */
     public function hasBinding(string $type, $name = null): bool
@@ -127,7 +127,9 @@ class Injector
             return false;
         }
 
-        return $this->index[PropertyBinding::TYPE]->hasProperty($name);
+        /** @var PropertyBinding $propertyBinding */
+        $propertyBinding = $this->index[PropertyBinding::TYPE];
+        return $propertyBinding->hasProperty($name);
     }
 
     /**
@@ -137,8 +139,8 @@ class Injector
      * hasBinding() or getInstance() are called.
      *
      * @api
-     * @param   string   $type
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string                                $type
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  boolean
      */
     public function hasExplicitBinding(string $type, $name = null): bool
@@ -167,8 +169,8 @@ class Injector
      * get an instance
      *
      * @api
-     * @param   string  $type
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string|class-string<object>           $type
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  object
      */
     public function getInstance(string $type, $name = null)
@@ -223,8 +225,8 @@ class Injector
     /**
      * gets a binding
      *
-     * @param   string  $type
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string|class-string<object>  $type
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  \stubbles\ioc\binding\Binding
      * @throws  \stubbles\ioc\binding\BindingException
      */
@@ -241,8 +243,8 @@ class Injector
     /**
      * tries to find a binding
      *
-     * @param   string  $type
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string|class-string<object>  $type
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  \stubbles\ioc\binding\Binding
      */
     private function findBinding(string $type, $name): ?Binding
@@ -257,6 +259,7 @@ class Injector
         }
 
         if (!in_array($type, [PropertyBinding::TYPE, ConstantBinding::TYPE, ListBinding::TYPE, MapBinding::TYPE])) {
+            /** @var class-string<object> $type */
             $this->index[$type] = $this->getAnnotatedBinding(new \ReflectionClass($type));
             return $this->index[$type];
         }
@@ -267,7 +270,7 @@ class Injector
     /**
      * parses binding name from given name
      *
-     * @param   string|\ReflectionClass|null  $name
+     * @param   string|\ReflectionClass<object>|null  $name
      * @return  string|null
      */
     private function bindingName($name)
@@ -287,7 +290,7 @@ class Injector
      *
      * If this is not the case it will fall back to the implicit binding.
      *
-     * @param   \ReflectionClass  $class
+     * @param   \ReflectionClass<object>  $class
      * @return  \stubbles\ioc\binding\Binding|null
      */
     private function getAnnotatedBinding(\ReflectionClass $class)
@@ -312,7 +315,7 @@ class Injector
      *
      * @param   \stubbles\reflect\annotation\Annotations  $annotations
      * @param   string                                    $type
-     * @return  \ReflectionClass
+     * @return  \ReflectionClass<object>
      * @throws  \stubbles\ioc\binding\BindingException
      */
     private function findImplementation(Annotations $annotations, string $type): \ReflectionClass
@@ -341,7 +344,7 @@ class Injector
      * and not an interface. Obviously, it makes sense to say that a class is
      * always bound to itself if no other bindings were defined.
      *
-     * @param   \ReflectionClass  $class
+     * @param   \ReflectionClass<object>  $class
      * @return  \stubbles\ioc\binding\Binding
      */
     private function getImplicitBinding(\ReflectionClass $class): ?Binding
@@ -356,8 +359,9 @@ class Injector
     /**
      * creates a class binding
      *
-     * @param   string  $classname
-     * @return  \stubbles\ioc\binding\ClassBinding
+     * @template T of object
+     * @param   class-string<T>  $classname
+     * @return  \stubbles\ioc\binding\ClassBinding<T>
      */
     private function bind(string $classname): ClassBinding
     {

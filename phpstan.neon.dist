@@ -25,19 +25,19 @@ parameters:
       -
           message: '#method stubbles\\ioc\\binding\\MapBinding::withEntryFromProvider\(\) expects class-string|stubbles\\ioc\\InjectionProvider<mixed>, stdClass given#'
           path: src/test/php/ioc/binding/MapBindingTest.php
-      # phpstan can't handle methods included by trait
+      -
+          message: '#method stubbles\\ioc\\binding\\ConstantBinding::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>, string given#'
+          path: src/test/php/ioc/InjectorConstantTest.php
+      -
+          message: '#method stubbles\\ioc\\binding\\ClassBinding<object,mixed>::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<stubbles\\test\\ioc\\Answer>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<stubbles\\test\\ioc\\Answer>>, string given#'
+          path: src/test/php/ioc/InjectorProviderTest.php
+      # phpstan has problems with methods defined on anonymous classes
       -
           message: '#Call to an undefined method stubbles\\Environment::useErrorHandler\(\)#'
           path: src/test/php/environments/ErrorHandlerTest.php
       -
           message: '#Call to an undefined method stubbles\\Environment::useExceptionHandler\(\)#'
           path: src/test/php/environments/ExceptionHandlerTest.php
-      -
-          message: '#method stubbles\\ioc\\binding\\ConstantBinding::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<bool|float|int|string>>, string given#'
-          path: src/test/php/ioc/InjectorConstantTest.php
-      -
-          message: '#method stubbles\\ioc\\binding\\ClassBinding<object,mixed>::toProviderClass\(\) expects class-string<stubbles\\ioc\\InjectionProvider<mixed>>|ReflectionClass<stubbles\\ioc\\InjectionProvider<mixed>>, string given#'
-          path: src/test/php/ioc/InjectorProviderTest.php
       # phpstan can't deal with callables in array form
       -
           message: '#Cannot access offset 0 on callable\(\): mixed#'
@@ -58,3 +58,7 @@ parameters:
       -
           message: '#method stubbles\\ioc\\binding\\SessionBindingScope::getInstance\(\) expects ReflectionClass, ReflectionClass<stdClass>|ReflectionFunction|ReflectionMethod|ReflectionObject<stdClass> given#'
           path: src/test/php/ioc/binding/SessionBindingScopeTest.php
+      # can't convince phpstan that $type is definitely a class-string
+      -
+          message: '#argument of class ReflectionClass constructor expects class-string<T of object>|T of object, string given#'
+          path: src/main/php/ioc/Injector.php

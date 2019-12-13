@@ -78,8 +78,9 @@ class Binder
     /**
      * Bind a new interface to a class
      *
-     * @param   string  $interface
-     * @return  \stubbles\ioc\binding\ClassBinding
+     * @template T of object
+     * @param   class-string<T>  $interface
+     * @return  \stubbles\ioc\binding\ClassBinding<T>
      */
     public function bind($interface): ClassBinding
     {

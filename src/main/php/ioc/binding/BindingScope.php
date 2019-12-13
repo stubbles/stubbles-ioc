@@ -23,7 +23,7 @@ interface BindingScope
      * @template T of object
      * @param   \ReflectionClass<T>                 $impl      concrete implementation
      * @param   \stubbles\ioc\InjectionProvider<T>  $provider
-     * @return  object
+     * @return  T
      */
     public function getInstance(\ReflectionClass $impl, InjectionProvider $provider);
 }

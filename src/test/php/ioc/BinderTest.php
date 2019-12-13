@@ -57,7 +57,7 @@ class BinderTest extends TestCase
     public function bindCreatesClassBinding(): void
     {
         assertThat(
-                $this->binder->bind('example\MyInterface'),
+                $this->binder->bind(__CLASS__),
                 isInstanceOf(ClassBinding::class)
         );
     }
