@@ -5,7 +5,6 @@
 ### BC breaks
 
 * added return type `void` to various methods:
-  * `stubbles\App\run()`
   * `stubbles\ioc\module\BindingModule::configure()`
   * `stubbles\ioc\binding\Session::putValue()`
   * `stubbles\environments\exceptionhandler\ExceptionHandler::handleException()`

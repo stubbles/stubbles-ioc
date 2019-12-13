@@ -20,9 +20,10 @@ abstract class App
      * runs the application
      *
      * @api
-     * @since  2.0.0
+     * @since   2.0.0
+     * @return  mixed
      */
-    public abstract function run(): void;
+    public abstract function run();
 
     /**
      * creates an object via injection
