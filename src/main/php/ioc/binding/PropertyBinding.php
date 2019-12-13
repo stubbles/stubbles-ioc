@@ -72,6 +72,10 @@ class PropertyBinding implements Binding
      */
     public function getInstance(Injector $injector, $name = null)
     {
+        if (null === $name) {
+            throw new \LogicException('$name can not be null');
+        }
+
         if ($this->properties->containValue($this->environment, $name)) {
             return $this->properties->parseValue($this->environment, $name);
         }
