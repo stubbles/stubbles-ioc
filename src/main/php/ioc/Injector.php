@@ -29,7 +29,7 @@ use function stubbles\reflect\annotationsOf;
 class Injector
 {
     /**
-     * @var  string
+     * @var  string|null
      */
     private $environment;
     /**
@@ -39,7 +39,7 @@ class Injector
      * index is a requirement because the key for a binding is not necessarily
      * complete when the binding is added to the injector.
      *
-     * @var  \stubbles\ioc\binding\Binding[]
+     * @var  array<string,\stubbles\ioc\binding\Binding|null>
      */
     private $index    = [];
     /**
@@ -245,7 +245,7 @@ class Injector
      *
      * @param   string|class-string<object>  $type
      * @param   string|\ReflectionClass<object>|null  $name
-     * @return  \stubbles\ioc\binding\Binding
+     * @return  \stubbles\ioc\binding\Binding|null
      */
     private function findBinding(string $type, $name): ?Binding
     {
@@ -293,7 +293,7 @@ class Injector
      * @param   \ReflectionClass<object>  $class
      * @return  \stubbles\ioc\binding\Binding|null
      */
-    private function getAnnotatedBinding(\ReflectionClass $class)
+    private function getAnnotatedBinding(\ReflectionClass $class): ?Binding
     {
         $annotations = annotationsOf($class);
         if ($class->isInterface() && $annotations->contain('ImplementedBy')) {
