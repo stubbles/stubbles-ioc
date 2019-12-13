@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.0.0 (2019-12-12)
+## 10.0.0 (2019-12-13)
 
 ### BC breaks
 
@@ -9,6 +9,10 @@
   * `stubbles\ioc\binding\Session::putValue()`
   * `stubbles\environments\exceptionhandler\ExceptionHandler::handleException()`
 * removed parameter `$context` from all methods of `stubbles\environments\errorhandler\ErrorHandler`, parameter is deprecated since PHP 7.2
+
+### Other changes
+
+* added more phpstan related type hints
 
 ## 9.0.0 (2019-11-12)
 
