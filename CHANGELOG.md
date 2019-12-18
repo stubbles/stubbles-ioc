@@ -1,5 +1,9 @@
 # Changelog
 
+## 10.1.0 (2019-12-18)
+
+* added new optional parameter `$default = null` to `stubbles\ioc\binding\Session::value()`
+
 ## 10.0.0 (2019-12-13)
 
 ### BC breaks

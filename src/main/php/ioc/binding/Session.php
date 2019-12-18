@@ -28,10 +28,11 @@ interface Session
     /**
      * returns value stored under given key
      *
-     * @param   string  $key
+     * @param   string  $key      key where value is stored under
+     * @param   mixed   $default  optional  return this if no data is associated with $key
      * @return  mixed
      */
-    public function value(string $key);
+    public function value(string $key, $default = null);
 
     /**
      * stores given value under given key
