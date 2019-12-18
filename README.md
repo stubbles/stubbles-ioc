@@ -19,7 +19,7 @@ _stubbles/ioc_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/ioc": "^9.0"
+    composer require "stubbles/ioc": "^10.1"
 
 
 Requirements
