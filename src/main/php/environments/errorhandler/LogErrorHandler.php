@@ -142,6 +142,7 @@ class LogErrorHandler implements ErrorHandler
         $logData .= '|' . $message;
         $logData .= '|' . $file;
         $logData .= '|' . $line;
+        $logData .= '|' . $this->requestUri();
         $logDir   = $this->buildLogDir();
         if (!file_exists($logDir)) {
             mkdir($logDir, $this->filemode, true);
@@ -165,4 +166,16 @@ class LogErrorHandler implements ErrorHandler
         return str_replace('{Y}', date('Y'), str_replace('{M}', date('m'), $this->logDir));
     }
 
+    private function requestUri(): string
+    {
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return 'no request uri present';
+        }
+
+        return (isset($_SERVER['HTTPS']) ? 'https' : 'http')
+                . '://'
+                . ($_SERVER['HTTP_HOST'] ?? '')
+                . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
+                . $_SERVER['REQUEST_URI'];
+    }
 }

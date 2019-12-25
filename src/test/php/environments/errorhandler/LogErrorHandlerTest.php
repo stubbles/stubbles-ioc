@@ -105,7 +105,48 @@ class LogErrorHandlerTest extends TestCase
         $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
             substr($logfile->getContent(), 19),
-            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "\n")
+            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|no request uri present\n")
+        );
+    }
+
+    /**
+     * @test
+     * @group  log_request_uri
+     * @since  10.2.0
+     */
+    public function handleErrorShouldLogTheErrorWithRequestUriWhenPresent(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/some/path?query=param';
+        $_SERVER['HTTP_HOST']   = 'localhost';
+        $_SERVER['SERVER_PORT'] = '8080';
+        $line = __LINE__;
+        $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, $line);
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
+        assertThat(
+            substr($logfile->getContent(), 19),
+            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|http://localhost:8080/some/path?query=param\n")
+        );
+    }
+
+    /**
+     * @test
+     * @group  log_request_uri
+     * @since  10.2.0
+     */
+    public function handleErrorShouldLogTheErrorWithRequestUriWhenPresentNoPortButHttps(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/some/path?query=param';
+        $_SERVER['HTTP_HOST']   = 'localhost';
+        $_SERVER['HTTPS'] = 1;
+        unset($_SERVER['SERVER_PORT']);
+        $line = __LINE__;
+        $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, $line);
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
+        assertThat(
+            substr($logfile->getContent(), 19),
+            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|https://localhost/some/path?query=param\n")
         );
     }
 
