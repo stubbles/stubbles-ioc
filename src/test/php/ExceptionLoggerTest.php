@@ -120,7 +120,6 @@ class ExceptionLoggerTest extends TestCase
                 . __FILE__ . '|' . $throwable->getLine() . "||||\n"
             )
         );
-
     }
 
     /**
