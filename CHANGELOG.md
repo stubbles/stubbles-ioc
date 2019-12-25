@@ -2,7 +2,8 @@
 
 ## 10.2.0 (2019-12-25)
 
-* `stubbles\ioc\environments\errorhandler\LogErrorHandler` now logs request uri as additional field if present
+* `stubbles\environments\errorhandler\LogErrorHandler` now logs request uri as additional field if present
+* `stubbles\ExceptionLogger::log()` now accepts the request id as optional second argument
 
 ## 10.1.0 (2019-12-18)
 

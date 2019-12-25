@@ -117,7 +117,28 @@ class ExceptionLoggerTest extends TestCase
             substr($logfile->getContent(), 19),
             equals(
                 '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "||||\n"
+                . __FILE__ . '|' . $throwable->getLine() . '|||||' . "\n"
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     * @group  log_request_id
+     * @since  10.2.0
+     */
+    public function logsExceptionDataWithRequestId(\Throwable $throwable): void
+    {
+        $this->exceptionLogger->log($throwable, 'some-request-id');
+        $line = __LINE__ - 1;
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
+        assertThat(
+            substr($logfile->getContent(), 19),
+            equals(
+                '|' . get_class($throwable) . '|failure message|'
+                . __FILE__ . '|' . $throwable->getLine() . "|||||some-request-id\n"
             )
         );
     }
@@ -138,7 +159,28 @@ class ExceptionLoggerTest extends TestCase
             equals(
                 '|Exception|chained exception|' . __FILE__ . '|' . $line
                 . '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "\n"
+                . __FILE__ . '|' . $throwable->getLine() . '|' . "\n"
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider  throwables
+     */
+    public function logsExceptionDataOfChainedAndCauseWithRequestId(\Throwable $throwable): void
+    {
+        $exception = new \Exception('chained exception', 303, $throwable);
+        $line      = __LINE__ - 1;
+        $this->exceptionLogger->log($exception, 'some-request-id');
+        /** @var  \org\bovigo\vfs\vfsStreamFile  $logfile */
+        $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
+        assertThat(
+            substr($logfile->getContent(), 19),
+            equals(
+                '|Exception|chained exception|' . __FILE__ . '|' . $line
+                . '|' . get_class($throwable) . '|failure message|'
+                . __FILE__ . '|' . $throwable->getLine() . "|some-request-id\n"
             )
         );
     }

@@ -65,12 +65,14 @@ class ExceptionLogger
      * logs the exception into a logfile
      *
      * @param  \Throwable  $throwable  exception to log
+     * @param  string      $requestId  optional
      */
-    public function log(\Throwable $throwable): void
+    public function log(\Throwable $throwable, string $requestId = ''): void
     {
         $logData  = date('Y-m-d H:i:s');
         $logData .= $this->fieldsOf($throwable);
         $logData .= $this->fieldsOf($throwable->getPrevious());
+        $logData .= '|' . $requestId;
         error_log(
                 $logData . "\n",
                 3,

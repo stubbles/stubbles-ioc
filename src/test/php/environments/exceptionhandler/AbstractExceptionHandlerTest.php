@@ -118,7 +118,7 @@ class AbstractExceptionHandlerTest extends TestCase
             substr($logfile->getContent(), 19),
             equals(
                 '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "||||\n"
+                . __FILE__ . '|' . $throwable->getLine() . "|||||\n"
             )
         );
 
@@ -143,7 +143,7 @@ class AbstractExceptionHandlerTest extends TestCase
             equals(
                 '|Exception|chained exception|'
                 . __FILE__ . '|' . $line . '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "\n"
+                . __FILE__ . '|' . $throwable->getLine() . "|\n"
             )
         );
     }
