@@ -86,7 +86,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     public function handleException(\Throwable $exception): void
     {
         if ($this->loggingEnabled) {
-            $this->exceptionLogger->log($exception);
+            $this->exceptionLogger->log($exception, $this->requestUri());
         }
 
         if ('cgi' === $this->sapi) {
@@ -96,6 +96,19 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
         }
 
         $this->writeBody($this->createResponseBody($exception));
+    }
+
+    private function requestUri(): string
+    {
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return 'no request uri present';
+        }
+
+        return (isset($_SERVER['HTTPS']) ? 'https' : 'http')
+                . '://'
+                . ($_SERVER['HTTP_HOST'] ?? '')
+                . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
+                . $_SERVER['REQUEST_URI'];
     }
 
     /**

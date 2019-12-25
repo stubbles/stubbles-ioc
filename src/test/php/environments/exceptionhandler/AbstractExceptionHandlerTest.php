@@ -107,6 +107,10 @@ class AbstractExceptionHandlerTest extends TestCase
      */
     public function handleExceptionLogsExceptionData(\Throwable $throwable): void
     {
+        $_SERVER['REQUEST_URI'] = '/some/path?query=param';
+        $_SERVER['HTTP_HOST']   = 'localhost';
+        unset($_SERVER['HTTPS']);
+        $_SERVER['SERVER_PORT'] = '8080';
         $this->exceptionHandler->handleException($throwable);
         $line = __LINE__ - 1;
         /** @var  \org\bovigo\vfs\vfsStreamFile */
@@ -118,7 +122,7 @@ class AbstractExceptionHandlerTest extends TestCase
             substr($logfile->getContent(), 19),
             equals(
                 '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "|||||\n"
+                . __FILE__ . '|' . $throwable->getLine() . "|||||http://localhost:8080/some/path?query=param\n"
             )
         );
 
@@ -130,6 +134,10 @@ class AbstractExceptionHandlerTest extends TestCase
      */
     public function handleChainedExceptionLogsExceptionDataOfChainedAndCause(\Throwable $throwable): void
     {
+        $_SERVER['REQUEST_URI'] = '/some/path?query=param';
+        $_SERVER['HTTP_HOST']   = 'localhost';
+        $_SERVER['HTTPS'] = 1;
+        unset($_SERVER['SERVER_PORT']);
         $exception = new \Exception('chained exception', 303, $throwable);
         $line      = __LINE__ - 1;
         $this->exceptionHandler->handleException($exception);
@@ -143,7 +151,7 @@ class AbstractExceptionHandlerTest extends TestCase
             equals(
                 '|Exception|chained exception|'
                 . __FILE__ . '|' . $line . '|' . get_class($throwable) . '|failure message|'
-                . __FILE__ . '|' . $throwable->getLine() . "|\n"
+                . __FILE__ . '|' . $throwable->getLine() . "|https://localhost/some/path?query=param\n"
             )
         );
     }

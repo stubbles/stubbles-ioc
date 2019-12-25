@@ -118,6 +118,7 @@ class LogErrorHandlerTest extends TestCase
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=param';
         $_SERVER['HTTP_HOST']   = 'localhost';
+        unset($_SERVER['HTTPS']);
         $_SERVER['SERVER_PORT'] = '8080';
         $line = __LINE__;
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, $line);
