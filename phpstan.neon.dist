@@ -17,7 +17,7 @@ parameters:
       - '#Method stubbles\\ioc\\MultibindingTest::createPluginHandler\(\) should return stubbles\\test\\ioc\\PluginHandler but returns object#'
       # Explicit tests
       -
-          message: '#class stubbles\\Runtime constructor expects \(callable\(\): mixed\)|stubbles\\Environment|null, stdClass given#'
+          message: '#class stubbles\\Runtime constructor expects \(callable\(\): mixed\)\|stubbles\\Environment\|null, stdClass given#'
           path: src/test/php/RuntimeTest.php
       -
           message: '#method stubbles\\ioc\\binding\\ListBinding::withValueFromProvider\(\) expects class-string|stubbles\\ioc\\InjectionProvider<mixed>, stdClass given#'
@@ -46,7 +46,7 @@ parameters:
           message: '#Method stubbles\\environments\\Handler::createCallback\(\) should return callable\(\): mixed but returns array\(mixed, string\)#'
           path: src/main/php/environments/Handler.php
       -
-          message: '#exception_handler of function set_exception_handler expects \(callable\(Throwable\): void\)|null, callable\(\): mixed given#'
+          message: '#exception_handler of function set_exception_handler expects \(callable\(Throwable\): void\)\|null, callable\(\): mixed given#'
           path: src/main/php/environments/Handler.php
       -
           message: '#Result of && is always false#'
