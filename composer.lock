@@ -97,16 +97,16 @@
         },
         {
             "name": "stubbles/values",
-            "version": "v9.1.0",
+            "version": "v9.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "82f8ceeddd20ea3ebc600623e01d6b6ee6a56696"
+                "reference": "053188e8d06f3d51d26f4b2fd20ec7f83ca53cd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/82f8ceeddd20ea3ebc600623e01d6b6ee6a56696",
-                "reference": "82f8ceeddd20ea3ebc600623e01d6b6ee6a56696",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/053188e8d06f3d51d26f4b2fd20ec7f83ca53cd7",
+                "reference": "053188e8d06f3d51d26f4b2fd20ec7f83ca53cd7",
                 "shasum": ""
             },
             "require": {
@@ -139,7 +139,7 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2019-12-10T14:47:56+00:00"
+            "time": "2019-12-16T10:45:02+00:00"
         }
     ],
     "packages-dev": [
@@ -1720,28 +1720,28 @@
         },
         {
             "name": "stubbles/streams",
-            "version": "v9.0.0",
+            "version": "v9.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-streams.git",
-                "reference": "799aa6303927b804196da5eb77fdcc8ed2a44b96"
+                "reference": "92e345de8708e77a591d22d88b37d68cef579b5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/799aa6303927b804196da5eb77fdcc8ed2a44b96",
-                "reference": "799aa6303927b804196da5eb77fdcc8ed2a44b96",
+                "url": "https://api.github.com/repos/stubbles/stubbles-streams/zipball/92e345de8708e77a591d22d88b37d68cef579b5d",
+                "reference": "92e345de8708e77a591d22d88b37d68cef579b5d",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3"
             },
             "require-dev": {
-                "bovigo/assert": "^5.0",
-                "bovigo/callmap": "^5.0.1",
+                "bovigo/assert": "^5.1.1",
+                "bovigo/callmap": "^5.2",
                 "ext-iconv": "*",
-                "mikey179/vfsstream": "^1.6.7",
+                "mikey179/vfsstream": "^1.6.8",
                 "phpunit/phpunit": "^8.4",
-                "stubbles/reflect": "^9.0",
+                "stubbles/reflect": "^9.1",
                 "stubbles/sequence": "^9.0"
             },
             "suggest": {
@@ -1751,7 +1751,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "9.0.x-dev"
+                    "dev-master": "9.1.x-dev"
                 }
             },
             "autoload": {
@@ -1768,7 +1768,7 @@
             ],
             "description": "Input- and OutputStreams.",
             "homepage": "http://stubbles.net/",
-            "time": "2019-11-08T13:01:55+00:00"
+            "time": "2019-12-11T14:54:46+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
