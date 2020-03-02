@@ -13,7 +13,7 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6.8",
         "phpunit/phpunit": "^9.0",
-        "bovigo/callmap": "^6.0",
+        "bovigo/callmap": "^6.1",
         "bovigo/assert": "^6.0",
         "stubbles/streams": "^9.0"
     },

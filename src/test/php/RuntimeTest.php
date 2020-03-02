@@ -148,7 +148,6 @@ class RuntimeTest extends TestCase
 
     /**
      * @test
-     * @doesNotPerformAssertions
      * @since  3.4.0
      */
     public function doesNotBindPropertiesWhenConfigFileIsMissing(): void
@@ -161,7 +160,6 @@ class RuntimeTest extends TestCase
 
     /**
      * @test
-     * @doesNotPerformAssertions
      * @since  3.4.0
      */
     public function bindsPropertiesWhenConfigFilePresent(): void

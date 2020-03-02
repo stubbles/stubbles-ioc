@@ -90,7 +90,6 @@ class AbstractExceptionHandlerTest extends TestCase
     /**
      * @test
      * @dataProvider  throwables
-     * @doesNotPerformAssertions
      */
     public function loggingDisabledFillsResponseOnly(\Throwable $throwable): void
     {
