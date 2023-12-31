@@ -1,5 +1,14 @@
 # Changelog
 
+## 11.0.0 ()
+
+### BC breaks
+
+ * raised minimum required PHP version to 8.2
+ * changed method declaration of `stubbles\ioc\InjectionProvider::get()` and `stubbles\ioc\binding\Binding::getInstance()` to include the return type hint `mixed`
+ * changed type hint for param `$name` of `stubbles\ioc\binding\Binding::getInstance()` to `string|ReflectionClass|null`
+ * changed return type hint of `stubbles\Environment::registerExceptionHandler()` and `stubbles\Environment::registerErrorHandler()` from none to `bool|object`
+
 ## 10.2.0 (2019-12-25)
 
 * `stubbles\environments\errorhandler\LogErrorHandler` now logs request uri as additional field if present
