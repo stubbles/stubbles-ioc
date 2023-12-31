@@ -15,11 +15,8 @@ class InjectorProvidedByProvider implements InjectionProvider
 {
     /**
      * returns the value to provide
-     *
-     * @param   string  $name  optional
-     * @return  mixed
      */
-    public function get(string $name = null)
+    public function get(string $name = null): mixed
     {
         return new Schst();
     }

@@ -14,15 +14,11 @@ namespace stubbles\ioc;
  * Inversion of Control features of Stubbles.
  *
  * @api
- * @template T of mixed
  */
 interface InjectionProvider
 {
     /**
      * returns the value to provide
-     *
-     * @param   string  $name
-     * @return  T
      */
-    public function get(string $name = null);
+    public function get(string $name = null): mixed;
 }

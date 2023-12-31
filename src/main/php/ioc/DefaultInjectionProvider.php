@@ -45,7 +45,7 @@ class DefaultInjectionProvider implements InjectionProvider
      *
      * @return  T
      */
-    public function get(string $name = null)
+    public function get(string $name = null): mixed
     {
         $constructor = $this->class->getConstructor();
         if (null === $constructor || $this->class->isInternal()) {

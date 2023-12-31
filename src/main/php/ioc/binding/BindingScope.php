@@ -27,5 +27,5 @@ interface BindingScope
      * @param   InjectionProvider<T>  $provider
      * @return  T
      */
-    public function getInstance(ReflectionClass $impl, InjectionProvider $provider);
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider): mixed;
 }

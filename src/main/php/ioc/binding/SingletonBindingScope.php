@@ -32,7 +32,7 @@ class SingletonBindingScope implements BindingScope
      * @param   InjectionProvider<T>  $provider
      * @return  T
      */
-    public function getInstance(ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider): object
     {
         $key = $impl->getName();
         if (!isset($this->instances[$key])) {

@@ -37,11 +37,8 @@ class ClosureInjectionProvider implements InjectionProvider
 
     /**
      * returns the value to provide
-     *
-     * @param   string  $name
-     * @return  mixed
      */
-    public function get(string $name = null)
+    public function get(string $name = null): mixed
     {
         $closure = $this->closure;
         return $closure($name);

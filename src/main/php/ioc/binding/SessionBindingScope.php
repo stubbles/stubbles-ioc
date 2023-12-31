@@ -42,7 +42,7 @@ class SessionBindingScope implements BindingScope
      * @return  T
      * @throws  RuntimeException
      */
-    public function getInstance(ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider): mixed
     {
         if (null === $this->session) {
             throw new RuntimeException(

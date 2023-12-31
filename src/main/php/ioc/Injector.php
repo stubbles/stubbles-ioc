@@ -216,7 +216,7 @@ class Injector
      * @return  scalar
      * @since   1.1.0
      */
-    public function getConstant(string $name)
+    public function getConstant(string $name): mixed
     {
         return $this->getBinding(ConstantBinding::TYPE, $name)
             ->getInstance($this, $name);
