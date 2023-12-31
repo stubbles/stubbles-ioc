@@ -193,7 +193,7 @@ stubbles.webapp.xml.serializeMode=true")
     /**
      * @return  array<string,string[]>
      */
-    public function getConstants(): array
+    public static function getConstants(): array
     {
         return ['config' => ['config', 'stubbles.config.path'],
                 'log'    => ['log', 'stubbles.log.path']
@@ -227,10 +227,10 @@ stubbles.webapp.xml.serializeMode=true")
      *
      * @return  array<string,string[]>
      */
-    public function getWithAdditionalConstants(): array
+    public static function getWithAdditionalConstants(): array
     {
         return array_merge(
-                $this->getConstants(),
+                self::getConstants(),
                 ['user' => ['user', 'stubbles.user.path']]
         );
     }

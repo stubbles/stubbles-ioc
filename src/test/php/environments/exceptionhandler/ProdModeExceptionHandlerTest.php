@@ -50,7 +50,7 @@ class ProdModeExceptionHandlerTest extends TestCase
     /**
      * @return  array<\Throwable[]>
      */
-    public function throwables(): array
+    public static function throwables(): array
     {
         return [
                 [new \Exception('failure message')],

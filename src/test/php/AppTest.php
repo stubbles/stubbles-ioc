@@ -134,7 +134,7 @@ class AppTest extends TestCase
     /**
      * @return  array<string[]>
      */
-    public function hostnameKeys(): array
+    public static function hostnameKeys(): array
     {
         return [
             ['stubbles.hostname.nq'],
@@ -171,7 +171,7 @@ class AppTest extends TestCase
     /**
      * @return  array<callable[]>
      */
-    public function assertions(): array
+    public static function assertions(): array
     {
         return [
             [function(Injector $injector) { assertTrue($injector->hasBinding('foo')); }],
