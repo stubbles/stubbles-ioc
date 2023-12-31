@@ -140,8 +140,8 @@ class PropertyBindingTest extends TestCase
         expect(function() use ($properyBinding) {
                 $properyBinding->getInstance($this->injector, 'does.not.exist');
         })
-        ->throws(BindingException::class)
-        ->withMessage('Missing property does.not.exist for environment PROD');
+            ->throws(BindingException::class)
+            ->withMessage('Missing property does.not.exist for environment PROD.');
     }
 
     /**

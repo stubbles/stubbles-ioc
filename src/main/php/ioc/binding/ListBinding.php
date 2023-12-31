@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use Closure;
+use stubbles\ioc\InjectionProvider;
+
 /**
  * Class for list bindings.
  *
@@ -19,22 +23,20 @@ class ListBinding extends MultiBinding
     /**
      * This string is used when generating the key for a list binding.
      */
-    const TYPE        = '__LIST__';
+    public const TYPE = '__LIST__';
     /**
      * list of bindings for the list values
      *
      * @var  array<int,callable>
      */
-    private $bindings = [];
+    private array $bindings = [];
 
     /**
      * adds a value to the list
      *
      * @api
-     * @param   mixed  $value
-     * @return  \stubbles\ioc\binding\ListBinding
      */
-    public function withValue($value): self
+    public function withValue(mixed $value): self
     {
         $this->bindings[] = $this->getValueCreator($value);
         return $this;
@@ -43,14 +45,9 @@ class ListBinding extends MultiBinding
     /**
      * adds a value to the list created by an injection provider
      *
-     * Note: class-string should actually be class-string<<InjectionProvider<mixed>>,
-     * but phpstan trips up about that.
-     *
      * @api
-     * @param   class-string|\stubbles\ioc\InjectionProvider<mixed>  $provider
-     * @return  \stubbles\ioc\binding\ListBinding
      */
-    public function withValueFromProvider($provider): self
+    public function withValueFromProvider(string|InjectionProvider $provider): self
     {
         $this->bindings[] = $this->getProviderCreator($provider);
         return $this;
@@ -60,11 +57,9 @@ class ListBinding extends MultiBinding
      * adds a value which is created by given closure
      *
      * @api
-     * @param   \Closure  $closure
-     * @return  \stubbles\ioc\binding\ListBinding
      * @since   2.1.0
      */
-    public function withValueFromClosure(\Closure $closure): self
+    public function withValueFromClosure(Closure $closure): self
     {
         $this->bindings[] = $closure;
         return $this;
@@ -82,8 +77,6 @@ class ListBinding extends MultiBinding
 
     /**
      * returns type key for for this binding
-     *
-     * @return  string
      */
     protected function getTypeKey(): string
     {

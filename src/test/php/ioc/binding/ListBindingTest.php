@@ -309,16 +309,6 @@ class ListBindingTest extends TestCase
     }
 
     /**
-     * @test
-     */
-    public function addInvalidProviderValueThrowsIlegalArgumentException(): void
-    {
-        expect(function() {
-            $this->listBinding->withValueFromProvider(new \stdClass());
-        })->throws(\InvalidArgumentException::class);
-    }
-
-    /**
      * @since  2.1.0
      * @test
      * @group  issue_31

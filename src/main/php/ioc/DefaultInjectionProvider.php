@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc;
+
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\ConstantBinding;
 use stubbles\ioc\binding\ListBinding;
@@ -28,34 +32,16 @@ use function stubbles\reflect\annotationsOf;
 class DefaultInjectionProvider implements InjectionProvider
 {
     /**
-     * injector to use for dependencies
-     *
-     * @var  \stubbles\ioc\Injector
-     */
-    private $injector;
-    /**
-     * concrete implementation to use
-     *
-     * @var  \ReflectionClass<T>
-     */
-    private $class;
-
-    /**
      * constructor
      *
-     * @param  \stubbles\ioc\Injector  $injector
-     * @param  \ReflectionClass<T>     $impl
+     * @param  Injector  $injector
+     * @param  ReflectionClass<T>     $impl
      */
-    public function __construct(Injector $injector, \ReflectionClass $impl)
-    {
-        $this->injector = $injector;
-        $this->class    = $impl;
-    }
+    public function __construct(private Injector $injector, private ReflectionClass $class) { }
 
     /**
      * returns the value to provide
      *
-     * @param   string  $name
      * @return  T
      */
     public function get(string $name = null)
@@ -76,11 +62,10 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * returns a list of all injection values for given method
      *
-     * @param   \ReflectionMethod  $method
      * @return  array<int,mixed>
-     * @throws  \stubbles\ioc\binding\BindingException
+     * @throws  BindingException
      */
-    private function injectionValuesForMethod(\ReflectionMethod $method): array
+    private function injectionValuesForMethod(ReflectionMethod $method): array
     {
         $paramValues = [];
         $defaultName = $this->methodBindingName($method);
@@ -96,12 +81,14 @@ class DefaultInjectionProvider implements InjectionProvider
             if (!$this->injector->hasBinding($type, $name)) {
                 $typeMsg = $this->createTypeMessage($type, $name);
                 throw new BindingException(
-                        'Can not inject into '
-                        . $this->class->getName() . '::' . $method->getName()
-                        . '(' . $this->createParamString($param, $type)
-                        . '). No binding for type ' . $typeMsg
-                        . ' specified. Injection stack: ' . "\n"
-                        . join("\n", $this->injector->stack())
+                    sprintf(
+                        'Can not inject into %s::%s(%s). No binding for type %s specified. Injection stack:\n%s',
+                        $this->class->getName(),
+                        $method->getName(),
+                        $this->createParamString($param, $type),
+                        $typeMsg,
+                        join("\n", $this->injector->stack())
+                    )
                 );
             }
 
@@ -113,11 +100,8 @@ class DefaultInjectionProvider implements InjectionProvider
 
     /**
      * returns default binding name for all parameters on given method
-     *
-     * @param   \ReflectionMethod  $method
-     * @return  string|null
      */
-    private function methodBindingName(\ReflectionMethod $method): ?string
+    private function methodBindingName(ReflectionMethod $method): ?string
     {
         $annotations = annotationsOf($method);
         if ($annotations->contain('List')) {
@@ -141,12 +125,8 @@ class DefaultInjectionProvider implements InjectionProvider
 
     /**
      * returns type of param
-     *
-     * @param   \ReflectionMethod     $method
-     * @param   \ReflectionParameter  $param
-     * @return  string
      */
-    private function paramType(\ReflectionMethod $method, \ReflectionParameter $param): string
+    private function paramType(ReflectionMethod $method, ReflectionParameter $param): string
     {
         $methodAnnotations = annotationsOf($method);
         $paramAnnotations  = annotationsOf($param);
@@ -174,15 +154,10 @@ class DefaultInjectionProvider implements InjectionProvider
         return ConstantBinding::TYPE;
     }
 
-    /**
-     * detects name for binding
-     *
-     * @param   \ReflectionParameter  $param
-     * @param   string                $default
-     * @return  string|\ReflectionClass<object>|null
-     */
-    private function detectBindingName(\ReflectionParameter $param, string $default = null)
-    {
+    private function detectBindingName(
+        ReflectionParameter $param,
+        string $default = null
+    ): string|ReflectionClass|null {
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {
             return $annotations->firstNamed('List')->getValue();
@@ -210,8 +185,10 @@ class DefaultInjectionProvider implements InjectionProvider
      * @param   string|\ReflectionClass<object>  $name  name of named parameter
      * @return  string
      */
-    private function createTypeMessage(string $type, $name = null): string
-    {
+    private function createTypeMessage(
+        string $type, 
+        string|ReflectionClass|null $name = null
+    ): string {
         if (null === $name) {
             return $type;
         }
@@ -225,12 +202,8 @@ class DefaultInjectionProvider implements InjectionProvider
 
     /**
      * creates the called method message
-     *
-     * @param   \ReflectionParameter  $parameter
-     * @param   string                $type
-     * @return  string
      */
-    private function createParamString(\ReflectionParameter $parameter, string $type): string
+    private function createParamString(ReflectionParameter $parameter, string $type): string
     {
         $message = '';
         if (!in_array($type, [PropertyBinding::TYPE, ConstantBinding::TYPE, ListBinding::TYPE, MapBinding::TYPE])) {

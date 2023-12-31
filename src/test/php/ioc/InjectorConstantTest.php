@@ -110,21 +110,6 @@ class InjectorConstantTest extends TestCase
      * @group  ioc_constantprovider
      * @since  1.6.0
      */
-    public function constantViaInvalidInjectionProviderClassThrowsBindingException(): void
-    {
-        $binder = new Binder();
-        $binder->bindConstant('answer')
-               ->toProviderClass(\stdClass::class);
-        expect(function() use ($binder) {
-                $binder->getInjector()->getConstant('answer');
-        })->throws(BindingException::class);
-    }
-
-    /**
-     * @test
-     * @group  ioc_constantprovider
-     * @since  1.6.0
-     */
     public function constantViaInjectionProviderClass(): void
     {
         $binder = new Binder();

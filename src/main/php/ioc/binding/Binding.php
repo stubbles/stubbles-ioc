@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use ReflectionClass;
 use stubbles\ioc\Injector;
 /**
  * A binding knows how to deliver a concrete instance.
@@ -19,17 +21,14 @@ interface Binding
 {
     /**
      * returns the created instance
-     *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  mixed
      */
-    public function getInstance(Injector $injector, $name = null);
+    public function getInstance(
+        Injector $injector,
+        string|ReflectionClass|null $name = null
+    ): mixed;
 
     /**
      * creates a unique key for this binding
-     *
-     * @return  string
      */
     public function getKey(): string;
 }

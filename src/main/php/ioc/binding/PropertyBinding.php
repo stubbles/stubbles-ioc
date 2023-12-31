@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use LogicException;
+use ReflectionClass;
 use stubbles\ioc\Injector;
 use stubbles\values\Properties;
 /**
@@ -21,37 +24,12 @@ class PropertyBinding implements Binding
     /**
      * This string is used when generating the key for a constant binding.
      */
-    const TYPE             = '__PROPERTY__';
-    /**
-     * actual properties
-     *
-     * @var  \stubbles\values\Properties
-     */
-    private $properties;
-    /**
-     * current environment
-     *
-     * @var  string
-     */
-    private $environment;
+    public const TYPE = '__PROPERTY__';
 
-    /**
-     * constructor
-     *
-     * @param  \stubbles\values\Properties  $properties
-     * @param  string                       $environment  current environment
-     */
-    public function __construct(Properties $properties, string $environment)
-    {
-        $this->properties  = $properties;
-        $this->environment = $environment;
-    }
+    public function __construct(private Properties $properties, private string $environment) { }
 
     /**
      * checks if property with given name exists
-     *
-     * @param   string  $name
-     * @return  bool
      */
     public function hasProperty(string $name): bool
     {
@@ -65,15 +43,14 @@ class PropertyBinding implements Binding
     /**
      * returns the created instance
      *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string                  $name
-     * @return  mixed
-     * @throws  \stubbles\ioc\binding\BindingException
+     * @throws  BindingException
      */
-    public function getInstance(Injector $injector, $name = null)
-    {
+    public function getInstance(
+        Injector $injector,
+        string|ReflectionClass|null $name = null
+    ): mixed {
         if (null === $name) {
-            throw new \LogicException('$name can not be null');
+            throw new LogicException('$name can not be null');
         }
 
         if ($this->properties->containValue($this->environment, $name)) {
@@ -84,14 +61,15 @@ class PropertyBinding implements Binding
             return $this->properties->parseValue('config', $name);
         }
 
-        throw new BindingException('Missing property ' . $name . ' for environment ' . $this->environment);
+        throw new BindingException(
+            sprintf(
+                'Missing property %s for environment %s.',
+                $name,
+                $this->environment
+            )
+        );
     }
 
-    /**
-     * creates a unique key for this binding
-     *
-     * @return  string
-     */
     public function getKey(): string
     {
         return self::TYPE;

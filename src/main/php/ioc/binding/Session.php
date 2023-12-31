@@ -19,26 +19,16 @@ interface Session
 {
     /**
      * checks if session contains value under given key
-     *
-     * @param   string  $key
-     * @return  bool
      */
     public function hasValue(string $key): bool;
 
     /**
      * returns value stored under given key
-     *
-     * @param   string  $key      key where value is stored under
-     * @param   mixed   $default  optional  return this if no data is associated with $key
-     * @return  mixed
      */
-    public function value(string $key, $default = null);
+    public function value(string $key, mixed $default = null): mixed;
 
     /**
      * stores given value under given key
-     *
-     * @param  string  $key
-     * @param  mixed   $value
      */
-    public function putValue(string $key, $value): void;
+    public function putValue(string $key, mixed $value): void;
 }

@@ -60,16 +60,6 @@ class ErrorHandlerTest extends TestCase
     /**
      * @test
      */
-    public function registerErrorHandlerWithInvalidClassThrowsIllegalArgumentException(): void
-    {
-        expect(function() {
-                $this->environment->useErrorHandler(404);
-        })->throws(\InvalidArgumentException::class);
-    }
-
-    /**
-     * @test
-     */
     public function registerErrorHandlerWithClassNameReturnsCreatedInstance(): void
     {
         $errorHandlerClass = NewInstance::classname(ErrorHandler::class);

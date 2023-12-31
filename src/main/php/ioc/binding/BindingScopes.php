@@ -16,37 +16,22 @@ namespace stubbles\ioc\binding;
  */
 class BindingScopes
 {
-    /**
-     * scope for singleton objects
-     *
-     * @var  \stubbles\ioc\binding\BindingScope
-     */
-    private $singletonScope;
-    /**
-     * scope for session resources
-     *
-     * @var  \stubbles\ioc\binding\BindingScope
-     */
-    private $sessionScope;
+    private BindingScope $singletonScope;
+    private BindingScope $sessionScope;
 
     /**
-     * constructor
-     *
-     * @param  \stubbles\ioc\binding\BindingScope  $singletonScope
-     * @param  \stubbles\ioc\binding\BindingScope  $sessionScope
      * @since  1.5.0
      */
     public function  __construct(BindingScope $singletonScope = null, BindingScope $sessionScope = null)
     {
-        $this->singletonScope = ((null === $singletonScope) ? (new SingletonBindingScope()) : ($singletonScope));
-        $this->sessionScope   = ((null === $sessionScope) ? (new SessionBindingScope()) : ($sessionScope));
+        $this->singletonScope = $singletonScope ?? new SingletonBindingScope();
+        $this->sessionScope   = $sessionScope ?? new SessionBindingScope();
     }
 
     /**
      * returns scope for singleton objects
      *
-     * @return  \stubbles\ioc\binding\BindingScope
-     * @since   1.5.0
+     * @since  1.5.0
      */
     public function singleton(): BindingScope
     {
@@ -56,8 +41,6 @@ class BindingScopes
     /**
      * sets the session for the session scope in case it is the built-in implementation
      *
-     * @param   \stubbles\ioc\binding\Session  $session
-     * @return  \stubbles\ioc\binding\BindingScopes
      * @throws  \RuntimeException  in case the session scope has been replaced with another implementation
      * @since   5.4.0
      */
@@ -74,8 +57,7 @@ class BindingScopes
     /**
      * returns scope for session resources
      *
-     * @return  \stubbles\ioc\binding\BindingScope
-     * @since   1.5.0
+     * @since  1.5.0
      */
     public function session(): BindingScope
     {

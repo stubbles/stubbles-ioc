@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use ReflectionClass;
 use stubbles\ioc\InjectionProvider;
 /**
  * Ensures that an object instance is only created once.
@@ -19,20 +21,18 @@ use stubbles\ioc\InjectionProvider;
 class SingletonBindingScope implements BindingScope
 {
     /**
-     * instances in this scope
-     *
      * @var  T[]
      */
-    protected $instances = [];
+    protected array $instances = [];
 
     /**
      * returns the requested instance from the scope
      *
-     * @param   \ReflectionClass<T>                 $impl      concrete implementation
-     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
+     * @param   ReflectionClass<T>    $impl      concrete implementation
+     * @param   InjectionProvider<T>  $provider
      * @return  T
      */
-    public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider)
     {
         $key = $impl->getName();
         if (!isset($this->instances[$key])) {

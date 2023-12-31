@@ -45,7 +45,11 @@ class RuntimeTest extends TestCase
     {
         $this->root        = vfsStream::setup('projects');
         $this->environment = NewInstance::of(Environment::class)
-                ->returns(['name' => 'TEST']);
+                ->returns([
+                    'name' => 'TEST',
+                    'registerErrorHandler' => false,
+                    'registerExceptionHandler' => false,
+                ]);
         Runtime::reset();
     }
 
@@ -134,16 +138,6 @@ class RuntimeTest extends TestCase
                 ->received($this->root->url());
         verify($this->environment, 'registerExceptionHandler')
                 ->received($this->root->url());
-    }
-
-    /**
-     * @test
-     * @since  4.0.0
-     */
-    public function createWithNonEnvironmentThrowsIllegalArgumentException(): void
-    {
-        expect(function() { new Runtime(new \stdClass()); })
-            ->throws(\InvalidArgumentException::class);
     }
 
     /**

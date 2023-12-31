@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
+
+use Override;
+use Throwable;
+
 /**
  * Exception handler for production mode: fills the response with an error document.
  *
@@ -16,13 +20,8 @@ namespace stubbles\environments\exceptionhandler;
  */
 class ProdModeExceptionHandler extends AbstractExceptionHandler
 {
-    /**
-     * creates response body with useful data for display
-     *
-     * @param   \Throwable  $exception  the uncatched exception
-     * @return  string
-     */
-    protected function createResponseBody(\Throwable $exception): string
+    #[Override]
+    protected function createResponseBody(Throwable $exception): string
     {
         if (file_exists($this->projectPath . '/docroot/500.html')) {
             $content = file_get_contents($this->projectPath . '/docroot/500.html');

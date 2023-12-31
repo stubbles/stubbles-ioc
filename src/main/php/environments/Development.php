@@ -21,9 +21,6 @@ use stubbles\environments\exceptionhandler\DisplayException;
  */
 class Development extends Handler implements Environment
 {
-    /**
-     * constructor
-     */
     public function __construct()
     {
         $this->setExceptionHandler(DisplayException::class);
@@ -31,8 +28,6 @@ class Development extends Handler implements Environment
 
     /**
      * returns the name of the mode
-     *
-     * @return  string
      */
     public function name(): string
     {

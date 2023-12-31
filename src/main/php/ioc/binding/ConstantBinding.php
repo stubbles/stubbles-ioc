@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use Closure;
+use ReflectionClass;
 use stubbles\ioc\ClosureInjectionProvider;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\Injector;
@@ -20,51 +23,27 @@ class ConstantBinding implements Binding
     /**
      * This string is used when generating the key for a constant binding.
      */
-    const TYPE             = '__CONSTANT__';
-    /**
-     * annotated with a name
-     *
-     * @var  string
-     */
-    private $name          = null;
-    /**
-     * value to provide
-     *
-     * @var  mixed
-     */
-    private $value;
+    public const TYPE = '__CONSTANT__';
+    private mixed $value;
     /**
      * provider to use for this binding
      *
-     * @var  \stubbles\ioc\InjectionProvider<scalar>
+     * @var  InjectionProvider<scalar>
      */
-    private $provider      = null;
+    private ?InjectionProvider $provider = null;
     /**
      * provider class to use for this binding (will be created via injector)
-     *
-     * actually class-string<\stubbles\ioc\InjectionProvider<scalar>> but phpstan can't parse this
-     * @var  class-string
      */
-    private $providerClass = null;
+    private ?string $providerClass = null;
 
-    /**
-     * constructor
-     *
-     * @param  string  $name  name of the list or map
-     */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+    public function __construct(private string $name) { }
 
     /**
      * set the constant value
      *
      * @api
-     * @param   mixed  $value
-     * @return  ConstantBinding
      */
-    public function to($value): self
+    public function to(mixed $value): self
     {
         $this->value = $value;
         return $this;
@@ -77,9 +56,8 @@ class ConstantBinding implements Binding
      * 'toProviderClass()' method.
      *
      * @api
-     * @param   \stubbles\ioc\InjectionProvider<scalar>  $provider
-     * @return  \stubbles\ioc\binding\ConstantBinding
-     * @since   1.6.0
+     * @param  InjectionProvider<scalar>  $provider
+     * @since  1.6.0
      */
     public function toProvider(InjectionProvider $provider): self
     {
@@ -95,13 +73,12 @@ class ConstantBinding implements Binding
      *
      * @api
      * @param   class-string<InjectionProvider<scalar>>|\ReflectionClass<InjectionProvider<scalar>>  $providerClass
-     * @return  \stubbles\ioc\binding\ConstantBinding
      * @since   1.6.0
      */
-    public function toProviderClass($providerClass): self
+    public function toProviderClass(string|ReflectionClass $providerClass): self
     {
-        $this->providerClass = (($providerClass instanceof \ReflectionClass) ?
-                                    ($providerClass->getName()) : ($providerClass));
+        $this->providerClass = $providerClass instanceof ReflectionClass ?
+            $providerClass->getName() : $providerClass;
         return $this;
     }
 
@@ -109,11 +86,9 @@ class ConstantBinding implements Binding
      * sets a closure which can create the instance
      *
      * @api
-     * @param   \Closure  $closure
-     * @return  \stubbles\ioc\binding\ConstantBinding
-     * @since   2.1.0
+     * @since  2.1.0
      */
-    public function toClosure(\Closure $closure): self
+    public function toClosure(Closure $closure): self
     {
         $this->provider = new ClosureInjectionProvider($closure);
         return $this;
@@ -121,23 +96,21 @@ class ConstantBinding implements Binding
 
     /**
      * creates a unique key for this binding
-     *
-     * @return  string
      */
     public function getKey(): string
     {
-        return self::TYPE . '#' . $this->name;
+        return sprintf('%s#%s', self::TYPE, $this->name);
     }
 
     /**
      * returns the created instance
      *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string                  $name
      * @return  scalar
      */
-    public function getInstance(Injector $injector, $name = null)
-    {
+    public function getInstance(
+        Injector $injector,
+        string|ReflectionClass|null $name = null
+    ): mixed {
         if (null !== $this->provider) {
             return $this->provider->get($name);
         }
@@ -145,7 +118,14 @@ class ConstantBinding implements Binding
         if (null != $this->providerClass) {
             $provider = $injector->getInstance($this->providerClass);
             if (!($provider instanceof InjectionProvider)) {
-                 throw new BindingException('Configured provider class ' . $this->providerClass . ' for constant ' . $this->name . ' is not an instance of stubbles\ioc\InjectionProvider.');
+                 throw new BindingException(
+                    sprintf(
+                        'Configured provider class %s for constant %s is not an instance of %.',
+                        $this->providerClass,
+                        $this->name,
+                        InjectionProvider::class
+                    )
+                );
             }
 
             $this->provider = $provider;

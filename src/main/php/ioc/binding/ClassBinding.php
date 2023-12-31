@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use Closure;
+use InvalidArgumentException;
+use ReflectionClass;
 use stubbles\ioc\ClosureInjectionProvider;
 use stubbles\ioc\DefaultInjectionProvider;
 use stubbles\ioc\InjectionProvider;
@@ -31,83 +35,48 @@ use function stubbles\reflect\annotationsOf;
 class ClassBinding implements Binding
 {
     /**
-     * type for this binding
-     *
-     * @var  class-string<T>
-     */
-    private $type;
-    /**
      * class that implements this binding
      *
      * @var  class-string<T>|\ReflectionClass<T>
      */
-    private $impl;
-    /**
-     * Annotated with a name
-     *
-     * @var  string
-     */
-    private $name;
-    /**
-     * scope of the binding
-     *
-     * @var  \stubbles\ioc\binding\BindingScope
-     */
-    private $scope;
+    private string|ReflectionClass $impl;
+    private ?string $name = null;
+    private ?BindingScope $scope = null;
     /**
      * instance this type is bound to
      *
      * @var  T
      */
-    private $instance;
+    private ?object $instance = null;
     /**
      * provider to use for this binding
      *
      * @var  \stubbles\ioc\InjectionProvider<T>
      */
-    private $provider;
+    private ?InjectionProvider $provider = null;
     /**
      * provider class to use for this binding (will be created via injector)
-     *
-     * @var  string
      */
-    private $providerClass;
-    /**
-     * list of available binding scopes
-     *
-     * @var  \stubbles\ioc\binding\BindingScopes
-     */
-    private $scopes;
+    private ?string $providerClass = null;
 
     /**
      * constructor
      *
-     * @param  class-string<T>                      $type
-     * @param  \stubbles\ioc\binding\BindingScopes  $scopes
+     * @param  class-string<T>  $type
      */
-    public function __construct(string $type, BindingScopes $scopes)
+    public function __construct(private string $type, private BindingScopes $scopes)
     {
-        $this->type     = $type;
-        $this->impl     = $type;
-        $this->scopes   = $scopes;
+        $this->impl = $type;
     }
 
     /**
      * set the concrete implementation
      *
      * @api
-     * @param   \ReflectionClass<T>|class-string<T>  $impl
-     * @return  $this
-     * @throws  \InvalidArgumentException
+     * @param  ReflectionClass<T>|class-string<T>  $impl
      */
-    public function to($impl): self
+    public function to(string|ReflectionClass $impl): self
     {
-        if (!is_string($impl) && !($impl instanceof \ReflectionClass)) {
-            throw new \InvalidArgumentException(
-                    '$impl must be a string or an instance of \ReflectionClass'
-            );
-        }
-
         $this->impl = $impl;
         return $this;
     }
@@ -121,14 +90,17 @@ class ClassBinding implements Binding
      * @api
      * @param   T  $instance
      * @return  $this
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
-    public function toInstance($instance): self
+    public function toInstance(object $instance): self
     {
         if (!($instance instanceof $this->type)) {
-            throw new \InvalidArgumentException(
-                    'Instance of ' . $this->type . ' expectected, '
-                    . get_class($instance) . ' given.'
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Instance of %s expectected, %s given',
+                    $this->type,
+                    get_class($instance)
+                )
             );
         }
 
@@ -143,8 +115,7 @@ class ClassBinding implements Binding
      * 'toProviderClass()' method.
      *
      * @api
-     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
-     * @return  $this
+     * @param  InjectionProvider<T>  $provider
      */
     public function toProvider(InjectionProvider $provider): self
     {
@@ -159,13 +130,13 @@ class ClassBinding implements Binding
      * 'toProvider()' method.
      *
      * @api
-     * @param   class-string<InjectionProvider<T>>|\ReflectionClass<InjectionProvider<T>>  $providerClass
+     * @param   class-string<InjectionProvider<T>>|ReflectionClass<InjectionProvider<T>>  $providerClass
      * @return  $this
      */
-    public function toProviderClass($providerClass): self
+    public function toProviderClass(string|ReflectionClass $providerClass): self
     {
-        $this->providerClass = (($providerClass instanceof \ReflectionClass) ?
-                                    ($providerClass->getName()) : ($providerClass));
+        $this->providerClass = $providerClass instanceof ReflectionClass ?
+            $providerClass->getName() : $providerClass;
         return $this;
     }
 
@@ -173,11 +144,9 @@ class ClassBinding implements Binding
      * sets a closure which can create the instance
      *
      * @api
-     * @param   \Closure  $closure
-     * @return  $this
-     * @since   2.1.0
+     * @since  2.1.0
      */
-    public function toClosure(\Closure $closure): self
+    public function toClosure(Closure $closure): self
     {
         $this->provider = new ClosureInjectionProvider($closure);
         return $this;
@@ -187,8 +156,7 @@ class ClassBinding implements Binding
      * binds the class to the singleton scope
      *
      * @api
-     * @return  $this
-     * @since   1.5.0
+     * @since  1.5.0
      */
     public function asSingleton(): self
     {
@@ -200,8 +168,7 @@ class ClassBinding implements Binding
      * binds the class to the session scope
      *
      * @api
-     * @return  $this
-     * @since   1.5.0
+     * @since  1.5.0
      */
     public function inSession(): self
     {
@@ -213,8 +180,6 @@ class ClassBinding implements Binding
      * set the scope
      *
      * @api
-     * @param   \stubbles\ioc\binding\BindingScope  $scope
-     * @return  $this
      */
     public function in(BindingScope $scope): self
     {
@@ -226,8 +191,6 @@ class ClassBinding implements Binding
      * Set the name of the injection
      *
      * @api
-     * @param   string  $name
-     * @return  $this
      */
     public function named(string $name): self
     {
@@ -238,13 +201,13 @@ class ClassBinding implements Binding
     /**
      * returns the created instance
      *
-     * @param   \stubbles\ioc\Injector  $injector
-     * @param   string                  $name
      * @return  T
-     * @throws  \stubbles\ioc\binding\BindingException
+     * @throws  BindingException
      */
-    public function getInstance(Injector $injector, $name = null)
-    {
+    public function getInstance(
+        Injector $injector,
+        string|ReflectionClass|null $name = null
+    ): mixed {
         if (null !== $this->instance) {
             return $this->instance;
         }
@@ -265,45 +228,44 @@ class ClassBinding implements Binding
     }
 
     /**
-     * @return  \ReflectionClass<T>
+     * @return  ReflectionClass<T>
      */
-    private function impl(): \ReflectionClass
+    private function impl(): ReflectionClass
     {
       if (is_string($this->impl)) {
-          $this->impl = new \ReflectionClass($this->impl);
+          $this->impl = new ReflectionClass($this->impl);
       }
 
       return $this->impl;
     }
 
     /**
-     * @param   Injector  $injector
      * @return  InjectionProvider<T>
      * @throws  BindingException
      */
     private function createInjectionProvider(Injector $injector): InjectionProvider
     {
-      if (null != $this->providerClass) {
-          $provider = $injector->getInstance($this->providerClass);
-          if (!($provider instanceof InjectionProvider)) {
-              throw new BindingException(
-                  'Configured provider class '
-                  . $this->providerClass . ' for type ' . $this->type
-                  . ' is not an instance of ' . InjectionProvider::class . '.');
-          }
+        if (null != $this->providerClass) {
+            $provider = $injector->getInstance($this->providerClass);
+            if (!($provider instanceof InjectionProvider)) {
+                throw new BindingException(
+                    sprintf(
+                        'Configured provider class %s for type %s is not an instance of %s.',
+                        $this->providerClass,
+                        $this->type,
+                        InjectionProvider::class
+                    )
+                );
+            }
 
-          return $provider;
-      }
+            return $provider;
+        }
 
-      /** @var InjectionProvider<T> $default */
-      $default = new DefaultInjectionProvider($injector, $this->impl());
-      return $default;
+        return new DefaultInjectionProvider($injector, $this->impl());
     }
 
     /**
      * creates a unique key for this binding
-     *
-     * @return  string
      */
     public function getKey(): string
     {
@@ -311,6 +273,6 @@ class ClassBinding implements Binding
             return $this->type;
         }
 
-        return $this->type . '#' . $this->name;
+        return sprintf('%s#%s', $this->type, $this->name);
     }
 }

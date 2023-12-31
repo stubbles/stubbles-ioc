@@ -35,10 +35,10 @@ interface ErrorHandler
      * @return  bool    true if error handler is responsible, else false
      */
     public function isResponsible(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
     ): bool;
 
     /**
@@ -54,10 +54,10 @@ interface ErrorHandler
      * @return  bool    true if error is supressable, else false
      */
     public function isSupressable(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
     ): bool;
 
     /**
@@ -70,9 +70,9 @@ interface ErrorHandler
      * @return  bool    true if error message should populate $php_errormsg, else false
      */
     public function handle(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
     ): bool;
 }

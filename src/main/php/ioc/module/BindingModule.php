@@ -19,9 +19,6 @@ interface BindingModule
 {
     /**
      * configure the binder
-     *
-     * @param  \stubbles\ioc\Binder  $binder
-     * @param  string                $projectPath  optional  project base path
      */
     public function configure(Binder $binder, string $projectPath): void;
 }

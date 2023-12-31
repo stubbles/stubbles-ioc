@@ -20,10 +20,9 @@ abstract class App
      * runs the application
      *
      * @api
-     * @since   2.0.0
-     * @return  mixed
+     * @since  2.0.0
      */
-    public abstract function run();
+    abstract public function run();
 
     /**
      * creates an object via injection
@@ -33,8 +32,6 @@ abstract class App
      * container to create the instance.
      *
      * @api
-     * @param   string  $projectPath  path to project
-     * @return  \stubbles\App
      */
     public static function create(string $projectPath): App
     {
@@ -43,18 +40,15 @@ abstract class App
 
     /**
      * project path, set when instance is created
-     *
-     * @var  string
      */
-    private static $projectPath;
+    private static string $projectPath;
 
     /**
      * returns current project path
      *
      * Should only be used during app initialization, but never at runtime.
      *
-     * @since   5.0.0
-     * @return  string
+     * @since  5.0.0
      */
     protected static function projectPath(): string
     {
@@ -69,9 +63,6 @@ abstract class App
      * container to create the instance.
      *
      * @api
-     * @param   string  $className    full qualified class name of class to create an instance of
-     * @param   string  $projectPath  path to project
-     * @return  \stubbles\App
      */
     public static function createInstance(string $className, string $projectPath): App
     {
@@ -102,8 +93,7 @@ abstract class App
      * creates list of bindings from given class
      *
      * @internal  must not be used by applications
-     * @param   string  $className    full qualified class name of class to create an instance of
-     * @return  array<string|\stubbles\ioc\module\BindingModule[]>
+     * @return  array<string|BindingModule[]>
      * @since   1.3.0
      */
     protected static function getBindingsForApp(string $className): array
@@ -120,11 +110,9 @@ abstract class App
      * creates mode binding module
      *
      * @api
-     * @param   \stubbles\Environment|callable  $environment  optional  current environment
-     * @return  \stubbles\Runtime
-     * @since   2.0.0
+     * @since  2.0.0
      */
-    protected static function runtime($environment = null): Runtime
+    protected static function runtime(Environment|callable|null $environment = null): Runtime
     {
         return new Runtime($environment);
     }
@@ -133,7 +121,6 @@ abstract class App
      * create a binding module which binds current working directory
      *
      * @api
-     * @return  \Closure
      */
     protected static function currentWorkingDirectory(): \Closure
     {
@@ -148,7 +135,6 @@ abstract class App
      * create a binding module which binds current hostnames
      *
      * @api
-     * @return  \Closure
      */
     protected static function hostname(): \Closure
     {

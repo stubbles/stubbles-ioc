@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use Closure;
+use stubbles\ioc\InjectionProvider;
+
 /**
  * Class for map bindings.
  *
@@ -19,23 +23,20 @@ class MapBinding extends MultiBinding
     /**
      * This string is used when generating the key for a map binding.
      */
-    const TYPE        = '__MAP__';
+    public const TYPE = '__MAP__';
     /**
      * list of bindings for the map values
      *
      * @var  array<string,callable>
      */
-    private $bindings = [];
+    private array $bindings = [];
 
     /**
      * adds an entry to the list
      *
      * @api
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  \stubbles\ioc\binding\MapBinding
      */
-    public function withEntry(string $key, $value): self
+    public function withEntry(string $key, mixed $value): self
     {
         $this->bindings[$key] = $this->getValueCreator($value);
         return $this;
@@ -48,11 +49,8 @@ class MapBinding extends MultiBinding
      * but phpstan trips up about that.
      *
      * @api
-     * @param   string                    $key
-     * @param   class-string|\stubbles\ioc\InjectionProvider<mixed>  $provider
-     * @return  \stubbles\ioc\binding\MapBinding
      */
-    public function withEntryFromProvider(string $key, $provider): self
+    public function withEntryFromProvider(string $key, string|InjectionProvider $provider): self
     {
         $this->bindings[$key] = $this->getProviderCreator($provider);
         return $this;
@@ -62,12 +60,9 @@ class MapBinding extends MultiBinding
      * adds an entry which is created by given closure
      *
      * @api
-     * @param   string    $key
-     * @param   \Closure  $closure
-     * @return  \stubbles\ioc\binding\MapBinding
      * @since   2.1.0
      */
-    public function withEntryFromClosure(string $key, \Closure $closure): self
+    public function withEntryFromClosure(string $key, Closure $closure): self
     {
         $this->bindings[$key] = $closure;
         return $this;
@@ -85,8 +80,6 @@ class MapBinding extends MultiBinding
 
     /**
      * returns type key for for this binding
-     *
-     * @return  string
      */
     protected function getTypeKey(): string
     {

@@ -23,19 +23,14 @@ use stubbles\environments\exceptionhandler\ProdModeExceptionHandler;
  */
 class Production extends Handler implements Environment
 {
-    /**
-     * constructor
-     */
     public function __construct()
     {
         $this->setExceptionHandler(ProdModeExceptionHandler::class)
-                ->setErrorHandler(LogErrorHandler::class);
+            ->setErrorHandler(LogErrorHandler::class);
     }
 
     /**
      * returns the name of the mode
-     *
-     * @return  string
      */
     public function name(): string
     {
@@ -44,8 +39,6 @@ class Production extends Handler implements Environment
 
     /**
      * checks whether cache is enabled or not
-     *
-     * @return  bool
      */
     public function isCacheEnabled(): bool
     {

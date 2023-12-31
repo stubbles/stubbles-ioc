@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\environments;
-use stubbles\Environment;
 /**
  * Provides methods for error and exception handling in environments.
  *
@@ -18,40 +17,22 @@ use stubbles\Environment;
  */
 abstract class Handler
 {
-    /**
-     * @var  class-string|object
-     */
-    private $exceptionHandler;
-    /**
-     * @var  string
-     */
-    private $exceptionHandlerMethod;
-    /**
-     * @var  class-string|object
-     */
-    private $errorHandler ;
-    /**
-     * @var  string
-     */
-    private $errorHandlerMethod;
+    /** @var  class-string|object */
+    private string|object|null $exceptionHandler = null;
+    private ?string $exceptionHandlerMethod = null;
+    /** @var  class-string|object */
+    private string|object|null $errorHandler = null;
+    private ?string $errorHandlerMethod = null;
 
     /**
      * sets the exception handler to given class and method name
      *
      * To register the new exception handler call registerExceptionHandler().
-     *
-     * @param   class-string|object  $class        name or instance of exception handler class
-     * @param   string               $methodName   name of exception handler method
-     * @return  self
      */
-    protected function setExceptionHandler($class, string $methodName = 'handleException'): self
-    {
-        if (!is_string($class) && !is_object($class)) {
-            throw new \InvalidArgumentException(
-                    'Given class must be a class name or a class instance.'
-            );
-        }
-
+    protected function setExceptionHandler(
+        string|object $class,
+        string $methodName = 'handleException'
+    ): self {
         $this->exceptionHandler = $class;
         $this->exceptionHandlerMethod = $methodName;
         return $this;
@@ -63,11 +44,8 @@ abstract class Handler
      * Return value depends on registration: if no exception handler set return
      * value will be false, if registered handler was an instance the handler
      * instance will be returned, and true in any other case.
-     *
-     * @param   string       $projectPath  path to project
-     * @return  bool|object
      */
-    public function registerExceptionHandler(string $projectPath)
+    public function registerExceptionHandler(string $projectPath): bool|object
     {
         if (null === $this->exceptionHandler) {
             return false;
@@ -86,19 +64,11 @@ abstract class Handler
      * sets the error handler to given class and method name
      *
      * To register the new error handler call registerErrorHandler().
-     *
-     * @param   class-string|object  $class        name or instance of error handler class
-     * @param   string               $methodName   name of error handler method
-     * @return  self
      */
-    protected function setErrorHandler($class, string $methodName = 'handle'): self
-    {
-        if (!is_string($class) && !is_object($class)) {
-            throw new \InvalidArgumentException(
-                    'Given class must be a class name or a class instance.'
-            );
-        }
-
+    protected function setErrorHandler(
+        string|object $class,
+        string $methodName = 'handle'
+    ): self {
         $this->errorHandler = $class;
         $this->errorHandlerMethod = $methodName;
         return $this;
@@ -110,11 +80,8 @@ abstract class Handler
      * Return value depends on registration: if no error handler set return value
      * will be false, if registered handler was an instance the handler instance
      * will be returned, and true in any other case.
-     *
-     * @param   string       $projectPath  path to project
-     * @return  bool|object
      */
-    public function registerErrorHandler(string $projectPath)
+    public function registerErrorHandler(string $projectPath): bool|object
     {
         if (null === $this->errorHandler) {
             return false;
@@ -131,16 +98,13 @@ abstract class Handler
 
     /**
      * helper method to create the callback from the handler data
-     *
-     * @param   class-string|object  $class        name or instance of error handler class
-     * @param   string               $methodName   name of error handler method
-     * @param   string               $projectPath  path to project
-     * @return  callable
      */
-    private function createCallback($class, string $methodName, string $projectPath): callable
-    {
+    private function createCallback(
+        string|object $class,
+        string $methodName,
+        string $projectPath
+    ): callable {
         $instance = ((is_string($class)) ? (new $class($projectPath)) : ($class));
-        $callback = [$instance, $methodName];
-        return $callback;
+        return [$instance, $methodName];
     }
 }

@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\environments\errorhandler;
+
+use Override;
+
 /**
  * Error handler that logs all errors.
  *
@@ -25,7 +28,7 @@ class LogErrorHandler implements ErrorHandler
      *
      * @var  string[]
      */
-    private static $levelStrings  = [
+    private static array $levelStrings  = [
             E_ERROR             => 'E_ERROR',
             E_WARNING           => 'E_WARNING',
             E_PARSE             => 'E_PARSE',
@@ -43,23 +46,14 @@ class LogErrorHandler implements ErrorHandler
     ];
     /**
      * directory to log errors into
-     *
-     * @var  string
      */
-    private $logDir;
+    private string $logDir;
     /**
      * mode for new directories
-     *
-     * @var  int
      */
-    private $filemode  = 0700;
+    private int $filemode  = 0700;
 
-    /**
-     * constructor
-     *
-     * @param  string  $projectPath  path to project
-     */
-    public function __construct($projectPath)
+    public function __construct(string $projectPath)
     {
         $this->logDir = $projectPath . DIRECTORY_SEPARATOR . 'log'
                 . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR
@@ -68,11 +62,8 @@ class LogErrorHandler implements ErrorHandler
 
     /**
      * sets the mode for new log directories
-     *
-     * @param   int  $filemode
-     * @return  \stubbles\environments\errorhandler\LogErrorHandler
      */
-    public function setFilemode($filemode)
+    public function setFilemode($filemode): LogErrorHandler
     {
         $this->filemode = $filemode;
         return $this;
@@ -82,20 +73,14 @@ class LogErrorHandler implements ErrorHandler
      * checks whether this error handler is responsible for the given error
      *
      * This error handler is always responsible.
-     *
-     * @param   int     $level    level of the raised error
-     * @param   string  $message  error message
-     * @param   string  $file     filename that the error was raised in
-     * @param   int     $line     line number the error was raised at
-     * @return  bool    true
      */
+    #[Override]
     public function isResponsible(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
-    ): bool
-    {
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
+    ): bool {
         return true;
     }
 
@@ -104,39 +89,24 @@ class LogErrorHandler implements ErrorHandler
      *
      * This method is called in case the level is 0. An error to log is never
      * supressable.
-     *
-     * @param   int     $level    level of the raised error
-     * @param   string  $message  error message
-     * @param   string  $file     filename that the error was raised in
-     * @param   int     $line     line number the error was raised at
-     * @return  bool    true if error is supressable, else false
      */
+    #[Override]
     public function isSupressable(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
-    ): bool
-    {
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
+    ): bool {
         return false;
     }
 
-    /**
-     * handles the given error
-     *
-     * @param   int     $level    level of the raised error
-     * @param   string  $message  error message
-     * @param   string  $file     filename that the error was raised in
-     * @param   int     $line     line number the error was raised at
-     * @return  bool    true if error message should populate $php_errormsg, else false
-     */
+    #[Override]
     public function handle(
-            int $level,
-            string $message,
-            string $file = null,
-            int $line = null
-    ): bool
-    {
+        int $level,
+        string $message,
+        string $file = null,
+        int $line = null
+    ): bool {
         $logData  = date('Y-m-d H:i:s') . '|' . $level;
         $logData .= '|' . (self::$levelStrings[$level] ?? 'unknown');
         $logData .= '|' . $message;
@@ -149,18 +119,13 @@ class LogErrorHandler implements ErrorHandler
         }
 
         error_log(
-                $logData . "\n",
-                3,
-                $logDir . DIRECTORY_SEPARATOR . 'php-error-' . date('Y-m-d') . '.log'
+            $logData . "\n",
+            3,
+            $logDir . DIRECTORY_SEPARATOR . 'php-error-' . date('Y-m-d') . '.log'
         );
         return ErrorHandler::STOP_ERROR_HANDLING;
     }
 
-    /**
-     * builds the log directory
-     *
-     * @return  string
-     */
     private function buildLogDir(): string
     {
         return str_replace('{Y}', date('Y'), str_replace('{M}', date('m'), $this->logDir));
@@ -173,9 +138,9 @@ class LogErrorHandler implements ErrorHandler
         }
 
         return (isset($_SERVER['HTTPS']) ? 'https' : 'http')
-                . '://'
-                . ($_SERVER['HTTP_HOST'] ?? '')
-                . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
-                . $_SERVER['REQUEST_URI'];
+            . '://'
+            . ($_SERVER['HTTP_HOST'] ?? '')
+            . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
+            . $_SERVER['REQUEST_URI'];
     }
 }

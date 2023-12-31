@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
+
+use Throwable;
+
 /**
  * Interface for exception handlers.
  *
@@ -16,10 +19,5 @@ namespace stubbles\environments\exceptionhandler;
  */
 interface ExceptionHandler
 {
-    /**
-     * handles the exception
-     *
-     * @param  \Throwable  $exception  the uncatched exception
-     */
-    public function handleException(\Throwable $exception): void;
+    public function handleException(Throwable $exception): void;
 }

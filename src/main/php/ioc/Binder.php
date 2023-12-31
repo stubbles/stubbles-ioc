@@ -24,50 +24,37 @@ use stubbles\values\Properties;
  */
 class Binder
 {
-    /**
-     * @var  string
-     */
-    private $environment;
+    private ?string $environment = null;
     /**
      * list of available binding scopes
-     *
-     * @var  \stubbles\ioc\binding\BindingScopes
      */
-    private $scopes;
+    private BindingScopes $scopes;
     /**
      * added bindings that are in the index not yet
      *
-     * @var  \stubbles\ioc\binding\Binding[]
+     * @var  Binding[]
      */
-    private $bindings = [];
+    private array $bindings = [];
     /**
      * map of list bindings
      *
-     * @var  \stubbles\ioc\binding\ListBinding[]
+     * @var  ListBinding[]
      */
-    private $listBindings = [];
+    private array $listBindings = [];
     /**
      * map of map bindings
      *
-     * @var  \stubbles\ioc\binding\MapBinding[]
+     * @var  MapBinding[]
      */
-    private $mapBindings  = [];
+    private array $mapBindings  = [];
 
-    /**
-     * constructor
-     *
-     * @param  \stubbles\ioc\binding\BindingScopes  $scopes  optional
-     */
     public function __construct(BindingScopes $scopes = null)
     {
-        $this->scopes = ((null === $scopes) ? (new BindingScopes()) : ($scopes));
+        $this->scopes = $scopes ?? new BindingScopes();
     }
 
     /**
      * adds a new binding to the injector
-     *
-     * @param   \stubbles\ioc\binding\Binding  $binding
-     * @return  \stubbles\ioc\binding\Binding
      */
     public function addBinding(Binding $binding): Binding
     {
@@ -80,9 +67,9 @@ class Binder
      *
      * @template T of object
      * @param   class-string<T>  $interface
-     * @return  \stubbles\ioc\binding\ClassBinding<T>
+     * @return  ClassBinding<T>
      */
-    public function bind($interface): ClassBinding
+    public function bind(string $interface): ClassBinding
     {
         $c = new ClassBinding($interface, $this->scopes);
         $this->addBinding($c);
@@ -92,8 +79,6 @@ class Binder
     /**
      * set environment for bindings
      *
-     * @param   string  $environment
-     * @return  \stubbles\ioc\Binder
      * @since   6.0.0
      */
     public function setEnvironment(string $environment): self
@@ -105,26 +90,20 @@ class Binder
     /**
      * binds properties from given properties file
      *
-     * @param   string   $propertiesFile  file where properties are stored
-     * @param   string   $environment     name of current environment
-     * @return  \stubbles\values\Properties
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function bindPropertiesFromFile(string $propertiesFile, string $environment): Properties
     {
         return $this->bindProperties(
-                Properties::fromFile($propertiesFile),
-                $environment
+            Properties::fromFile($propertiesFile),
+            $environment
         );
     }
 
     /**
      * binds properties
      *
-     * @param   \stubbles\values\Properties  $properties
-     * @param   string                $environment  name of current environment
-     * @return  \stubbles\values\Properties
-     * @since   3.4.0
+     * @since  3.4.0
      */
     public function bindProperties(Properties $properties, string $environment): Properties
     {
@@ -137,9 +116,6 @@ class Binder
 
     /**
      * bind a constant
-     *
-     * @param   string  $name  name of constant to bind
-     * @return  \stubbles\ioc\binding\ConstantBinding
      */
     public function bindConstant(string $name): ConstantBinding
     {
@@ -154,9 +130,7 @@ class Binder
      * If a list with given name already exists it will return exactly this list
      * to add more values to it.
      *
-     * @param   string  $name
-     * @return  \stubbles\ioc\binding\ListBinding
-     * @since   2.0.0
+     * @since  2.0.0
      */
     public function bindList(string $name): ListBinding
     {
@@ -174,9 +148,7 @@ class Binder
      * If a map with given name already exists it will return exactly this map
      * to add more key-value pairs to it.
      *
-     * @param   string  $name
-     * @return  \stubbles\ioc\binding\MapBinding
-     * @since   2.0.0
+     * @since  2.0.0
      */
     public function bindMap(string $name): MapBinding
     {
@@ -190,8 +162,6 @@ class Binder
 
     /**
      * Get an injector for this binder
-     *
-     * @return  \stubbles\ioc\Injector
      */
     public function getInjector(): Injector
     {
@@ -201,8 +171,6 @@ class Binder
     /**
      * creates injector instance with bindings
      *
-     * @param   callable  ...$applyBindings  optional  callables which accept instances of stubbles\ioc\Binder
-     * @return  \stubbles\ioc\Injector
      * @since   7.0.0
      */
     public static function createInjector(callable ...$applyBindings): Injector

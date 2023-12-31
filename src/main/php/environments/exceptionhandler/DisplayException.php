@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\environments\exceptionhandler;
+
+use Override;
+use Throwable;
+
 /**
  * Exception handler that displays the exception message nicely formated in the response.
  *
@@ -18,15 +22,10 @@ namespace stubbles\environments\exceptionhandler;
  */
 class DisplayException extends AbstractExceptionHandler
 {
-    /**
-     * creates response body with useful data for display
-     *
-     * @param   \Throwable  $exception  the uncatched exception
-     * @return  string
-     */
-    protected function createResponseBody(\Throwable $exception): string
+    #[Override]
+    protected function createResponseBody(Throwable $exception): string
     {
         return $exception->getMessage()
-                . "\nTrace:\n" . $exception->getTraceAsString();
+            . "\nTrace:\n" . $exception->getTraceAsString();
     }
 }

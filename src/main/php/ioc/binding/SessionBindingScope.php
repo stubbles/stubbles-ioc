@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc\binding;
+
+use ReflectionClass;
+use RuntimeException;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\binding\BindingScope;
 /**
@@ -18,22 +21,11 @@ use stubbles\ioc\binding\BindingScope;
  */
 class SessionBindingScope implements BindingScope
 {
-    /**
-     * session prefix key
-     */
-    const SESSION_KEY  = 'stubbles.ioc.session.scope#';
-    /**
-     * session instance to store instances in
-     *
-     * @var  \stubbles\ioc\binding\Session
-     */
-    private $session;
+    private const SESSION_KEY  = 'stubbles.ioc.session.scope#';
+    private ?Session $session = null;
 
     /**
      * sets actual session
-     *
-     * @param   \stubbles\ioc\binding\Session  $session
-     * @return  \stubbles\ioc\binding\SessionBindingScope
      */
     public function setSession(Session $session): self
     {
@@ -45,18 +37,19 @@ class SessionBindingScope implements BindingScope
      * returns the requested instance from the scope
      *
      * @template T of object
-     * @param   \ReflectionClass<T>                 $impl      concrete implementation
-     * @param   \stubbles\ioc\InjectionProvider<T>  $provider
+     * @param   ReflectionClass<T>    $impl      concrete implementation
+     * @param   InjectionProvider<T>  $provider
      * @return  T
-     * @throws  \RuntimeException
+     * @throws  RuntimeException
      */
-    public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider)
     {
         if (null === $this->session) {
-            throw new \RuntimeException(
-                'Can not create session-scoped instance for '
-                . $impl->getName()
-                . ', no session set in session scope'
+            throw new RuntimeException(
+                sprintf(
+                    'Can not create session-scoped instance for %s, no session set in session scope.',
+                    $impl->getName()
+                )
             );
         }
 

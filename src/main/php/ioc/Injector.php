@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package  stubbles
  */
 namespace stubbles\ioc;
+
+use InvalidArgumentException;
+use ReflectionClass;
 use stubbles\ioc\binding\Binding;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\BindingScopes;
@@ -28,10 +31,6 @@ use function stubbles\reflect\annotationsOf;
  */
 class Injector
 {
-    /**
-     * @var  string|null
-     */
-    private $environment;
     /**
      * index for faster access to bindings
      *
@@ -58,15 +57,15 @@ class Injector
     /**
      * constructor
      *
-     * @param  string                               $environment  optional  name of current environment
-     * @param  \stubbles\ioc\binding\Binding[]      $bindings     optional
-     * @param  \stubbles\ioc\binding\BindingScopes  $scopes       optional
+     * @param  Binding[] $bindings     optional
      * @since  1.5.0
      */
-    public function __construct(string $environment = null, array $bindings = [], BindingScopes $scopes = null)
-    {
-        $this->environment = $environment;
-        $this->scopes      = $scopes !== null ? $scopes : new BindingScopes();
+    public function __construct(
+        private ?string $environment = null,
+        array $bindings = [],
+        BindingScopes $scopes = null
+    ) {
+        $this->scopes = $scopes ?? new BindingScopes();
         foreach ($bindings as $binding) {
             $this->index[$binding->getKey()] = $binding;
         }
@@ -79,16 +78,15 @@ class Injector
      * instance. If no interface is given it uses the session instances class
      * name.
      *
-     * @param   \stubbles\ioc\binding\Session  $session
-     * @param   class-string                   $sessionInterface  optional
-     * @return  \stubbles\ioc\Injector
-     * @since   5.4.0
+     * @param  class-string  $sessionInterface  optional
+     * @since  5.4.0
      */
     public function setSession(Session $session, string $sessionInterface = null): self
     {
         $this->scopes->setSession($session);
-        $binding = $this->bind(null !== $sessionInterface ? $sessionInterface : get_class($session))
-                ->toInstance($session);
+        $binding = $this->bind(
+            null !== $sessionInterface ? $sessionInterface : get_class($session)
+        )->toInstance($session);
         $this->index[$binding->getKey()] = $binding;
         return $this;
     }
@@ -97,28 +95,29 @@ class Injector
      * check whether a binding for a type is available (explicit and implicit)
      *
      * @api
-     * @param   string|class-string<object>           $type
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  boolean
+     * @throws InvalidArgumentException
      */
-    public function hasBinding(string $type, $name = null): bool
+    public function hasBinding(string $type, string|ReflectionClass|null $name = null): bool
     {
         if (PropertyBinding::TYPE === $type) {
             if (null === $name || $name instanceof \ReflectionClass) {
-                throw new \InvalidArgumentException('$name must be a string for type ' . PropertyBinding::TYPE);
+                throw new InvalidArgumentException(
+                    sprintf(
+                        '$name must be a string for type %s.',
+                        PropertyBinding::TYPE
+                    )
+                );
             }
 
             return $this->hasProperty($name);
         }
 
-        return ($this->findBinding($type, $name) != null);
+        return $this->findBinding($type, $name) != null;
     }
 
     /**
      * checks whether property with given name is available
      *
-     * @param   string  $name
-     * @return  bool
      * @since   3.4.0
      */
     private function hasProperty(string $name): bool
@@ -139,15 +138,20 @@ class Injector
      * hasBinding() or getInstance() are called.
      *
      * @api
-     * @param   string                                $type
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  boolean
+     * @throws InvalidArgumentException
      */
-    public function hasExplicitBinding(string $type, $name = null): bool
-    {
+    public function hasExplicitBinding(
+        string $type,
+        string|ReflectionClass|null $name = null
+    ): bool {
         if (PropertyBinding::TYPE === $type) {
             if (null === $name || $name instanceof \ReflectionClass) {
-              throw new \InvalidArgumentException('$name must be a string for type ' . PropertyBinding::TYPE);
+                throw new InvalidArgumentException(
+                    sprintf(
+                        '$name must be a string for type %s.',
+                        PropertyBinding::TYPE
+                    )
+                );
             }
 
             return $this->hasProperty($name);
@@ -169,12 +173,11 @@ class Injector
      * get an instance
      *
      * @api
-     * @param   string|class-string<object>           $type
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  object
      */
-    public function getInstance(string $type, $name = null)
-    {
+    public function getInstance(
+        string $type,
+        string|ReflectionClass|null $name = null
+    ): mixed {
         if (__CLASS__ === $type) {
             return $this;
         }
@@ -199,9 +202,7 @@ class Injector
      * check whether a constant is available
      *
      * @api
-     * @param   string  $name  name of constant to check for
-     * @return  bool
-     * @since   1.1.0
+     * @since  1.1.0
      */
     public function hasConstant(string $name): bool
     {
@@ -212,26 +213,24 @@ class Injector
      * returns constanct value
      *
      * @api
-     * @param   string  $name  name of constant value to retrieve
      * @return  scalar
      * @since   1.1.0
      */
     public function getConstant(string $name)
     {
         return $this->getBinding(ConstantBinding::TYPE, $name)
-                    ->getInstance($this, $name);
+            ->getInstance($this, $name);
     }
 
     /**
      * gets a binding
      *
-     * @param   string|class-string<object>  $type
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  \stubbles\ioc\binding\Binding
-     * @throws  \stubbles\ioc\binding\BindingException
+     * @throws  BindingException
      */
-    private function getBinding(string $type, $name): Binding
-    {
+    private function getBinding(
+        string $type,
+        string|ReflectionClass|null $name
+    ): Binding {
         $binding = $this->findBinding($type, $name);
         if (null === $binding) {
             throw new BindingException('No binding for ' . $type . ' defined');
@@ -242,13 +241,11 @@ class Injector
 
     /**
      * tries to find a binding
-     *
-     * @param   string|class-string<object>  $type
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  \stubbles\ioc\binding\Binding|null
      */
-    private function findBinding(string $type, $name): ?Binding
-    {
+    private function findBinding(
+        string $type,
+        string|ReflectionClass|null $name
+    ): ?Binding {
         $bindingName = $this->bindingName($name);
         if (null !== $bindingName && isset($this->index[$type . '#' . $bindingName])) {
             return $this->index[$type . '#' . $bindingName];
@@ -269,11 +266,8 @@ class Injector
 
     /**
      * parses binding name from given name
-     *
-     * @param   string|\ReflectionClass<object>|null  $name
-     * @return  string|null
      */
-    private function bindingName($name)
+    private function bindingName(string|ReflectionClass|null $name): ?string
     {
         if ($name instanceof \ReflectionClass) {
             return $name->getName();
@@ -289,22 +283,18 @@ class Injector
      * @ImplementedBy oder @ProvidedBy.
      *
      * If this is not the case it will fall back to the implicit binding.
-     *
-     * @param   \ReflectionClass<object>  $class
-     * @return  \stubbles\ioc\binding\Binding|null
      */
-    private function getAnnotatedBinding(\ReflectionClass $class): ?Binding
+    private function getAnnotatedBinding(ReflectionClass $class): ?Binding
     {
         $annotations = annotationsOf($class);
         if ($class->isInterface() && $annotations->contain('ImplementedBy')) {
             return $this->bind($class->getName())
-                    ->to($this->findImplementation($annotations, $class->getName()));
+                ->to($this->findImplementation($annotations, $class->getName()));
         } elseif ($annotations->contain('ProvidedBy')) {
             return $this->bind($class->getName())
-                    ->toProviderClass(
-                        $annotations->firstNamed('ProvidedBy')
-                                ->getProviderClass()
-                    );
+                ->toProviderClass(
+                    $annotations->firstNamed('ProvidedBy')->getProviderClass()
+                );
         }
 
         return $this->getImplicitBinding($class);
@@ -313,12 +303,9 @@ class Injector
     /**
      * finds implementation to be used from list of @ImplementedBy annotations
      *
-     * @param   \stubbles\reflect\annotation\Annotations  $annotations
-     * @param   string                                    $type
-     * @return  \ReflectionClass<object>
-     * @throws  \stubbles\ioc\binding\BindingException
+     * @throws  BindingException
      */
-    private function findImplementation(Annotations $annotations, string $type): \ReflectionClass
+    private function findImplementation(Annotations $annotations, string $type): ReflectionClass
     {
         $implementation = null;
         foreach ($annotations->named('ImplementedBy') as $annotation) {
@@ -343,11 +330,8 @@ class Injector
      * An implicit binding means that a type is requested which itself is a class
      * and not an interface. Obviously, it makes sense to say that a class is
      * always bound to itself if no other bindings were defined.
-     *
-     * @param   \ReflectionClass<object>  $class
-     * @return  \stubbles\ioc\binding\Binding
      */
-    private function getImplicitBinding(\ReflectionClass $class): ?Binding
+    private function getImplicitBinding(ReflectionClass $class): ?Binding
     {
         if (!$class->isInterface()) {
             return $this->bind($class->getName())->to($class);
@@ -361,7 +345,7 @@ class Injector
      *
      * @template T of object
      * @param   class-string<T>  $classname
-     * @return  \stubbles\ioc\binding\ClassBinding<T>
+     * @return  ClassBinding<T>
      */
     private function bind(string $classname): ClassBinding
     {

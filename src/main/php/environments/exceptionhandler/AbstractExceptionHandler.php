@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace stubbles\environments\exceptionhandler;
 use stubbles\ExceptionLogger;
+use Throwable;
+
 /**
  * Abstract base implementation for exception handlers, containing logging of exceptions.
  *
@@ -17,50 +19,18 @@ use stubbles\ExceptionLogger;
  */
 abstract class AbstractExceptionHandler implements ExceptionHandler
 {
-    /**
-     * path to project
-     *
-     * @var  string
-     */
-    protected $projectPath;
-    /**
-     * current php sapi
-     *
-     * @var  string
-     */
-    private $sapi;
-    /**
-     * switch whether logging is enabled or not
-     *
-     * @var  bool
-     */
-    private $loggingEnabled = true;
-    /**
-     * logger for exceptions
-     *
-     * @var  \stubbles\ExceptionLogger
-     */
-    private $exceptionLogger;
+    private bool $loggingEnabled = true;
+    private ExceptionLogger $exceptionLogger;
 
-    /**
-     * constructor
-     *
-     * @param  string  $projectPath  path to project
-     * @param  string  $sapi         current php sapi
-     */
-    public function __construct(string $projectPath, string $sapi = PHP_SAPI)
+    public function __construct(protected string $projectPath, private string $sapi = PHP_SAPI)
     {
-        $this->projectPath     = $projectPath;
-        $this->sapi            = $sapi;
         $this->exceptionLogger = new ExceptionLogger($projectPath);
     }
 
     /**
      * disables exception logging
-     *
-     * @return  \stubbles\environments\exceptionhandler\AbstractExceptionHandler
      */
-    public function disableLogging(): ExceptionHandler
+    public function disableLogging(): AbstractExceptionHandler
     {
         $this->loggingEnabled = false;
         return $this;
@@ -68,22 +38,14 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
 
     /**
      * sets the mode for new log directories
-     *
-     * @param   int  $filemode
-     * @return  \stubbles\environments\exceptionhandler\AbstractExceptionHandler
      */
-    public function setFilemode(int $filemode): ExceptionHandler
+    public function setFilemode(int $filemode): AbstractExceptionHandler
     {
         $this->exceptionLogger->setFilemode($filemode);
         return $this;
     }
 
-    /**
-     * handles the exception
-     *
-     * @param  \Throwable  $exception  the uncatched exception
-     */
-    public function handleException(\Throwable $exception): void
+    public function handleException(Throwable $exception): void
     {
         if ($this->loggingEnabled) {
             $this->exceptionLogger->log($exception, $this->requestUri());
@@ -105,24 +67,19 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
         }
 
         return (isset($_SERVER['HTTPS']) ? 'https' : 'http')
-                . '://'
-                . ($_SERVER['HTTP_HOST'] ?? '')
-                . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
-                . $_SERVER['REQUEST_URI'];
+            . '://'
+            . ($_SERVER['HTTP_HOST'] ?? '')
+            . (isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '')
+            . $_SERVER['REQUEST_URI'];
     }
 
     /**
      * creates response body with useful data for display
-     *
-     * @param   \Throwable  $exception  the uncatched exception
-     * @return  string
      */
-    protected abstract function createResponseBody(\Throwable $exception): string;
+    abstract protected function createResponseBody(Throwable $exception): string;
 
     /**
      * helper method to send the header
-     *
-     * @param  string  $header
      */
     protected function header(string $header): void
     {
@@ -131,8 +88,6 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
 
     /**
      * helper method to send the body
-     *
-     * @param  string  $body
      */
     protected function writeBody(string $body): void
     {

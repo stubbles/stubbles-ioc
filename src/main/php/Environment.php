@@ -31,7 +31,6 @@ interface Environment
      * returns the name of the environment
      *
      * @api
-     * @return  string
      */
     public function name(): string;
 
@@ -41,11 +40,8 @@ interface Environment
      * Return value depends on registration: if no exception handler set return
      * value will be false, if registered handler was an instance the handler
      * instance will be returned, and true in any other case.
-     *
-     * @param   string       $projectPath  path to project
-     * @return  bool|object
      */
-    public function registerExceptionHandler(string $projectPath);
+    public function registerExceptionHandler(string $projectPath): bool|object;
 
     /**
      * registers error handler for current environment
@@ -53,17 +49,13 @@ interface Environment
      * Return value depends on registration: if no error handler set return value
      * will be false, if registered handler was an instance the handler instance
      * will be returned, and true in any other case.
-     *
-     * @param   string       $projectPath  path to project
-     * @return  bool|object
      */
-    public function registerErrorHandler(string $projectPath);
+    public function registerErrorHandler(string $projectPath): bool|object;
 
     /**
      * checks whether cache is enabled or not
      *
      * @api
-     * @return  bool
      */
     public function isCacheEnabled(): bool;
 }

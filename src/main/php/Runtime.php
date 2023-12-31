@@ -19,16 +19,13 @@ class Runtime implements BindingModule
 {
     /**
      * marker whether runtime was already initialized
-     *
-     * @var  bool
      */
-    private static $initialized = false;
+    private static bool $initialized = false;
 
     /**
      * checks whether runtime was already bound
      *
      * @internal
-     * @return  bool
      */
     public static function initialized(): bool
     {
@@ -50,35 +47,26 @@ class Runtime implements BindingModule
      *
      * @var  string[]
      */
-    private $pathTypes   = ['config', 'log'];
+    private array $pathTypes = ['config', 'log'];
     /**
      * current environment we are running in
-     *
-     * @var  \stubbles\Environment
      */
-    protected $environment;
+    protected Environment $environment;
 
     /**
      * constructor
      *
      * If no environment is passed it will fallback to the default environment.
      *
-     * @param   \stubbles\Environment|callable  $environment  optional  current environment
      * @throws  \InvalidArgumentException
      */
-    public function __construct($environment = null)
+    public function __construct(Environment|callable|null $environment = null)
     {
         if (null !== $environment) {
             if (is_callable($environment)) {
                 $this->environment = $environment();
-            } elseif ($environment instanceof Environment) {
-                $this->environment = $environment;
             } else {
-                throw new \InvalidArgumentException(
-                        'Invalid environment, must either be an instance of '
-                        . Environment::class . ' or a callable returning such '
-                        . 'an instance'
-                );
+                $this->environment = $environment;
             }
         } else {
             $this->environment = $this->defaultEnvironment();
@@ -89,8 +77,6 @@ class Runtime implements BindingModule
 
     /**
      * returns default environment as fallback if no environment provided
-     *
-     * @return  \stubbles\Environment
      */
     protected function defaultEnvironment(): Environment
     {
@@ -105,8 +91,6 @@ class Runtime implements BindingModule
      * value will be $projectPath/$pathtype.
      *
      * @api
-     * @param   string  $pathType
-     * @return  \stubbles\Runtime
      */
     public function addPathType(string $pathType): self
     {
@@ -116,20 +100,17 @@ class Runtime implements BindingModule
 
     /**
      * configure the binder
-     *
-     * @param  \stubbles\ioc\Binder  $binder
-     * @param  string                $projectPath  optional  project base path
      */
     public function configure(Binder $binder, string $projectPath): void
     {
         $this->environment->registerErrorHandler($projectPath);
         $this->environment->registerExceptionHandler($projectPath);
         $binder->setEnvironment($this->environment->name())
-                ->bind(Environment::class)->toInstance($this->environment);
+            ->bind(Environment::class)->toInstance($this->environment);
         if (file_exists($this->propertiesFile($projectPath))) {
             $binder->bindPropertiesFromFile(
-                    $this->propertiesFile($projectPath),
-                    $this->environment->name()
+                $this->propertiesFile($projectPath),
+                $this->environment->name()
             );
         }
 
@@ -141,9 +122,6 @@ class Runtime implements BindingModule
 
     /**
      * returns path to config file
-     *
-     * @param   string  $projectPath
-     * @return  string
      */
     private function propertiesFile(string $projectPath): string
     {
@@ -153,7 +131,6 @@ class Runtime implements BindingModule
     /**
      * appends directory separator if necessary
      *
-     * @param   string  $projectPath
      * @return  array<string,string>
      */
     private function buildPathes(string $projectPath): array
