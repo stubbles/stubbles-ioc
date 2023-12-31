@@ -1,3 +1,4 @@
 docs/coverage
 docs/phpunit
+.phpunit.cache
 vendor
