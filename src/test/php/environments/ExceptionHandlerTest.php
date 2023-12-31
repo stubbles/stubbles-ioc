@@ -8,48 +8,28 @@ declare(strict_types=1);
  */
 namespace stubbles\environments;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use stubbles\Environment;
 use stubbles\environments\exceptionhandler\ExceptionHandler;
+use stubbles\test\environments\TestEnvironment;
 
 use function bovigo\assert\assertThat;
-use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Tests for stubbles\environments\Handler.
  *
  * Contains all tests which require restoring the previous exception handler.
- *
- * @group   environments
  */
+#[Group('environments')]
 class ExceptionHandlerTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\Environment
-     */
-    protected $environment;
+    private TestEnvironment $environment;
 
     protected function setUp(): void
     {
-        $this->environment = new class() extends Handler implements Environment
-        {
-            /**
-             * @param   class-string<ExceptionHandler>|ExceptionHandler  $class
-             * @return  self
-             */
-            public function useExceptionHandler($class): self
-            {
-                $this->setExceptionHandler($class, 'handleException');
-                return $this;
-            }
-
-            public function name(): string { return 'TEST'; }
-
-            public function isCacheEnabled(): bool { return false; }
-        };
+        $this->environment = new TestEnvironment();
     }
 
     protected function tearDown(): void
@@ -57,29 +37,25 @@ class ExceptionHandlerTest extends TestCase
         restore_exception_handler();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerExceptionHandlerWithClassNameReturnsCreatedInstance(): void
     {
         $exceptionHandlerClass = NewInstance::classname(ExceptionHandler::class);
         assertThat(
-                $this->environment->useExceptionHandler($exceptionHandlerClass)
-                        ->registerExceptionHandler('/tmp'),
-                isInstanceOf($exceptionHandlerClass)
+            $this->environment->useExceptionHandler($exceptionHandlerClass)
+                ->registerExceptionHandler('/tmp'),
+            isInstanceOf($exceptionHandlerClass)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerExceptionHandlerWithInstanceReturnsGivenInstance(): void
     {
         $exceptionHandler = NewInstance::of(ExceptionHandler::class);
         assertThat(
-                $this->environment->useExceptionHandler($exceptionHandler)
-                        ->registerExceptionHandler('/tmp'),
-                isSameAs($exceptionHandler)
+            $this->environment->useExceptionHandler($exceptionHandler)
+                ->registerExceptionHandler('/tmp'),
+            isSameAs($exceptionHandler)
         );
     }
 }

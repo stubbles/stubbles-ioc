@@ -33,7 +33,7 @@ abstract class App
      *
      * @api
      */
-    public static function create(string $projectPath): App
+    public static function create(string $projectPath): static
     {
         return self::createInstance(get_called_class(), $projectPath);
     }
@@ -63,6 +63,9 @@ abstract class App
      * container to create the instance.
      *
      * @api
+     * @template T of App
+     * @param class-string<T> $className
+     * @return T
      */
     public static function createInstance(string $className, string $projectPath): App
     {

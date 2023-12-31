@@ -7,9 +7,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\environments\exceptionhandler;
+
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
+use Error;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use Throwable;
 
 use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
@@ -18,24 +27,13 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
 /**
  * Tests for stubbles\environments\exceptionhandler\AbstractExceptionHandler.
- *
- * @group  environments
- * @group  environments_exceptionhandler
  */
+#[Group('environments')]
+#[Group('environments_exceptionhandler')]
 class AbstractExceptionHandlerTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  AbstractExceptionHandler&\bovigo\callmap\ClassProxy
-     */
-    private $exceptionHandler;
-    /**
-     * root path for log files
-     *
-     * @var  \org\bovigo\vfs\vfsStreamDirectory
-     */
-    private $root;
+    private AbstractExceptionHandler&ClassProxy $exceptionHandler;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
@@ -51,16 +49,14 @@ class AbstractExceptionHandlerTest extends TestCase
     public static function throwables(): array
     {
         return [
-                [new \Exception('failure message')],
-                [new \Error('failure message')]
+                [new Exception('failure message')],
+                [new Error('failure message')]
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
-    public function loggingDisabledDoesNotCreateLogfile(\Throwable $throwable): void
+    #[Test]
+    #[DataProvider('throwables')]
+    public function loggingDisabledDoesNotCreateLogfile(Throwable $throwable): void
     {
         $this->exceptionHandler->disableLogging()
                 ->handleException($throwable);
@@ -72,10 +68,8 @@ class AbstractExceptionHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function loggingNotDisabledCreatesLogfile(\Throwable $throwable): void
     {
         $this->exceptionHandler->handleException($throwable);
@@ -87,10 +81,8 @@ class AbstractExceptionHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function loggingDisabledFillsResponseOnly(\Throwable $throwable): void
     {
         $this->exceptionHandler->disableLogging()
@@ -100,10 +92,8 @@ class AbstractExceptionHandlerTest extends TestCase
         verify($this->exceptionHandler, 'writeBody')->wasCalledOnce();
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function handleExceptionLogsExceptionData(\Throwable $throwable): void
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=param';
@@ -127,10 +117,8 @@ class AbstractExceptionHandlerTest extends TestCase
 
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function handleChainedExceptionLogsExceptionDataOfChainedAndCause(\Throwable $throwable): void
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=param';
@@ -155,10 +143,8 @@ class AbstractExceptionHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function createsLogDirectoryWithDefaultPermissionsIfNotExists(\Throwable $throwable): void
     {
         $this->exceptionHandler->handleException($throwable);
@@ -170,10 +156,8 @@ class AbstractExceptionHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
+    #[Test]
+    #[DataProvider('throwables')]
     public function createLogDirectoryWithChangedPermissionsIfNotExists(\Throwable $throwable): void
     {
         $this->exceptionHandler->setFilemode(0777)->handleException($throwable);

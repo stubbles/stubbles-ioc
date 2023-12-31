@@ -7,7 +7,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\environments\errorhandler;
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -17,36 +20,15 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\callmap\verify;
 /**
  * Tests for stubbles\environments\errorhandler\ErrorHandlers
- *
- * @group  environments
- * @group  environments_errorhandler
  */
+#[Group('environments')]
+#[Group('environments_errorhandler')]
 class ErrorHandlersTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  ErrorHandlers
-     */
-    protected $errorHandlers;
-    /**
-     * a mocked error handler
-     *
-     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
-     */
-    protected $errorHandler1;
-    /**
-     * a mocked error handler
-     *
-     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
-     */
-    protected $errorHandler2;
-    /**
-     * a mocked error handler
-     *
-     * @var  ErrorHandler&\bovigo\callmap\ClassProxy
-     */
-    protected $errorHandler3;
+    private ErrorHandlers $errorHandlers;
+    private ErrorHandler&ClassProxy $errorHandler1;
+    private ErrorHandler&ClassProxy $errorHandler2;
+    private ErrorHandler&ClassProxy $errorHandler3;
 
     protected function setUp(): void
     {
@@ -59,9 +41,7 @@ class ErrorHandlersTest extends TestCase
         $this->errorHandlers->addErrorHandler($this->errorHandler3);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isResponsibleDoesOnlyCallErrorHandlersUntilResponsibleOneFound(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
@@ -70,9 +50,7 @@ class ErrorHandlersTest extends TestCase
         verify($this->errorHandler3, 'isResponsible')->wasNeverCalled();
      }
 
-    /**
-     * @test
-     */
+     #[Test]
     public function isResponsibleReturnsFalseIfNoHandlerIsResponsible(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
@@ -81,9 +59,7 @@ class ErrorHandlersTest extends TestCase
         assertFalse($this->errorHandlers->isResponsible(1, 'foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isSupressableReturnsFalseAsSoonAsOneHandlerDeniesSupressability(): void
     {
         $this->errorHandler1->returns(['isSupressable' => true]);
@@ -92,9 +68,7 @@ class ErrorHandlersTest extends TestCase
         verify($this->errorHandler3, 'isSupressable')->wasNeverCalled();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isSupressableReturnsOnlyTrueIfAllHandlerAllowSupressability(): void
     {
         $this->errorHandler1->returns(['isSupressable' => true]);
@@ -103,57 +77,50 @@ class ErrorHandlersTest extends TestCase
         assertTrue($this->errorHandlers->isSupressable(1, 'foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleSignalsDefaultStrategyIfNoErrorHandlerIsResponsible(): void
     {
         $this->errorHandler1->returns(['isResponsible' => false]);
         $this->errorHandler2->returns(['isResponsible' => false]);
         $this->errorHandler3->returns(['isResponsible' => false]);
         assertThat(
-                $this->errorHandlers->handle(1, 'foo'),
-                equals(ErrorHandler::CONTINUE_WITH_PHP_INTERNAL_HANDLING)
+            $this->errorHandlers->handle(1, 'foo'),
+            equals(ErrorHandler::CONTINUE_WITH_PHP_INTERNAL_HANDLING)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleSignalsStopIfErrorIsSuppressableAndSuppressedByGlobalErrorReporting(): void
     {
         $oldLevel = error_reporting(0);
         try {
             $this->errorHandler1->returns(['isResponsible' => false]);
             $this->errorHandler2->returns(
-                    ['isResponsible' => true, 'isSupressable' => true]
+                ['isResponsible' => true, 'isSupressable' => true]
             );
             assertThat(
-                    $this->errorHandlers->handle(1, 'foo'),
-                    equals(ErrorHandler::STOP_ERROR_HANDLING)
+                $this->errorHandlers->handle(1, 'foo'),
+                equals(ErrorHandler::STOP_ERROR_HANDLING)
             );
         } finally {
             error_reporting($oldLevel);
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingDisabled(): void
     {
         $oldLevel = error_reporting(0);
         try {
             $this->errorHandler1->returns(['isResponsible' => false]);
-            $this->errorHandler2->returns(
-                    ['isResponsible' => true,
-                     'isSupressable' => false,
-                     'handle'        => ErrorHandler::STOP_ERROR_HANDLING
-                    ]
-            );
+            $this->errorHandler2->returns([
+                'isResponsible' => true,
+                'isSupressable' => false,
+                'handle'        => ErrorHandler::STOP_ERROR_HANDLING
+            ]);
             assertThat(
-                    $this->errorHandlers->handle(1, 'foo'),
-                    equals(ErrorHandler::STOP_ERROR_HANDLING)
+                $this->errorHandlers->handle(1, 'foo'),
+                equals(ErrorHandler::STOP_ERROR_HANDLING)
             );
             verify($this->errorHandler3, 'isResponsible')->wasNeverCalled();
         } finally {
@@ -161,23 +128,20 @@ class ErrorHandlersTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleSignalsResultOfResponsibleErrorHandlerIfErrorReportingEnabled(): void
     {
         $oldLevel = error_reporting(E_ALL);
         try {
             $this->errorHandler1->returns(['isResponsible' => false]);
-            $this->errorHandler2->returns(
-                    ['isResponsible' => true,
-                     'isSupressable' => false,
-                     'handle'        => ErrorHandler::STOP_ERROR_HANDLING
-                    ]
-            );
+            $this->errorHandler2->returns([
+                'isResponsible' => true,
+                'isSupressable' => false,
+                'handle'        => ErrorHandler::STOP_ERROR_HANDLING
+            ]);
             assertThat(
-                    $this->errorHandlers->handle(1, 'foo'),
-                    equals(ErrorHandler::STOP_ERROR_HANDLING)
+                $this->errorHandlers->handle(1, 'foo'),
+                equals(ErrorHandler::STOP_ERROR_HANDLING)
             );
         } finally {
             error_reporting($oldLevel);

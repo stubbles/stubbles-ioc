@@ -7,37 +7,34 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\environments\exceptionhandler;
+
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use stubbles\test\environments\ThrowablesDataProvider;
+use Throwable;
 
 use function bovigo\callmap\verify;
 /**
  * Tests for stubbles\environments\exceptionhandler\ProdModeExceptionHandler.
- *
- * @group  environments
- * @group  environments_exceptionhandler
  */
+#[Group('environments')]
+#[Group('environments_exceptionhandler')]
 class ProdModeExceptionHandlerTest extends TestCase
 {
-    /**
-     * root path for log files
-     *
-     * @var  \org\bovigo\vfs\vfsStreamDirectory
-     */
-    protected $root;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
 
-    /**
-     * creates instance to test
-     *
-     * @return  ProdModeExceptionHandler&\bovigo\callmap\ClassProxy
-     */
-    public function createExceptionHandler(string $sapi): ProdModeExceptionHandler
+    public function createExceptionHandler(string $sapi): ProdModeExceptionHandler&ClassProxy
     {
         $prodModeExceptionHandler = NewInstance::of(
             ProdModeExceptionHandler::class,
@@ -47,45 +44,30 @@ class ProdModeExceptionHandlerTest extends TestCase
         return $prodModeExceptionHandler;
     }
 
-    /**
-     * @return  array<\Throwable[]>
-     */
-    public static function throwables(): array
-    {
-        return [
-                [new \Exception('failure message')],
-                [new \Error('failure message')]
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
-    public function createsFallbackErrorMessageIfNoError500FilePresent(\Throwable $throwable): void
+    #[Test]
+    #[DataProviderExternal(ThrowablesDataProvider::class, 'throwables')]
+    public function createsFallbackErrorMessageIfNoError500FilePresent(Throwable $throwable): void
     {
         $prodModeExceptionHandler = $this->createExceptionHandler('cgi');
         $prodModeExceptionHandler->handleException($throwable);
         verify($prodModeExceptionHandler, 'header')
-                ->received('Status: 500 Internal Server Error');
+            ->received('Status: 500 Internal Server Error');
         verify($prodModeExceptionHandler, 'writeBody')
-                ->received('I\'m sorry but I can not fulfill your request. Somewhere someone messed something up.');
+            ->received('I\'m sorry but I can not fulfill your request. Somewhere someone messed something up.');
     }
 
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
-    public function returnsContentOfError500FileIfPresent(\Throwable $throwable): void
+    #[Test]
+    #[DataProviderExternal(ThrowablesDataProvider::class, 'throwables')]
+    public function returnsContentOfError500FileIfPresent(Throwable $throwable): void
     {
         vfsStream::newFile('docroot/500.html')
-                ->withContent('An error occurred')
-                ->at($this->root);
+            ->withContent('An error occurred')
+            ->at($this->root);
         $prodModeExceptionHandler = $this->createExceptionHandler('apache');
         $prodModeExceptionHandler->handleException($throwable);
         verify($prodModeExceptionHandler, 'header')
-                ->received('HTTP/1.1 500 Internal Server Error');
+            ->received('HTTP/1.1 500 Internal Server Error');
         verify($prodModeExceptionHandler, 'writeBody')
-                ->received('An error occurred');
+            ->received('An error occurred');
     }
 }

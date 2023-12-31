@@ -7,6 +7,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
@@ -23,9 +28,8 @@ use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\App.
- *
- * @group  app
  */
+#[Group('app')]
 class AppTest extends TestCase
 {
     protected function tearDown(): void
@@ -36,93 +40,89 @@ class AppTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function createCreatesInstanceUsingBindings(): void
     {
         $appCommandWithBindings = AppClassWithBindings::create('projectPath');
         assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInstanceCreatesInstanceUsingBindings(): void
     {
         $appCommandWithBindings = App::createInstance(
-                AppClassWithBindings::class,
-                'projectPath'
+            AppClassWithBindings::class,
+            'projectPath'
         );
         assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInstanceCreatesInstanceWithoutBindings(): void
     {
         assertThat(
-                App::createInstance(
-                        AppClassWithoutBindings::class,
-                        'projectPath'
-                ),
-                isInstanceOf(AppClassWithoutBindings::class)
+            App::createInstance(
+                AppClassWithoutBindings::class,
+                'projectPath'
+            ),
+            isInstanceOf(AppClassWithoutBindings::class)
         );
     }
 
     /**
-     * @test
      * @since  5.0.0
      */
+    #[Test]
     public function projectPathIsBoundWithExplicitBindings(): void
     {
         assertThat(
-                AppClassWithBindings::create('projectPath')->pathOfProject,
-                equals('projectPath')
+            AppClassWithBindings::create('projectPath')->pathOfProject,
+            equals('projectPath')
         );
     }
 
     /**
-     * @test
      * @since  5.0.0
      */
+    #[Test]
     public function projectPathIsBoundWithoutExplicitBindings(): void
     {
         assertThat(
-                AppClassWithoutBindings::create('projectPath')->pathOfProject,
-                equals('projectPath')
+            AppClassWithoutBindings::create('projectPath')->pathOfProject,
+            equals('projectPath')
         );
     }
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function canCreateRuntime(): void
     {
         assertThat(
-                AppUsingBindingModule::callBindRuntime(),
-                isInstanceOf(Runtime::class)
+            AppUsingBindingModule::callBindRuntime(),
+            isInstanceOf(Runtime::class)
         );
     }
 
     /**
      * @since  2.1.0
-     * @group  issue_33
-     * @test
      */
+    #[Test]
+    #[Group('issue_33')]
     public function dynamicBindingViaClosure(): void
     {
         assertThat(
-                AppClassWithBindings::create('projectPath')->wasBoundBy(),
-                equals('closure')
+            AppClassWithBindings::create('projectPath')->wasBoundBy(),
+            equals('closure')
         );
     }
 
     /**
-     * @test
      * @since  3.4.0
      */
+    #[Test]
     public function bindCurrentWorkingDirectory(): void
     {
         $binder = new Binder();
@@ -132,21 +132,11 @@ class AppTest extends TestCase
     }
 
     /**
-     * @return  array<string[]>
-     */
-    public static function hostnameKeys(): array
-    {
-        return [
-            ['stubbles.hostname.nq'],
-            ['stubbles.hostname.fq']
-        ];
-    }
-
-    /**
-     * @test
      * @since  3.4.0
-     * @dataProvider  hostnameKeys
      */
+    #[Test]
+    #[TestWith(['stubbles.hostname.nq'])]
+    #[TestWith(['stubbles.hostname.fq'])]
     public function bindHostname(string $key): void
     {
         $binder = new Binder();
@@ -155,16 +145,14 @@ class AppTest extends TestCase
         assertTrue($binder->getInjector()->hasConstant($key));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidBindingModuleThrowsIllegalArgumentException(): void
     {
         expect(function() {
-                App::createInstance(
-                        AppClassWithInvalidBindingModule::class,
-                        'projectPath'
-                );
+            App::createInstance(
+                AppClassWithInvalidBindingModule::class,
+                'projectPath'
+            );
         })->throws(\InvalidArgumentException::class);
     }
 
@@ -181,15 +169,13 @@ class AppTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider  assertions
-     */
+    #[Test]
+    #[DataProvider('assertions')]
     public function bindingModulesAreProcessed(callable $assertion): void
     {
         $injector = App::createInstance(
-                AppClassWithBindings::class,
-                'projectPath'
+            AppClassWithBindings::class,
+            'projectPath'
         )->injector;
         $assertion($injector);
     }

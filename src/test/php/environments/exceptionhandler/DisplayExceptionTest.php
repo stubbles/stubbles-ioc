@@ -7,24 +7,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\environments\exceptionhandler;
+
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use stubbles\test\environments\ThrowablesDataProvider;
+use Throwable;
 
 use function bovigo\callmap\verify;
 /**
  * Tests for stubbles\environments\exceptionhandler\DisplayException.
- *
- * @group  environments
- * @group  environments_exceptionhandler
  */
+#[Group('environments')]
+#[Group('environments_exceptionhandler')]
 class DisplayExceptionTest extends TestCase
 {
-    /**
-     * creates instance to test
-     *
-     * @return  DisplayException&\bovigo\callmap\ClassProxy
-     */
-    public function createExceptionHandler(string $sapi): DisplayException
+    private function createExceptionHandler(string $sapi): DisplayException&ClassProxy
     {
         $displayExceptionHandler = NewInstance::of(
             DisplayException::class,
@@ -34,28 +35,15 @@ class DisplayExceptionTest extends TestCase
         return $displayExceptionHandler;
     }
 
-    /**
-     * @return  array<\Throwable[]>
-     */
-    public static function throwables(): array
-    {
-        return [
-                [new \Exception('failure message')],
-                [new \Error('failure message')]
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider  throwables
-     */
-    public function writesMessageAndTraceForInternalException(\Throwable $throwable): void
+    #[Test]
+    #[DataProviderExternal(ThrowablesDataProvider::class, 'throwables')]
+    public function writesMessageAndTraceForInternalException(Throwable $throwable): void
     {
         $displayExceptionHandler = $this->createExceptionHandler('cgi');
         $displayExceptionHandler->handleException($throwable);
         verify($displayExceptionHandler, 'header')
-                ->received('Status: 500 Internal Server Error');
+            ->received('Status: 500 Internal Server Error');
         verify($displayExceptionHandler, 'writeBody')
-                ->received("failure message\nTrace:\n" . $throwable->getTraceAsString());
+            ->received("failure message\nTrace:\n" . $throwable->getTraceAsString());
     }
 }

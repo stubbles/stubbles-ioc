@@ -8,6 +8,9 @@ declare(strict_types=1);
  */
 namespace stubbles\environments\errorhandler;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -16,36 +19,16 @@ use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
 /**
  * Tests for stubbles\environments\errorhandler\LogErrorHandler.
- *
- * @group  environments
- * @group  environments_errorhandler
  */
+#[Group('environments')]
+#[Group('environments_errorhandler')]
 class LogErrorHandlerTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\environments\errorhandler\LogErrorHandler
-     */
-    private $logErrorHandler;
-    /**
-     * root path for log files
-     *
-     * @var  \org\bovigo\vfs\vfsStreamDirectory
-     */
-    private $root;
-    /**
-     * @var  string
-     */
-    private static $logPath;
-    /**
-     * @var  string
-     */
-    private static $logFile;
+    private LogErrorHandler $logErrorHandler;
+    private vfsStreamDirectory $root;
+    private static string $logPath;
+    private static string $logFile;
 
-    /**
-     * set up test environment
-     */
     public static function setUpBeforeClass(): void
     {
         self::$logPath = 'log/errors/' . date('Y') . '/' . date('m');
@@ -58,25 +41,19 @@ class LogErrorHandlerTest extends TestCase
         $this->logErrorHandler = new LogErrorHandler(vfsStream::url('root'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAlwaysResponsible(): void
     {
         assertTrue($this->logErrorHandler->isResponsible(E_NOTICE, 'foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isNeverSupressable(): void
     {
         assertFalse($this->logErrorHandler->isSupressable(E_NOTICE, 'foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function stopsErrorHandlingWhenHandled(): void
     {
         assertThat(
@@ -85,18 +62,14 @@ class LogErrorHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleErrorCreatesLogfile(): void
     {
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__);
         assertTrue($this->root->hasChild(self::$logPath . '/' . self::$logFile));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleErrorShouldLogTheError(): void
     {
         $line = __LINE__;
@@ -105,15 +78,25 @@ class LogErrorHandlerTest extends TestCase
         $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
             substr($logfile->getContent(), 19),
-            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|no request uri present\n")
+            equals(
+                '|'
+                . E_WARNING
+                .
+                '|E_WARNING|message|'
+                . __FILE__
+                .
+                '|'
+                . $line
+                . "|no request uri present\n"
+            )
         );
     }
 
     /**
-     * @test
-     * @group  log_request_uri
      * @since  10.2.0
      */
+    #[Test]
+    #[Group('log_request_uri')]
     public function handleErrorShouldLogTheErrorWithRequestUriWhenPresent(): void
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=param';
@@ -126,15 +109,23 @@ class LogErrorHandlerTest extends TestCase
         $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
             substr($logfile->getContent(), 19),
-            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|http://localhost:8080/some/path?query=param\n")
+            equals(
+                '|'
+                . E_WARNING
+                . '|E_WARNING|message|'
+                . __FILE__
+                . '|'
+                . $line
+                . "|http://localhost:8080/some/path?query=param\n"
+            )
         );
     }
 
     /**
-     * @test
-     * @group  log_request_uri
      * @since  10.2.0
      */
+    #[Test]
+    #[Group('log_request_uri')]
     public function handleErrorShouldLogTheErrorWithRequestUriWhenPresentNoPortButHttps(): void
     {
         $_SERVER['REQUEST_URI'] = '/some/path?query=param';
@@ -147,13 +138,19 @@ class LogErrorHandlerTest extends TestCase
         $logfile = $this->root->getChild(self::$logPath . '/' . self::$logFile);
         assertThat(
             substr($logfile->getContent(), 19),
-            equals('|' . E_WARNING . '|E_WARNING|message|' . __FILE__ . '|' . $line . "|https://localhost/some/path?query=param\n")
+            equals(
+                '|'
+                . E_WARNING
+                . '|E_WARNING|message|'
+                . __FILE__
+                . '|'
+                . $line
+                . "|https://localhost/some/path?query=param\n"
+            )
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleShouldCreateLogDirectoryWithDefaultPermissionsIfNotExists(): void
     {
         $this->logErrorHandler->handle(E_WARNING, 'message', __FILE__, __LINE__);
@@ -163,9 +160,7 @@ class LogErrorHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function handleShouldCreateLogDirectoryWithChangedPermissionsIfNotExists(): void
     {
         $this->logErrorHandler->setFilemode(0777)

@@ -12,44 +12,36 @@ use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use stubbles\environments\Production;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
-use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\ioc\module\Runtime.
- *
- * @group  app
  */
+#[Group('app')]
 class RuntimeTest extends TestCase
 {
-    /**
-     * mocked mode instance
-     *
-     * @var  Environment&\bovigo\callmap\ClassProxy
-     */
-    private $environment;
-    /**
-     * root path
-     *
-     * @var  \org\bovigo\vfs\vfsStreamDirectory
-     */
-    private $root;
+    private Environment&\bovigo\callmap\ClassProxy $environment;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         $this->root        = vfsStream::setup('projects');
         $this->environment = NewInstance::of(Environment::class)
-                ->returns([
-                    'name' => 'TEST',
-                    'registerErrorHandler' => false,
-                    'registerExceptionHandler' => false,
-                ]);
+            ->returns([
+                'name' => 'TEST',
+                'registerErrorHandler' => false,
+                'registerExceptionHandler' => false,
+            ]);
         Runtime::reset();
     }
 
@@ -59,54 +51,48 @@ class RuntimeTest extends TestCase
     }
 
     /**
-     * @test
      * @since  5.0.0
      */
+    #[Test]
     public function runtimeIsNotInitializedWhenNoInstanceCreated(): void
     {
         assertFalse(Runtime::initialized());
     }
 
     /**
-     * @test
      * @since  5.0.0
      */
+    #[Test]
     public function runtimeIsInitializedAfterFirstInstanceCreation(): void
     {
         new Runtime();
         assertTrue(Runtime::initialized());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerMethodsShouldBeCalledWithGivenProjectPath(): void
     {
         $runtime = new Runtime($this->environment);
         $runtime->configure(new Binder(), $this->root->url());
         verify($this->environment, 'registerErrorHandler')
-                ->received($this->root->url());
+            ->received($this->root->url());
         verify($this->environment, 'registerExceptionHandler')
-                ->received($this->root->url());
+            ->received($this->root->url());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function givenEnvironmentShouldBeBound(): void
     {
         $runtime = new Runtime($this->environment);
         $binder  = new Binder();
         $runtime->configure($binder, $this->root->url());
         assertThat(
-                $binder->getInjector()->getInstance(Environment::class),
-                isSameAs($this->environment)
+            $binder->getInjector()->getInstance(Environment::class),
+            isSameAs($this->environment)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function noEnvironmentGivenDefaultsToProdEnvironment(): void
     {
         $runtime = new Runtime();
@@ -122,28 +108,28 @@ class RuntimeTest extends TestCase
     }
 
     /**
-     * @test
      * @since  4.0.0
      */
+    #[Test]
     public function bindsEnvironmentProvidedViaCallable(): void
     {
         $runtime = new Runtime(function() { return $this->environment; });
         $binder  = new Binder();
         $runtime->configure($binder, $this->root->url());
         assertThat(
-                $binder->getInjector()->getInstance(Environment::class),
-                isSameAs($this->environment)
+            $binder->getInjector()->getInstance(Environment::class),
+            isSameAs($this->environment)
         );
         verify($this->environment, 'registerErrorHandler')
-                ->received($this->root->url());
+            ->received($this->root->url());
         verify($this->environment, 'registerExceptionHandler')
-                ->received($this->root->url());
+            ->received($this->root->url());
     }
 
     /**
-     * @test
      * @since  3.4.0
      */
+    #[Test]
     public function doesNotBindPropertiesWhenConfigFileIsMissing(): void
     {
         $binder = NewInstance::of(Binder::class);
@@ -153,9 +139,9 @@ class RuntimeTest extends TestCase
     }
 
     /**
-     * @test
      * @since  3.4.0
      */
+    #[Test]
     public function bindsPropertiesWhenConfigFilePresent(): void
     {
         vfsStream::newFile('config/config.ini')
@@ -170,9 +156,7 @@ stubbles.webapp.xml.serializeMode=true")
         verify($binder, 'bindProperties')->wasCalledOnce();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function projectPathIsBound(): void
     {
         $binder  = new Binder();
@@ -189,8 +173,9 @@ stubbles.webapp.xml.serializeMode=true")
      */
     public static function getConstants(): array
     {
-        return ['config' => ['config', 'stubbles.config.path'],
-                'log'    => ['log', 'stubbles.log.path']
+        return [
+            'config' => ['config', 'stubbles.config.path'],
+            'log'    => ['log', 'stubbles.log.path']
         ];
     }
 
@@ -199,12 +184,8 @@ stubbles.webapp.xml.serializeMode=true")
         return $this->root->url() . DIRECTORY_SEPARATOR . $part;
     }
 
-    /**
-     * @param  string  $pathPart
-     * @param  string  $constantName
-     * @test
-     * @dataProvider  getConstants
-     */
+    #[Test]
+    #[DataProvider('getConstants')]
     public function pathesShouldBeBoundAsConstant(string $pathPart, string $constantName): void
     {
         $binder  = new Binder();
@@ -224,25 +205,21 @@ stubbles.webapp.xml.serializeMode=true")
     public static function getWithAdditionalConstants(): array
     {
         return array_merge(
-                self::getConstants(),
-                ['user' => ['user', 'stubbles.user.path']]
+            self::getConstants(),
+            ['user' => ['user', 'stubbles.user.path']]
         );
     }
 
-    /**
-     * @param  string  $pathPart
-     * @param  string  $constantName
-     * @test
-     * @dataProvider  getWithAdditionalConstants
-     */
+    #[Test]
+    #[DataProvider('getWithAdditionalConstants')]
     public function additionalPathTypesShouldBeBound(string $pathPart, string $constantName): void
     {
         $binder  = new Binder();
         $runtime = new Runtime($this->environment);
         $runtime->addPathType('user')->configure($binder, $this->root->url());
         assertThat(
-                $binder->getInjector()->getConstant($constantName),
-                equals($this->getProjectPath($pathPart))
+            $binder->getInjector()->getConstant($constantName),
+            equals($this->getProjectPath($pathPart))
         );
     }
 }

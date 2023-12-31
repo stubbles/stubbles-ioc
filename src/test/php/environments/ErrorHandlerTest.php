@@ -8,48 +8,28 @@ declare(strict_types=1);
  */
 namespace stubbles\environments;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use stubbles\Environment;
 use stubbles\environments\errorhandler\ErrorHandler;
+use stubbles\test\environments\TestEnvironment;
 
 use function bovigo\assert\assertThat;
-use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Tests for stubbles\environments\Handler.
  *
  * Contains all tests which require restoring the previous error handler.
- *
- * @group  environments
  */
+#[Group('environments')]
 class ErrorHandlerTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\Environment
-     */
-    protected $environment;
+    private TestEnvironment $environment;
 
     protected function setUp(): void
     {
-        $this->environment = new class() extends Handler implements Environment
-        {
-            /**
-             * @param   class-string<ErrorHandler>|ErrorHandler  $class
-             * @return  self
-             */
-            public function useErrorHandler($class): self
-            {
-                $this->setErrorHandler($class, 'handle');
-                return $this;
-            }
-
-            public function name(): string { return 'TEST'; }
-
-            public function isCacheEnabled(): bool { return false; }
-        };
+        $this->environment = new TestEnvironment();
     }
 
     protected function tearDown(): void
@@ -57,29 +37,25 @@ class ErrorHandlerTest extends TestCase
         restore_error_handler();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerErrorHandlerWithClassNameReturnsCreatedInstance(): void
     {
         $errorHandlerClass = NewInstance::classname(ErrorHandler::class);
         assertThat(
-                $this->environment->useErrorHandler($errorHandlerClass)
-                        ->registerErrorHandler('/tmp'),
-                isInstanceOf($errorHandlerClass)
+            $this->environment->useErrorHandler($errorHandlerClass)
+                ->registerErrorHandler('/tmp'),
+            isInstanceOf($errorHandlerClass)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerErrorHandlerWithInstanceReturnsGivenInstance(): void
     {
         $errorHandler = NewInstance::of(ErrorHandler::class);
         assertThat(
-                $this->environment->useErrorHandler($errorHandler)
-                        ->registerErrorHandler('/tmp'),
-                isSameAs($errorHandler)
+            $this->environment->useErrorHandler($errorHandler)
+                ->registerErrorHandler('/tmp'),
+            isSameAs($errorHandler)
         );
     }
 }
