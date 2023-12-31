@@ -12,6 +12,7 @@ namespace stubbles\ioc;
 
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\ConstantBinding;
@@ -130,13 +131,18 @@ class DefaultInjectionProvider implements InjectionProvider
     {
         $methodAnnotations = annotationsOf($method);
         $paramAnnotations  = annotationsOf($param);
-        $paramClass        = $param->getClass();
-        if (null !== $paramClass) {
+        $paramClass        = $param->getType();
+        if (
+            null !== $paramClass
+            && $paramClass instanceof ReflectionNamedType
+        ) {
             if ($methodAnnotations->contain('Property') || $paramAnnotations->contain('Property')) {
                 return PropertyBinding::TYPE;
             }
 
-            return $paramClass->getName();
+            if (!$paramClass->isBuiltin()) {
+                return $paramClass->getName();
+            }
         }
 
         if ($methodAnnotations->contain('List') || $paramAnnotations->contain('List')) {
@@ -208,8 +214,11 @@ class DefaultInjectionProvider implements InjectionProvider
         $message = '';
         if (!in_array($type, [PropertyBinding::TYPE, ConstantBinding::TYPE, ListBinding::TYPE, MapBinding::TYPE])) {
             $message .= $type . ' ';
-        } elseif ($parameter->isArray()) {
-            $message .= 'array ';
+        } else {
+            $type = $parameter->getType();
+            if ($type instanceof ReflectionNamedType && $type->getName() === 'array') {
+                $message .= 'array ';
+            }
         }
 
         return $message . '$' . $parameter->getName();
