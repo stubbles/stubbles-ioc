@@ -7,7 +7,7 @@ Dependency injection.
 Build status
 ------------
 
-![Tests](https://github.com/stubbles/stubbles-ioc/workflows/Tests/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/stubbles/stubbles-ioc/badge.svg?branch=master)](https://coveralls.io/github/stubbles/stubbles-ioc?branch=master)
+![Tests](https://github.com/stubbles/stubbles-ioc/workflows/Tests/badge.svg)
 
 [![Latest Stable Version](https://poser.pugx.org/stubbles/ioc/version.png)](https://packagist.org/packages/stubbles/ioc) [![Latest Unstable Version](https://poser.pugx.org/stubbles/ioc/v/unstable.png)](//packagist.org/packages/stubbles/ioc)
 
@@ -19,13 +19,13 @@ _stubbles/ioc_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/ioc": "^10.1"
+    composer require "stubbles/ioc": "^11.0"
 
 
 Requirements
 ------------
 
-_stubbles/ioc_ requires at least PHP 7.3.
+_stubbles/ioc_ requires at least PHP 8.2.
 
 
 Inversion of Control
