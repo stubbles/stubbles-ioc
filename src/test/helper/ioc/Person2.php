@@ -13,5 +13,5 @@ namespace stubbles\test\ioc;
  */
 interface Person2
 {
-    public function sayHello2();
+    public function sayHello2(): string;
 }

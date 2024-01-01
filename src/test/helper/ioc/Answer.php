@@ -13,10 +13,8 @@ class Answer
 {
     /**
      * the answer to all questions
-     *
-     * @return  int
      */
-    public function answer()
+    public function answer(): int
     {
         return 42;
     }

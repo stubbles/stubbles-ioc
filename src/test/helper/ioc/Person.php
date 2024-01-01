@@ -16,5 +16,5 @@ interface Person
     /**
      * a method
      */
-    public function sayHello();
+    public function sayHello(): string;
 }

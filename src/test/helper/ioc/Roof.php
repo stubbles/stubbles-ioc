@@ -14,9 +14,9 @@ interface Roof
     /**
      * method to open the roof
      */
-    public function open();
+    public function open(): void;
     /**
      * method to close the roof
      */
-    public function close();
+    public function close(): void;
 }

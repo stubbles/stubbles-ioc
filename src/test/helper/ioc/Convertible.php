@@ -11,36 +11,12 @@ namespace stubbles\test\ioc;
  */
 class Convertible implements Vehicle
 {
-    /**
-     * injected tire instance
-     *
-     * @var  Tire
-     */
-    public $tire;
-    /**
-     * injected roof instance
-     *
-     * @var   Roof
-     */
-    public $roof;
-
-    /**
-     * sets the tire
-     *
-     * @param  Tire $tire
-     */
-    public function __construct(Tire $tire, Roof $roof = null)
-    {
-        $this->tire = $tire;
-        $this->roof = $roof;
-    }
+    public function __construct(public Tire $tire, public Roof $roof = null) { }
 
     /**
      * moves the vehicle forward
-     *
-     * @return  string
      */
-    public function moveForward()
+    public function moveForward(): string
     {
         return $this->tire->rotate();
     }

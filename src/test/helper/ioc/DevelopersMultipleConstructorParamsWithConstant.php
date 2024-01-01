@@ -11,19 +11,10 @@ namespace stubbles\test\ioc;
  */
 class DevelopersMultipleConstructorParamsWithConstant
 {
-    public $role;
-    public $schst;
-
     /**
      * constructor method with Named() annotation on a specific param
      *
-     * @param  Employee  $schst
-     * @param  string                            $role
      * @Named{role}('boss')
      */
-    public function __construct(Employee $schst, string $role)
-    {
-        $this->schst = $schst;
-        $this->role  = $role;
-    }
+    public function __construct(public Employee $schst, public string $role) { }
 }

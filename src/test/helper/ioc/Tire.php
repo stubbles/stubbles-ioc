@@ -13,8 +13,6 @@ interface Tire
 {
     /**
      * rotates the tires
-     *
-     * @return  string
      */
-    public function rotate();
+    public function rotate(): string;
 }

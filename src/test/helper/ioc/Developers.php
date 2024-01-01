@@ -11,19 +11,10 @@ namespace stubbles\test\ioc;
  */
 class Developers
 {
-    public $mikey;
-    public $schst;
-
     /**
      * Setter method with Named() annotation
      *
-     * @param  Employee  $schst
-     * @param  Employee  $mikey
      * @Named{schst}('schst')
      */
-    public function __construct(Employee $schst, Employee $mikey)
-    {
-        $this->schst = $schst;
-        $this->mikey = $mikey;
-    }
+    public function __construct(public Employee $schst, public Employee $mikey) { }
 }

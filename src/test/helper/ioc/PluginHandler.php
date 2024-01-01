@@ -12,47 +12,23 @@ namespace stubbles\test\ioc;
 class PluginHandler
 {
     /**
-     * list of config values
-     *
-     * @var  scalar[]
-     */
-    private $configList;
-    /**
-     * map of config values
-     *
-     * @var  scalar[]
-     */
-    private $pluginList;
-    /**
      * some passed arguments
      *
      * @var  array
      */
-    private $args;
-    /**
-     * list of plugins
-     *
-     * @var  Plugin[]
-     */
-    private $configMap;
-    /**
-     * map of plugins
-     *
-     * @var  Plugin[]
-     */
-    private $pluginMap;
+    private array $args;
 
     /**
      * constructor
      *
-     * @param  scalar[]                     $configList  list of config values
-     * @param  scalar[]                     $configMap   map of config values
-     * @param  \stubbles\test\ioc\Plugin[]  $pluginList  list of plugins
-     * @param  \stubbles\test\ioc\Plugin[]  $pluginMap   map of plugins
-     * @param  \stubbles\test\ioc\Plugin    $std
-     * @param  mixed                        $answer
-     * @param  array                        $list
-     * @param  array                        $map
+     * @param  scalar[]  $configList  list of config values
+     * @param  scalar[]  $configMap   map of config values
+     * @param  Plugin[]  $pluginList  list of plugins
+     * @param  Plugin[]  $pluginMap   map of plugins
+     * @param  Plugin    $std
+     * @param  mixed     $answer
+     * @param  array     $list
+     * @param  array     $map
      * @List{configList}('listConfig')
      * @Map{configMap}('mapConfig')
      * @List{pluginList}(stubbles\test\ioc\Plugin.class)
@@ -63,12 +39,12 @@ class PluginHandler
      * @Map{map}('aMap')
      */
     public function __construct(
-            array $configList,
-            array $configMap,
-            array $pluginList = null,
-            array $pluginMap = null,
+            private array $configList,
+            private array $configMap,
+            private ?array $pluginList = null,
+            private ?array $pluginMap = null,
             Plugin $std = null,
-            $answer = null,
+            mixed $answer = null,
             array $list = null,
             array $map = null)
     {
@@ -76,11 +52,12 @@ class PluginHandler
         $this->configMap  = $configMap;
         $this->pluginList = $pluginList;
         $this->pluginMap  = $pluginMap;
-        $this->args  = ['std'    => $std,
-                        'answer' => $answer,
-                        'list'   => $list,
-                        'map'    => $map
-                       ];
+        $this->args  = [
+            'std'    => $std,
+            'answer' => $answer,
+            'list'   => $list,
+            'map'    => $map
+        ];
     }
 
     /**
@@ -88,7 +65,7 @@ class PluginHandler
      *
      * @return  scalar[]
      */
-    public function getConfigList()
+    public function getConfigList(): array
     {
         return $this->configList;
     }
@@ -98,7 +75,7 @@ class PluginHandler
      *
      * @return  Plugin[]
      */
-    public function getPluginList()
+    public function getPluginList(): array
     {
         return $this->pluginList;
     }
@@ -108,7 +85,7 @@ class PluginHandler
      *
      * @return  scalar[]
      */
-    public function getConfigMap()
+    public function getConfigMap(): array
     {
         return $this->configMap;
     }
@@ -118,7 +95,7 @@ class PluginHandler
      *
      * @return  Plugin[]
      */
-    public function getPluginMap()
+    public function getPluginMap(): array
     {
         return $this->pluginMap;
     }
@@ -128,7 +105,7 @@ class PluginHandler
      *
      * @return  array
      */
-    public function getArgs()
+    public function getArgs(): array
     {
         return $this->args;
     }

@@ -12,28 +12,16 @@ namespace stubbles\test\ioc;
 class Bike implements Vehicle
 {
     /**
-     * injected tire instance
-     *
-     * @var  Tire
-     */
-    public $tire;
-
-    /**
      * constructor
      *
      * @param  Tire  $tire
      */
-    public function __construct(Tire $tire)
-    {
-        $this->tire = $tire;
-    }
+    public function __construct(public Tire $tire) { }
 
     /**
      * moves the vehicle forward
-     *
-     * @return  string
      */
-    public function moveForward()
+    public function moveForward(): string
     {
         return $this->tire->rotate();
     }

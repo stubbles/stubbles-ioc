@@ -11,19 +11,10 @@ namespace stubbles\test\ioc;
  */
 class DevelopersMultipleConstructorParams
 {
-    public $mikey;
-    public $schst;
-
     /**
      * constructor with Named() annotation on a specific param
      *
-     * @param  Employee  $boss
-     * @param  Employee  $employee
      * @Named{boss}('schst')
      */
-    public function __construct(Employee $boss, Employee $employee)
-    {
-        $this->schst = $boss;
-        $this->mikey = $employee;
-    }
+    public function __construct(public Employee $boss, public Employee $employee) { }
 }

@@ -13,29 +13,22 @@ namespace stubbles\test\ioc;
  */
 class BikeWithOptionalTire implements Vehicle
 {
-    /**
-     * injected tire instance
-     *
-     * @var  Tire
-     */
-    public $tire;
+    public Tire $tire;
 
     /**
      * sets the tire
      *
      * @param  Tire  $tire
      */
-    public function __construct(Tire $tire = null)
+    public function __construct(?Tire $tire = null)
     {
-        $this->tire = ((null === $tire) ? (new Goodyear()) : ($tire));
+        $this->tire = $tire ?? new Goodyear();
     }
 
     /**
      * moves the vehicle forward
-     *
-     * @return  string
      */
-    public function moveForward()
+    public function moveForward(): string
     {
         return $this->tire->rotate();
     }

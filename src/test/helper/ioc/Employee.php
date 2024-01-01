@@ -13,8 +13,6 @@ interface Employee
 {
     /**
      * says hello
-     *
-     * @return  string
      */
-    public function sayHello();
+    public function sayHello(): string;
 }

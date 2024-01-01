@@ -14,18 +14,9 @@ use stubbles\App;
 class AppClassWithInvalidBindingModule extends App
 {
     /**
-     * bound by value for retrieval
-     *
-     * @var  string
-     */
-    private $boundBy;
-
-    public $projectPath;
-
-    /**
      * return list of bindings required for this command
      *
-     * @return  array
+     * @return  array<BindingModule|Closure>
      */
     public static function __bindings(): array
     {

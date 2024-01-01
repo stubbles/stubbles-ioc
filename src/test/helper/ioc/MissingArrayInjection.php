@@ -13,15 +13,9 @@ namespace stubbles\test\ioc;
  */
 class MissingArrayInjection
 {
-    private $data;
     /**
-     * constructor
-     *
      * @param  array  $data
      * @Named('foo')
      */
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
+    public function __construct(private array $data) { }
 }

@@ -11,19 +11,9 @@ namespace stubbles\test\ioc;
  */
 class PropertyReceiver
 {
-    public $foo;
-
-    public $bar;
-
     /**
-     *
-     * @param  string  $foo
      * @Property{foo}('example.foo')
      * @Property{bar}('example.bar')
      */
-    public function __construct($foo, $bar)
-    {
-        $this->foo = $foo;
-        $this->bar = $bar;
-    }
+    public function __construct(public string $foo, public $bar) { }
 }

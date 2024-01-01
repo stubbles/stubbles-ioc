@@ -12,21 +12,11 @@ namespace stubbles\test\ioc;
 class ImplicitDependency
 {
     /**
-     * instance from constructor injection
-     *
-     * @var  Goodyear
-     */
-    private $goodyearByConstructor;
-
-    /**
      * constructor
      *
      * @param  Goodyear  $goodyear
      */
-    public function __construct(Goodyear $goodyear)
-    {
-        $this->goodyearByConstructor = $goodyear;
-    }
+    public function __construct(private Goodyear $goodyear) { }
 
     /**
      * returns the instance from constructor injection
@@ -35,6 +25,6 @@ class ImplicitDependency
      */
     public function getGoodyearByConstructor()
     {
-        return $this->goodyearByConstructor;
+        return $this->goodyear;
     }
 }

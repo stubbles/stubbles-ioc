@@ -13,27 +13,11 @@ namespace stubbles\test\ioc;
 class AnotherQuestion
 {
     /**
-     * answer
-     *
-     * @var  Answer
-     */
-    private $answer;
-
-    /**
-     * @param  Answer  $answer
      * @Named('answer')
      */
-    public function __construct(Answer $answer)
-    {
-        $this->answer = $answer;
-    }
+    public function __construct(private Answer $answer) { }
 
-    /**
-     * returns answer
-     *
-     * @return  Answer
-     */
-    public function getAnswer()
+    public function getAnswer(): Answer
     {
         return $this->answer;
     }

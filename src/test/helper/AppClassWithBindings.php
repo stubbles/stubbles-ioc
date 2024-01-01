@@ -16,17 +16,6 @@ use stubbles\ioc\Injector;
 class AppClassWithBindings extends App
 {
     /**
-     * bound by value for retrieval
-     *
-     * @var  string
-     */
-    private $boundBy;
-
-    public $injector;
-
-    public $pathOfProject;
-
-    /**
      * return list of bindings required for this command
      *
      * @return  array
@@ -34,29 +23,24 @@ class AppClassWithBindings extends App
     public static function __bindings(): array
     {
         return [
-                new AppTestBindingModuleOne(),
-                new AppTestBindingModuleTwo(),
-                function(Binder $binder)
-                {
-                    $binder->bindConstant('boundBy')->to('closure');
-                }
+            new AppTestBindingModuleOne(),
+            new AppTestBindingModuleTwo(),
+            function(Binder $binder): void
+            {
+                $binder->bindConstant('boundBy')->to('closure');
+            }
         ];
     }
 
     /**
-     *
-     * @param  \stubbles\ioc\Injector  $injector
-     * @param  string                  $projectPath
-     * @param  string                  $boundBy      optional
-     * @Named{projectPath}('stubbles.project.path')
+     * @Named{pathOfProject}('stubbles.project.path')
      * @Named{boundBy}('boundBy')
      */
-    public function __construct(Injector $injector, string $projectPath, string $boundBy = null)
-    {
-        $this->injector      = $injector;
-        $this->pathOfProject = $projectPath;
-        $this->boundBy       = $boundBy;
-    }
+    public function __construct(
+        public Injector $injector,
+        public string $pathOfProject,
+        private ?string $boundBy = null
+    ) { }
 
     /**
      * returns value and how it was bound

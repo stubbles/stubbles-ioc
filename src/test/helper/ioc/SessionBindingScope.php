@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
+
+use ReflectionClass;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\binding\BindingScope;
 /**
@@ -16,19 +18,13 @@ class SessionBindingScope implements BindingScope
 {
     /**
      * simulate session, sufficient for purpose of this test
-     *
-     * @var  array
      */
-    public static $instances = array();
+    public static array $instances = [];
 
     /**
      * returns the requested instance from the scope
-     *
-     * @param   \ReflectionClass   $impl      concrete implementation
-     * @param   InjectionProvider  $provider
-     * @return  mixed
      */
-    public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider): mixed
     {
         $key = $impl->getName();
         if (isset(self::$instances[$key])) {

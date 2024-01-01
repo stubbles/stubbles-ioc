@@ -7,6 +7,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\test;
+
+use Closure;
 use stubbles\App;
 use stubbles\Environment;
 use stubbles\Runtime;
@@ -17,12 +19,8 @@ use stubbles\Runtime;
  */
 class AppUsingBindingModule extends App
 {
-
     /**
      * creates mode binding module
-     *
-     * @param   \stubbles\Environment  $environment  runtime mode
-     * @return  \stubbles\Runtime
      */
     public static function callBindRuntime(Environment $environment = null): Runtime
     {
@@ -32,10 +30,9 @@ class AppUsingBindingModule extends App
     /**
      * returns binding module for current working directory
      *
-     * @return  \Closure
      * @since   3.4.0
      */
-    public static function currentWorkingDirectoryModule(): \Closure
+    public static function currentWorkingDirectoryModule(): Closure
     {
         return self::currentWorkingDirectory();
     }
@@ -43,10 +40,9 @@ class AppUsingBindingModule extends App
     /**
      * returns binding module for current hostname
      *
-     * @return  \Closure
      * @since   3.4.0
      */
-    public static function bindHostnameModule(): \Closure
+    public static function bindHostnameModule(): Closure
     {
         return self::hostname();
     }

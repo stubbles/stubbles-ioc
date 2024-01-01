@@ -15,10 +15,8 @@ class RandomSingleton implements Number
 {
     /**
      * value of the number
-     *
-     * @var  int
      */
-    private $value;
+    private int $value;
 
     /**
      * constructor
@@ -32,7 +30,8 @@ class RandomSingleton implements Number
     /**
      * display a number
      */
-    public function display() {
+    public function display(): void
+    {
         echo $this->value . "\n";
     }
 }

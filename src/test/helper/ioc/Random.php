@@ -13,10 +13,8 @@ class Random implements Number
 {
     /**
      * value of the number
-     *
-     * @var  int
      */
-    private $value;
+    private int $value;
 
     /**
      * constructor
@@ -30,7 +28,8 @@ class Random implements Number
     /**
      * display a number
      */
-    public function display() {
+    public function display(): void
+    {
         echo $this->value . "\n";
     }
 }

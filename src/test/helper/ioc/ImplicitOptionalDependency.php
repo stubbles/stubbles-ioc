@@ -12,29 +12,17 @@ namespace stubbles\test\ioc;
 class ImplicitOptionalDependency
 {
     /**
-     * instance from setter injection
-     *
-     * @var  Goodyear
-     */
-    protected $goodyearBySetter;
-
-    /**
      * constructor
      *
      * @param  Goodyear  $goodyear
      */
-    public function __construct(Goodyear $goodyear = null)
-    {
-        $this->goodyearBySetter = $goodyear;
-    }
+    public function __construct(protected ?Goodyear $goodyear = null) { }
 
     /**
-     * returns the instance from setter injection
-     *
-     * @return  Goodyear
+     * returns the instance from implicit optional injection
      */
-    public function getGoodyear()
+    public function getGoodyear(): ?Goodyear
     {
-        return $this->goodyearBySetter;
+        return $this->goodyear;
     }
 }

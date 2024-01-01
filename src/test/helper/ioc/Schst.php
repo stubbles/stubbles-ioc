@@ -14,12 +14,12 @@ class Schst implements Person, Person2, Person3
     /**
      * a method
      */
-    public function sayHello()
+    public function sayHello(): string
     {
         return "My name is schst.";
     }
 
-    public function sayHello2()
+    public function sayHello2(): string
     {
         return 'My name is still schst.';
     }

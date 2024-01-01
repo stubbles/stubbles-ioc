@@ -12,29 +12,18 @@ namespace stubbles\test\ioc;
 class Question
 {
     /**
-     * the answer
-     *
-     * @var  mixed
-     */
-    private $answer;
-
-    /**
      * sets the answer
      *
-     * @param  mixed  $answer
      * @Named('answer')
      */
-    public function __construct($answer)
-    {
-        $this->answer = $answer;
-    }
+    public function __construct(private mixed $answer) { }
 
     /**
      * returns the answer
      *
      * @return  mixed
      */
-    public function getAnswer()
+    public function getAnswer(): mixed
     {
         return $this->answer;
     }

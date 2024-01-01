@@ -13,18 +13,10 @@ use stubbles\App;
  */
 class AppClassWithoutBindings extends App
 {
-
-    public $pathOfProject;
-
     /**
-     *
-     * @param  string  $projectPath
      * @Named('stubbles.project.path')
      */
-    public function __construct(string $projectPath)
-    {
-        $this->pathOfProject = $projectPath;
-    }
+    public function __construct(public string $pathOfProject) { }
 
     /**
      * runs the command
