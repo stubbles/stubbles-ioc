@@ -211,7 +211,6 @@ Further features
 * [Default implementations](docs/default_implementations.md)
 * [Inject instances](docs/inject_instances.md)
 * [Singletons](docs/singleton_scope.md)
-* [Session scope](docs/session_scope.md)
 * [Named parameters](docs/named_parameters.md)
 * [Constant values](docs/constant_values.md)
 * [List bindings](docs/list_bindings.md)
