@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\Number;
 use stubbles\test\ioc\Random;
@@ -18,56 +21,51 @@ use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\ioc\Injector with the singleton scope.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorSingletonScopeTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function assigningSingletonScopeToBindingWillReuseInitialInstance(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)
-               ->to(Random::class)
-               ->asSingleton();
+            ->to(Random::class)
+            ->asSingleton();
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
         assertThat(
-                $slot->number1,
-                isInstanceOf(Random::class)->and(isSameAs($slot->number2))
+            $slot->number1,
+            isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
     }
 
     /**
      * @since  2.1.0
-     * @test
-     * @group  issue_31
      */
+    #[Test]
+    #[Group('issue_31')]
     public function assigningSingletonScopeToClosureBindingWillReuseInitialInstance(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)
-                ->toClosure(function() { return new Random(); })
-                ->asSingleton();
+            ->toClosure(fn() => new Random())
+            ->asSingleton();
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
         assertThat(
-                $slot->number1,
-                isInstanceOf(Random::class)->and(isSameAs($slot->number2))
+            $slot->number1,
+            isInstanceOf(Random::class)->and(isSameAs($slot->number2))
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function classAnnotatedWithSingletonWillOnlyBeCreatedOnce(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)->to(RandomSingleton::class);
         $slot = $binder->getInjector()->getInstance(SlotMachine::class);
         assertThat(
-                $slot->number1,
-                isInstanceOf(RandomSingleton::class)->and(isSameAs($slot->number2))
+            $slot->number1,
+            isInstanceOf(RandomSingleton::class)->and(isSameAs($slot->number2))
         );
     }
 }

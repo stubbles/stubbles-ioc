@@ -16,6 +16,8 @@ use stubbles\ioc\binding\ListBinding;
 use stubbles\ioc\binding\MapBinding;
 use stubbles\values\Properties;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 use function bovigo\assert\assertThat;
 use function bovigo\assert\predicate\equals;
@@ -23,17 +25,11 @@ use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\ioc\Binder
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class BinderTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  Binder
-     */
-    private $binder;
+    private Binder $binder;
 
     protected function setUp(): void
     {
@@ -42,8 +38,8 @@ class BinderTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function addBindingReturnsAddedBinding(): void
     {
         $binding = NewInstance::of(Binding::class);
@@ -52,32 +48,32 @@ class BinderTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function bindCreatesClassBinding(): void
     {
         assertThat(
-                $this->binder->bind(__CLASS__),
-                isInstanceOf(ClassBinding::class)
+            $this->binder->bind(__CLASS__),
+            isInstanceOf(ClassBinding::class)
         );
     }
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function bindConstantCreatesBinding(): void
     {
         assertThat(
-                $this->binder->bindConstant('foo'),
-                isInstanceOf(ConstantBinding::class)
+            $this->binder->bindConstant('foo'),
+            isInstanceOf(ConstantBinding::class)
         );
     }
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function bindListCreatesBinding(): void
     {
         assertThat($this->binder->bindList('foo'), isInstanceOf(ListBinding::class));
@@ -85,8 +81,8 @@ class BinderTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function bindMapCreatesBinding(): void
     {
         assertThat($this->binder->bindMap('foo'), isInstanceOf(MapBinding::class));
@@ -94,8 +90,8 @@ class BinderTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function createdInjectorCanRetrieveItself(): void
     {
         $binder = new Binder();
@@ -104,31 +100,31 @@ class BinderTest extends TestCase
     }
 
     /**
-     * @since  3.4.0
-     * @test
+     * @since  2.0.0
      */
+    #[Test]
     public function bindPropertiesCreatesBinding(): void
     {
         $properties = new Properties([]);
         assertThat(
-                $this->binder->bindProperties($properties, 'PROD'),
-                isSameAs($properties)
+            $this->binder->bindProperties($properties, 'PROD'),
+            isSameAs($properties)
         );
     }
 
     /**
      * @since  4.0.0
-     * @test
      */
+    #[Test]
     public function bindPropertiesFromFileCreatesBinding(): void
     {
         $file = vfsStream::newFile('config.ini')
-                ->withContent("[config]\nfoo=bar")
-                ->at(vfsStream::setup());
+            ->withContent("[config]\nfoo=bar")
+            ->at(vfsStream::setup());
         $properties = new Properties(['config' => ['foo' => 'bar']]);
         assertThat(
-                $this->binder->bindPropertiesFromFile($file->url(), 'PROD'),
-                equals($properties)
+            $this->binder->bindPropertiesFromFile($file->url(), 'PROD'),
+            equals($properties)
         );
     }
 }

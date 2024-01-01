@@ -16,17 +16,7 @@ use stubbles\values\Secret;
 class Example
 {
     /**
-     * @var  Secret
-     */
-    public $password;
-    /**
-     * constructor
-     *
-     * @param  \stubbles\values\Secret  $password
      * @Property('example.password')
      */
-    public function __construct(Secret $password)
-    {
-        $this->password = $password;
-    }
+    public function __construct(public ?Secret $password) { }
 }

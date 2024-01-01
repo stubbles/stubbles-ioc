@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\PropertyReceiver;
 use stubbles\ioc\binding\BindingException;
@@ -20,35 +23,24 @@ use function bovigo\assert\predicate\startsWith;
 /**
  * Test for property bindings.
  *
- * @group  ioc
  * @since  3.4.0
  */
+#[Group('ioc')]
 class PropertyTest extends TestCase
 {
-    /**
-     * properties to be bound
-     *
-     * @var  \stubbles\values\Properties
-     */
-    private $properties;
+    private Properties $properties;
 
     protected function setUp(): void
     {
-        $this->properties = new Properties(
-                ['PROD'   => ['example.foo' => 'baz'],
-                 'config' => ['example.foo' => 'default',
-                              'example.bar' => 'someValue'
-                             ]
-                ]
-        );
+        $this->properties = new Properties([
+            'PROD'   => ['example.foo' => 'baz'],
+            'config' => [
+                'example.foo' => 'default',
+                'example.bar' => 'someValue'
+            ]
+        ]);
     }
 
-    /**
-     * create injector instance
-     *
-     * @param   string  $environment  optional
-     * @return  \stubbles\ioc\Injector
-     */
     private function createInjector(string $environment = 'PROD'): Injector
     {
         $binder = new Binder();
@@ -57,56 +49,50 @@ class PropertyTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setsCorrectPropertiesInRuntimeModeWithSpecificProperties(): void
     {
         $propertyReceiver = $this->createInjector('PROD')
-                ->getInstance(PropertyReceiver::class);
+            ->getInstance(PropertyReceiver::class);
         assertThat($propertyReceiver->foo, equals('baz'));
         assertThat($propertyReceiver->bar, equals('someValue'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setsCorrectPropertiesInRuntimeModeWithDefaultProperties(): void
     {
         $propertyReceiver = $this->createInjector('DEV')
-                ->getInstance(PropertyReceiver::class);
+            ->getInstance(PropertyReceiver::class);
         assertThat($propertyReceiver->foo, equals('default'));
         assertThat($propertyReceiver->bar, equals('someValue'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function instanceCreationThrowsBindingExceptionWhenNoPropertiesBound(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(PropertyReceiver::class);
+            $injector->getInstance(PropertyReceiver::class);
         })
         ->throws(BindingException::class)
         ->message(startsWith(
-                'Can not inject into ' . PropertyReceiver::class . '::__construct($foo).'
-                . ' No binding for type __PROPERTY__ (named "example.foo") specified.'
+            'Can not inject into ' . PropertyReceiver::class . '::__construct($foo).'
+            . ' No binding for type __PROPERTY__ (named "example.foo") specified.'
         ));
     }
 
     /**
-     * @test
      * @since  5.1.0
      */
+    #[Test]
     public function propertyInstanceIsBound(): void
     {
         assertThat(
-                $this->createInjector()->getInstance(
-                        Properties::class,
-                        'config.ini'
-                ),
-                isSameAs($this->properties)
+            $this->createInjector()->getInstance(
+                Properties::class,
+                'config.ini'
+            ),
+            isSameAs($this->properties)
         );
     }
 }

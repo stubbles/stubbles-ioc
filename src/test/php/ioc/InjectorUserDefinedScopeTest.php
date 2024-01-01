@@ -8,7 +8,10 @@ declare(strict_types=1);
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use stubbles\ioc\binding\BindingScope;
 
 use function bovigo\assert\assertThat;
@@ -16,38 +19,34 @@ use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\ioc\Injector with user-defined scope.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorUserDefinedScopeTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function hasBindingWhenBoundToOtherScope(): void
     {
         $binder = new Binder();
-        $binder->bind(\stdClass::class)
-                ->to(\stdClass::class)
-                ->in(NewInstance::of(BindingScope::class));
-        assertTrue($binder->getInjector()->hasBinding(\stdClass::class));
+        $binder->bind(stdClass::class)
+            ->to(stdClass::class)
+            ->in(NewInstance::of(BindingScope::class));
+        assertTrue($binder->getInjector()->hasBinding(stdClass::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function otherScopeIsUsedToCreateInstance(): void
     {
         $binder   = new Binder();
-        $instance = new \stdClass();
-        $binder->bind(\stdClass::class)
-                ->to(\stdClass::class)
-                ->in(NewInstance::of(BindingScope::class)
-                        ->returns(['getInstance' => $instance])
-        );
+        $instance = new stdClass();
+        $binder->bind(stdClass::class)
+            ->to(stdClass::class)
+            ->in(
+                NewInstance::of(BindingScope::class)
+                    ->returns(['getInstance' => $instance])
+            );
         assertThat(
-                $binder->getInjector()->getInstance(\stdClass::class),
-                isSameAs($instance)
+            $binder->getInjector()->getInstance(\stdClass::class),
+            isSameAs($instance)
         );
     }
 }

@@ -7,8 +7,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc\binding;
+
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\Injector;
 
@@ -20,23 +26,13 @@ use function bovigo\assert\predicate\equals;
  * Test for stubbles\ioc\binding\MapBinding.
  *
  * @since  2.0.0
- * @group  ioc
- * @group  ioc_binding
  */
+#[Group('ioc')]
+#[Group('ioc_binding')]
 class MapBindingTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\ioc\binding\MapBinding
-     */
-    private $mapBinding;
-    /**
-     * mocked injector
-     *
-     * @var  Injector&\bovigo\callmap\ClassProxy
-     */
-    private $injector;
+    private MapBinding $mapBinding;
+    private Injector&ClassProxy $injector;
 
     protected function setUp(): void
     {
@@ -44,247 +40,214 @@ class MapBindingTest extends TestCase
         $this->mapBinding = new MapBinding('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getKeyReturnsUniqueListKey(): void
     {
         assertThat($this->mapBinding->getKey(), equals(MapBinding::TYPE . '#foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsEmptyListIfNothingAdded(): void
     {
         assertEmptyArray($this->mapBinding->getInstance($this->injector, 'int'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsTypedEmptyListIfNothingAdded(): void
     {
         assertEmptyArray(
-                $this->mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
-                )
+            $this->mapBinding->getInstance(
+                $this->injector,
+                new \ReflectionClass(\stdClass::class)
+            )
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueIsAddedToList(): void
     {
         assertThat(
-                $this->mapBinding->withEntry('x', 303)
-                        ->getInstance($this->injector, 'int'),
-                equals(['x' => 303])
+            $this->mapBinding->withEntry('x', 303)
+                ->getInstance($this->injector, 'int'),
+            equals(['x' => 303])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueIsAddedToTypedList(): void
     {
         $value = new \stdClass();
         assertThat(
-                $this->mapBinding->withEntry('x', $value)
-                        ->getInstance(
-                                $this->injector,
-                                new \ReflectionClass(\stdClass::class)
-                ),
-                equals(['x' => $value])
+            $this->mapBinding->withEntry('x', $value)
+                ->getInstance(
+                    $this->injector,
+                    new ReflectionClass(stdClass::class)
+            ),
+            equals(['x' => $value])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function classNameIsAddedToTypedList(): void
     {
-        $value = new \stdClass();
+        $value = new stdClass();
         $this->injector->returns(['getInstance' => $value]);
         assertThat(
-                $this->mapBinding->withEntry('x', \stdClass::class)
-                        ->getInstance(
-                                $this->injector,
-                                new \ReflectionClass(\stdClass::class)
-                ),
-                equals(['x' => $value])
+            $this->mapBinding->withEntry('x', stdClass::class)
+                ->getInstance(
+                    $this->injector,
+                    new ReflectionClass(stdClass::class)
+            ),
+            equals(['x' => $value])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidValueAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntry('x', 303);
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(stdClass::class)
+            );
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidObjectAddedToTypedListThrowsBindingException(): void
     {
-        $mapBinding = $this->mapBinding->withEntry('x', new \stdClass());
+        $mapBinding = $this->mapBinding->withEntry('x', new stdClass());
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(InjectionProvider::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(InjectionProvider::class)
+            );
         })->throws(BindingException::class);
     }
 
     /**
      * creates mocked injection provider which returns given value
      *
-     * @param   mixed  $value
      * @return  \stubbles\ioc\InjectionProvider<mixed>
      */
-    private function createInjectionProvider($value): InjectionProvider
+    private function createInjectionProvider(mixed $value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
-                ->returns(['get' => $value]);
+            ->returns(['get' => $value]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueFromProviderIsAddedToList(): void
     {
         assertThat(
-                $this->mapBinding->withEntryFromProvider(
-                        'x',
-                        $this->createInjectionProvider(303)
-                )->getInstance($this->injector,'int'),
-                equals(['x' => 303])
+            $this->mapBinding->withEntryFromProvider(
+                'x',
+                $this->createInjectionProvider(303)
+            )->getInstance($this->injector,'int'),
+            equals(['x' => 303])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueFromProviderIsAddedToTypedList(): void
     {
-        $value = new \stdClass();
+        $value = new stdClass();
         assertThat(
-                $this->mapBinding->withEntryFromProvider(
-                        'x',
-                        $this->createInjectionProvider($value)
-                )->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
-                ),
-                equals(['x' => $value])
+            $this->mapBinding->withEntryFromProvider(
+                'x',
+                $this->createInjectionProvider($value)
+            )->getInstance(
+                $this->injector,
+                new ReflectionClass(stdClass::class)
+            ),
+            equals(['x' => $value])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidValueFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromProvider(
-                'x',
-                $this->createInjectionProvider(303)
+            'x',
+            $this->createInjectionProvider(303)
         );
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass('\\stdClass')
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass('\\stdClass')
+            );
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidObjectFromProviderAddedToTypedListThrowsBindingException(): void
     {
         $mapBinding = $this->mapBinding->withEntryFromProvider(
-                'x',
-                $this->createInjectionProvider(new \stdClass())
+            'x',
+            $this->createInjectionProvider(new stdClass())
         );
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(InjectionProvider::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(InjectionProvider::class)
+            );
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueFromProviderClassIsAddedToList(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
         assertThat(
-                $this->mapBinding->withEntryFromProvider('x', get_class($provider))
-                        ->getInstance($this->injector, 'int'),
-                equals(['x' => 303])
+            $this->mapBinding->withEntryFromProvider('x', get_class($provider))
+                ->getInstance($this->injector, 'int'),
+            equals(['x' => 303])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueFromProviderClassIsAddedToTypedList(): void
     {
         $value    = new \stdClass();
         $provider = $this->createInjectionProvider($value);
         $this->prepareInjector($provider);
         assertThat(
-                $this->mapBinding->withEntryFromProvider('x', get_class($provider))
-                        ->getInstance(
-                                $this->injector,
-                                new \ReflectionClass(\stdClass::class)
+            $this->mapBinding->withEntryFromProvider('x', get_class($provider))
+                ->getInstance(
+                        $this->injector,
+                        new ReflectionClass(stdClass::class)
                 ),
-                equals(['x' => $value])
+            equals(['x' => $value])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidValueFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
         $provider = $this->createInjectionProvider(303);
         $this->prepareInjector($provider);
         $mapBinding = $this->mapBinding->withEntryFromProvider('x', get_class($provider));
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(stdClass::class)
+            );
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidObjectFromProviderClassAddedToTypedListThrowsBindingException(): void
     {
-        $provider = $this->createInjectionProvider(new \stdClass());
+        $provider = $this->createInjectionProvider(new stdClass());
         $this->prepareInjector($provider);
         $mapBinding = $this->mapBinding->withEntryFromProvider('x', get_class($provider));
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(InjectionProvider::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(InjectionProvider::class)
+            );
         })->throws(BindingException::class);
     }
 
@@ -298,91 +261,81 @@ class MapBindingTest extends TestCase
         $this->injector->returns(['getInstance' => $provider]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addInvalidProviderClassThrowsBindingException(): void
     {
         $providerClass = get_class(NewInstance::of(InjectionProvider::class));
-        $this->injector->returns(['getInstance' => \stdClass::class]);
+        $this->injector->returns(['getInstance' => stdClass::class]);
         $mapBinding = $this->mapBinding->withEntryFromProvider('x', $providerClass);
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(InjectionProvider::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(InjectionProvider::class)
+            );
         })->throws(BindingException::class);
     }
 
     /**
      * @since  2.1.0
-     * @test
-     * @group  issue_31
      */
+    #[Test]
+    #[Group('issue_31')]
     public function valueFromClosureIsAddedToList(): void
     {
         assertThat(
-                $this->mapBinding->withEntryFromClosure('x', function() { return 303; })
-                        ->getInstance($this->injector, 'int'),
-                equals(['x' => 303])
+            $this->mapBinding->withEntryFromClosure('x', fn() => 303)
+                ->getInstance($this->injector, 'int'),
+            equals(['x' => 303])
         );
     }
 
     /**
      * @since  2.1.0
-     * @test
-     * @group  issue_31
      */
+    #[Test]
+    #[Group('issue_31')]
     public function valueFromClosureIsAddedToTypedList(): void
     {
-        $value = new \stdClass();
+        $value = new stdClass();
         assertThat(
-                $this->mapBinding->withEntryFromClosure(
-                        'x',
-                        function() use($value) { return $value; }
-                )->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
+            $this->mapBinding->withEntryFromClosure('x', fn() => $value)
+                ->getInstance(
+                    $this->injector,
+                    new ReflectionClass(stdClass::class)
                 ),
-                equals(['x' => $value])
+            equals(['x' => $value])
         );
     }
 
     /**
      * @since  2.1.0
-     * @test
-     * @group  issue_31
      */
+    #[Test]
+    #[Group('issue_31')]
     public function invalidValueFromClosureAddedToTypedListThrowsBindingException(): void
     {
-        $mapBinding = $this->mapBinding->withEntryFromClosure(
-                'x',
-                function() { return 303; }
-        );
+        $mapBinding = $this->mapBinding->withEntryFromClosure('x', fn() => 303);
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(\stdClass::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(stdClass::class)
+            );
         })->throws(BindingException::class);
     }
 
     /**
      * @since  2.1.0
-     * @test
-     * @group  issue_31
      */
+    #[Test]
+    #[Group('issue_31')]
     public function invalidObjectFromClosureAddedToTypedListThrowsBindingException(): void
     {
-        $mapBinding = $this->mapBinding->withEntryFromClosure(
-                'x',
-                function() { return new \stdClass(); }
-        );
+        $mapBinding = $this->mapBinding->withEntryFromClosure('x', fn() => new stdClass());
         expect(function() use ($mapBinding) {
-                $mapBinding->getInstance(
-                        $this->injector,
-                        new \ReflectionClass(InjectionProvider::class)
-                );
+            $mapBinding->getInstance(
+                $this->injector,
+                new ReflectionClass(InjectionProvider::class)
+            );
         })->throws(BindingException::class);
     }
 }

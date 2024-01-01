@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Bike;
@@ -29,66 +32,55 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
  * Test for stubbles\ioc\Injector.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorBasicTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorHasBindingsWhenSpecified(): void
     {
         $injector = Binder::createInjector(
-                function(Binder $binder)
-                {
-                    $binder->bind(Tire::class)->to(Goodyear::class);
-                    $binder->bind(Vehicle::class)->to(Car::class);
-                }
+            function(Binder $binder)
+            {
+                $binder->bind(Tire::class)->to(Goodyear::class);
+                $binder->bind(Vehicle::class)->to(Car::class);
+            }
         );
         assertTrue($injector->hasBinding(Vehicle::class));
         assertTrue($injector->hasBinding(Tire::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructorInjection(): void
     {
         $injector = Binder::createInjector(
-                function(Binder $binder)
-                {
-                    $binder->bind(Tire::class)->to(Goodyear::class);
-                    $binder->bind(Vehicle::class)->to(Car::class);
-                }
+            function(Binder $binder)
+            {
+                $binder->bind(Tire::class)->to(Goodyear::class);
+                $binder->bind(Vehicle::class)->to(Car::class);
+            }
         );
         assertThat(
-                $injector->getInstance(Vehicle::class),
-                equals(new Car(new Goodyear()))
+            $injector->getInstance(Vehicle::class),
+            equals(new Car(new Goodyear()))
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function doesNotHaveExplicitBindingWhenNotDefined(): void
     {
         $injector = Binder::createInjector();
         assertFalse($injector->hasExplicitBinding(Goodyear::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usesImplicitBindingViaTypehints(): void
     {
         $goodyear = Binder::createInjector()->getInstance(Goodyear::class);
         assertThat($goodyear, isInstanceOf(Goodyear::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function implicitBindingTurnsIntoExplicitBindingAfterFirstUsage(): void
     {
         $injector = Binder::createInjector();
@@ -96,9 +88,7 @@ class InjectorBasicTest extends TestCase
         assertTrue($injector->hasExplicitBinding(Goodyear::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function implicitBindingAsDependency(): void
     {
         $injector = Binder::createInjector();
@@ -106,9 +96,7 @@ class InjectorBasicTest extends TestCase
         assertThat($obj->getGoodyearByConstructor(), isInstanceOf(Goodyear::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function optionalImplicitDependencyWillNotBeSetIfNotBound(): void
     {
         $injector = Binder::createInjector();
@@ -116,9 +104,7 @@ class InjectorBasicTest extends TestCase
         assertNull($obj->getGoodyear());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function optionalImplicitDependencyWillBeSetIfBound(): void
     {
         $injector = Binder::createInjector(
@@ -131,9 +117,7 @@ class InjectorBasicTest extends TestCase
         assertThat($obj->getGoodyear(), isInstanceOf(Goodyear::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function missingBindingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
@@ -142,9 +126,7 @@ class InjectorBasicTest extends TestCase
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function missingBindingOnInjectionHandlingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
@@ -153,21 +135,19 @@ class InjectorBasicTest extends TestCase
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function missingConstantBindingOnInjectionHandlingThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(MissingArrayInjection::class);
+            $injector->getInstance(MissingArrayInjection::class);
         })->throws(BindingException::class);
     }
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function optionalConstructorInjection(): void
     {
         $injector = Binder::createInjector();
@@ -176,16 +156,16 @@ class InjectorBasicTest extends TestCase
     }
 
     /**
-     * @test
      * @since  5.1.0
      */
+    #[Test]
     public function constructorInjectionWithOptionalSecondParam(): void
     {
         $injector = Binder::createInjector(
-                function(Binder $binder)
-                {
-                    $binder->bind(Tire::class)->to(Goodyear::class);
-                }
+            function(Binder $binder)
+            {
+                $binder->bind(Tire::class)->to(Goodyear::class);
+            }
         );
         $bike = $injector->getInstance(BikeWithOptionalOtherParam::class);
         assertThat($bike->other, equals('foo'));

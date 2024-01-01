@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Mikey;
@@ -20,102 +23,97 @@ use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
  * Test for stubbles\ioc\Injector with the ImplementedBy annotation.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorImplementedByTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createsInstanceFromImplementedByAnnotationIfNoExplicitBindingsSet(): void
     {
         assertThat(
-                Binder::createInjector()->getInstance(Person::class),
-                isInstanceOf(Schst::class)
+            Binder::createInjector()->getInstance(Person::class),
+            isInstanceOf(Schst::class)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function explicitBindingOverwritesImplementedByAnnotation(): void
     {
         $binder = new Binder();
         $binder->bind(Person::class)->to(Mikey::class);
         assertThat(
-                $binder->getInjector()->getInstance(Person::class),
-                isInstanceOf(Mikey::class)
+            $binder->getInjector()->getInstance(Person::class),
+            isInstanceOf(Mikey::class)
         );
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function fallsBackToDefaultImplementedByIfNoEnvironmentSet(): void
     {
         assertThat(
-                Binder::createInjector()->getInstance(Person3::class),
-                isInstanceOf(Schst::class)
+            Binder::createInjector()->getInstance(Person3::class),
+            isInstanceOf(Schst::class)
         );
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function usesFallbackIfNoSpecialImplementationDefinedForMode(): void
     {
 
         $binder = new Binder();
         assertThat(
-                $binder->setEnvironment('PROD')
-                        ->getInjector()
-                        ->getInstance(Person3::class),
-                isInstanceOf(Schst::class)
+            $binder->setEnvironment('PROD')
+                ->getInjector()
+                ->getInstance(Person3::class),
+            isInstanceOf(Schst::class)
         );
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function usesImplementationSpecifiedForMode(): void
     {
 
         $binder = new Binder();
         assertThat(
-                $binder->setEnvironment('DEV')
-                        ->getInjector()
-                        ->getInstance(Person3::class),
-                isInstanceOf(Mikey::class)
+            $binder->setEnvironment('DEV')
+                ->getInjector()
+                ->getInstance(Person3::class),
+            isInstanceOf(Mikey::class)
         );
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function throwsBindingExceptionWhenNoFallbackSpecified(): void
     {
         $injector = (new Binder())
-                ->setEnvironment('PROD')
-                ->getInjector();
+            ->setEnvironment('PROD')
+            ->getInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(Person4::class);
+            $injector->getInstance(Person4::class);
         })->throws(BindingException::class);
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function throwsBindingExceptionWhenNoFallbackSpecifiedAndNoModeSet(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(Person4::class);
+            $injector->getInstance(Person4::class);
         })->throws(BindingException::class);
     }
 }

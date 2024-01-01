@@ -8,6 +8,8 @@ declare(strict_types=1);
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\ListBinding;
@@ -22,193 +24,166 @@ use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for list and map bindings.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class MultibindingTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createsList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
-                ->withValue(303)
-                ->withValueFromProvider($this->createProviderForValue(313))
-                ->withValueFromClosure(function() { return 323; });
+            ->withValue(303)
+            ->withValueFromProvider($this->createProviderForValue(313))
+            ->withValueFromClosure(function() { return 323; });
         $binder->bindMap('mapConfig');
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat($pluginHandler->getConfigList(), equals([303, 313, 323]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorReturnsFalseForNonAddedListOnCheck(): void
     {
         assertFalse(
-                Binder::createInjector()
-                        ->hasBinding(ListBinding::TYPE, 'listConfig')
+            Binder::createInjector()
+                ->hasBinding(ListBinding::TYPE, 'listConfig')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorReturnsTrueForAddedListOnCheck(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
-                ->withValue(303)
-                ->withValueFromProvider($this->createProviderForValue(313))
-                ->withValueFromClosure(function() { return 323; });
+            ->withValue(303)
+            ->withValueFromProvider($this->createProviderForValue(313))
+            ->withValueFromClosure(function() { return 323; });
         assertTrue(
-                $binder->getInjector()
-                        ->hasBinding(ListBinding::TYPE, 'listConfig')
+            $binder->getInjector()
+                ->hasBinding(ListBinding::TYPE, 'listConfig')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorRetrievesNonAddedListThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(ListBinding::TYPE, 'listConfig');
+            $injector->getInstance(ListBinding::TYPE, 'listConfig');
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorRetrievesAddedList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
-                ->withValue(303)
-                ->withValueFromProvider($this->createProviderForValue(313))
-                ->withValueFromClosure(function() { return 323; });
+            ->withValue(303)
+            ->withValueFromProvider($this->createProviderForValue(313))
+            ->withValueFromClosure(function() { return 323; });
         assertThat(
-                $binder->getInjector()->getInstance(ListBinding::TYPE, 'listConfig'),
-                equals([303, 313, 323])
+            $binder->getInjector()->getInstance(ListBinding::TYPE, 'listConfig'),
+            equals([303, 313, 323])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function bindListMoreThanOnceAddsToSameList(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig')
-                ->withValue(303);
+            ->withValue(303);
         $binder->bindList('listConfig')
-                ->withValueFromProvider($this->createProviderForValue(313));
+            ->withValueFromProvider($this->createProviderForValue(313));
         $binder->bindList('listConfig')
-                ->withValueFromClosure(function() { return 323; });
+            ->withValueFromClosure(function() { return 323; });
         $binder->bindMap('mapConfig');
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getConfigList(),
-                equals([303, 313, 323])
+            $pluginHandler->getConfigList(),
+            equals([303, 313, 323])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorReturnsFalseForNonAddedMapOnCheck(): void
     {
         assertFalse(
-                Binder::createInjector()->hasBinding(MapBinding::TYPE, 'mapConfig')
+            Binder::createInjector()->hasBinding(MapBinding::TYPE, 'mapConfig')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorReturnsTrueForAddedMapOnCheck(): void
     {
         $binder = new Binder();
         $binder->bindMap('mapConfig')
-                ->withEntry('tb', 303)
-                ->withEntryFromProvider('dd', $this->createProviderForValue(313))
-                ->withEntryFromClosure('hf', function() { return 323; });
+            ->withEntry('tb', 303)
+            ->withEntryFromProvider('dd', $this->createProviderForValue(313))
+            ->withEntryFromClosure('hf', function() { return 323; });
         assertTrue(
-                $binder->getInjector()->hasBinding(MapBinding::TYPE, 'mapConfig')
+            $binder->getInjector()->hasBinding(MapBinding::TYPE, 'mapConfig')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorRetrievesNonAddedMapThrowsBindingException(): void
     {
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(MapBinding::TYPE, 'mapConfig');
+            $injector->getInstance(MapBinding::TYPE, 'mapConfig');
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectorRetrievesAddedMap(): void
     {
         $binder = new Binder();
         $binder->bindMap('mapConfig')
-                ->withEntry('tb', 303)
-                ->withEntryFromProvider('dd', $this->createProviderForValue(313))
-                ->withEntryFromClosure('hf', function() { return 323; });
+            ->withEntry('tb', 303)
+            ->withEntryFromProvider('dd', $this->createProviderForValue(313))
+            ->withEntryFromClosure('hf', function() { return 323; });
         assertThat(
-                $binder->getInjector()->getInstance(MapBinding::TYPE, 'mapConfig'),
-                equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
+            $binder->getInjector()->getInstance(MapBinding::TYPE, 'mapConfig'),
+            equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createsMap(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig')
-                ->withEntry('tb', 303)
-                ->withEntryFromProvider('dd', $this->createProviderForValue(313))
-                ->withEntryFromClosure('hf', function() { return 323; });
+            ->withEntry('tb', 303)
+            ->withEntryFromProvider('dd', $this->createProviderForValue(313))
+            ->withEntryFromClosure('hf', function() { return 323; });
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getConfigMap(),
-                equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
+            $pluginHandler->getConfigMap(),
+            equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function bindMapMoreThanOnceAddsToSameMap(): void
     {
         $binder = new Binder();
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig')
-                ->withEntry('tb', 303);
+            ->withEntry('tb', 303);
         $binder->bindMap('mapConfig')
-                ->withEntryFromProvider('dd', $this->createProviderForValue(313));
+            ->withEntryFromProvider('dd', $this->createProviderForValue(313));
         $binder->bindMap('mapConfig')
-                ->withEntryFromClosure('hf', function() { return 323; });
+            ->withEntryFromClosure('hf', function() { return 323; });
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getConfigMap(),
-                equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
+            $pluginHandler->getConfigMap(),
+            equals(['tb' => 303, 'dd' => 313, 'hf' => 323])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTypedList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
@@ -218,21 +193,17 @@ class MultibindingTest extends TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindList(Plugin::class)
-                ->withValue($plugin1)
-                ->withValueFromProvider($this->createProviderForValue($plugin2))
-                ->withValueFromClosure(
-                        function() use($plugin3) { return $plugin3; }
-                );
+            ->withValue($plugin1)
+            ->withValueFromProvider($this->createProviderForValue($plugin2))
+            ->withValueFromClosure(fn() => $plugin3);
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getPluginList(),
-                equals([$plugin1, $plugin2, $plugin3])
+            $pluginHandler->getPluginList(),
+            equals([$plugin1, $plugin2, $plugin3])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function bindTypedListMoreThanOnceAddsToSameList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
@@ -242,23 +213,19 @@ class MultibindingTest extends TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindList(Plugin::class)
-                ->withValue($plugin1);
+            ->withValue($plugin1);
         $binder->bindList(Plugin::class)
-                ->withValueFromProvider($this->createProviderForValue($plugin2));
+            ->withValueFromProvider($this->createProviderForValue($plugin2));
         $binder->bindList(Plugin::class)
-                ->withValueFromClosure(
-                        function() use($plugin3) { return $plugin3; }
-                );
+            ->withValueFromClosure(fn() => $plugin3);
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getPluginList(),
-                equals([$plugin1, $plugin2, $plugin3])
+            $pluginHandler->getPluginList(),
+            equals([$plugin1, $plugin2, $plugin3])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTypedMap(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
@@ -268,25 +235,20 @@ class MultibindingTest extends TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindMap(Plugin::class)
-                ->withEntry('tb', $plugin1)
-                ->withEntryFromProvider(
-                        'dd',
-                        $this->createProviderForValue($plugin2)
-                )
-                ->withEntryFromClosure(
-                        'hf',
-                        function() use($plugin3) { return $plugin3; }
-                );
+            ->withEntry('tb', $plugin1)
+            ->withEntryFromProvider(
+                'dd',
+                $this->createProviderForValue($plugin2)
+            )
+            ->withEntryFromClosure('hf', fn() => $plugin3);
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getPluginMap(),
-                equals(['tb' => $plugin1, 'dd' => $plugin2, 'hf' => $plugin3])
+            $pluginHandler->getPluginMap(),
+            equals(['tb' => $plugin1, 'dd' => $plugin2, 'hf' => $plugin3])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function bindTypedMapMoreThanOnceAddsToSameList(): void
     {
         $plugin1 = NewInstance::of(Plugin::class);
@@ -296,27 +258,22 @@ class MultibindingTest extends TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bindMap(Plugin::class)
-                ->withEntry('tb', $plugin1);
+            ->withEntry('tb', $plugin1);
         $binder->bindMap(Plugin::class)
-                ->withEntryFromProvider(
-                        'dd',
-                        $this->createProviderForValue($plugin2)
-                );
+            ->withEntryFromProvider(
+                'dd',
+                $this->createProviderForValue($plugin2)
+            );
         $binder->bindMap(Plugin::class)
-                ->withEntryFromClosure(
-                        'hf',
-                        function() use($plugin3) { return $plugin3; }
-                );
+            ->withEntryFromClosure('hf', fn() => $plugin3);
         $pluginHandler = $this->createPluginHandler($binder);
         assertThat(
-                $pluginHandler->getPluginMap(),
-                equals(['tb' => $plugin1, 'dd' => $plugin2, 'hf' => $plugin3])
+            $pluginHandler->getPluginMap(),
+            equals(['tb' => $plugin1, 'dd' => $plugin2, 'hf' => $plugin3])
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typedListWithInvalidValueThrowsBindingException(): void
     {
         $binder = new Binder();
@@ -324,13 +281,11 @@ class MultibindingTest extends TestCase
         $binder->bindMap('mapConfig');
         $binder->bindList(Plugin::class)->withValue(303);
         expect(function() use ($binder) {
-                $this->createPluginHandler($binder);
+            $this->createPluginHandler($binder);
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function typedMapWithInvalidValueThrowsBindingException(): void
     {
         $binder = new Binder();
@@ -338,13 +293,11 @@ class MultibindingTest extends TestCase
         $binder->bindMap('mapConfig');
         $binder->bindMap(Plugin::class)->withEntry('tb', 303);
         expect(function() use ($binder) {
-                $this->createPluginHandler($binder);
+            $this->createPluginHandler($binder);
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function mixedAnnotations(): void
     {
         $plugin = NewInstance::of(Plugin::class);
@@ -352,42 +305,38 @@ class MultibindingTest extends TestCase
         $binder->bindList('listConfig');
         $binder->bindMap('mapConfig');
         $binder->bind(Plugin::class)
-               ->named('foo')
-               ->toInstance($plugin);
+            ->named('foo')
+            ->toInstance($plugin);
         $binder->bindConstant('foo')
-               ->to(42);
+            ->to(42);
         $binder->bindList('aList')
-               ->withValue(313);
+            ->withValue(313);
         $binder->bindMap('aMap')
-               ->withEntry('tb', 303);
+            ->withEntry('tb', 303);
         assertThat(
-                $this->createPluginHandler($binder)->getArgs(),
-                equals([
-                        'std'    => $plugin,
-                        'answer' => 42,
-                        'list'   => [313],
-                        'map'    => ['tb' => 303]
-                ])
+            $this->createPluginHandler($binder)->getArgs(),
+            equals([
+                'std'    => $plugin,
+                'answer' => 42,
+                'list'   => [313],
+                'map'    => ['tb' => 303]
+            ])
         );
     }
 
     /**
      * creates mocked provider
      *
-     * @param   mixed  $value
      * @return  \stubbles\ioc\InjectionProvider<mixed>
      */
-    private function createProviderForValue($value): InjectionProvider
+    private function createProviderForValue(mixed $value): InjectionProvider
     {
         return NewInstance::of(InjectionProvider::class)
-                ->returns(['get' => $value]);
+            ->returns(['get' => $value]);
     }
 
     /**
      * creates plugin handler instance
-     *
-     * @param   Binder  $binder
-     * @return  PluginHandler
      */
     private function createPluginHandler(Binder $binder): PluginHandler
     {

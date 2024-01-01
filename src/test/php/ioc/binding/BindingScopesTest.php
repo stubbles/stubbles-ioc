@@ -8,6 +8,8 @@ declare(strict_types=1);
  */
 namespace stubbles\ioc\binding;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -15,27 +17,22 @@ use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
 /**
  * Test for stubbles\ioc\binding\BindingScopes
- *
- * @group  ioc
- * @group  ioc_binding
  */
+#[Group('ioc')]
+#[Group('ioc_binding')]
 class BindingScopesTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createsSingletonScopeIfNonePassed(): void
     {
         $bindingScopes = new BindingScopes();
         assertThat(
-                $bindingScopes->singleton(),
-                isInstanceOf(SingletonBindingScope::class)
+            $bindingScopes->singleton(),
+            isInstanceOf(SingletonBindingScope::class)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usesPassedSingletonScope(): void
     {
         $singletonScope = NewInstance::of(BindingScope::class);
@@ -43,9 +40,7 @@ class BindingScopesTest extends TestCase
         assertThat($bindingScopes->singleton(), isSameAs($singletonScope));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usesPassedSessionScope(): void
     {
         $sessionScope  = NewInstance::of(BindingScope::class);

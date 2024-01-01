@@ -7,8 +7,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc\binding;
+
+use bovigo\callmap\ClassProxy;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use stubbles\ioc\InjectionProvider;
 
 use function bovigo\assert\assertThat;
@@ -20,29 +25,15 @@ use function stubbles\reflect\reflect;
  * Tests for stubbles\ioc\binding\SessionBindingScope.
  *
  * @since  5.4.0
- * @group  ioc
- * @group  ioc_binding
  */
+#[Group('ioc')]
+#[Group('ioc_binding')]
 class SessionBindingScopeTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\ioc\binding\SessionBindingScope
-     */
-    private $sessionScope;
-    /**
-     * mocked session id
-     *
-     * @var  Session&\bovigo\callmap\ClassProxy
-     */
-    private $session;
-    /**
-     * mocked injection provider
-     *
-     * @var  InjectionProvider<object>&\bovigo\callmap\ClassProxy
-     */
-    private $provider;
+    private SessionBindingScope $sessionScope;
+    private Session&ClassProxy $session;
+    /** @var  InjectionProvider<object>&ClassProxy */
+    private InjectionProvider&ClassProxy $provider;
 
     protected function setUp(): void
     {
@@ -62,50 +53,44 @@ class SessionBindingScopeTest extends TestCase
         $this->sessionScope->setSession($this->session);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsInstanceFromSessionIfPresent(): void
     {
-        $instance = new \stdClass();
+        $instance = new stdClass();
         $this->prepareSession(['hasValue' => true, 'value' => $instance]);
         assertThat(
-                $this->sessionScope->getInstance(
-                        reflect(\stdClass::class),
-                        $this->provider
-                ),
-                isSameAs($instance)
+            $this->sessionScope->getInstance(
+                reflect(stdClass::class),
+                $this->provider
+            ),
+            isSameAs($instance)
         );
         verify($this->provider, 'get')->wasNeverCalled();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createsInstanceIfNotPresent(): void
     {
-        $instance = new \stdClass();
+        $instance = new stdClass();
         $this->prepareSession(['hasValue' => false]);
         $this->provider->returns(['get' => $instance]);
         assertThat(
-                $this->sessionScope->getInstance(
-                        reflect(\stdClass::class),
-                        $this->provider
-                ),
-                isSameAs($instance)
+            $this->sessionScope->getInstance(
+                reflect(stdClass::class),
+                $this->provider
+            ),
+            isSameAs($instance)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwsRuntimeExceptionWhenCreatedWithoutSession(): void
     {
         expect(function() {
-                $this->sessionScope->getInstance(
-                        reflect(\stdClass::class),
-                        $this->provider
-                );
+            $this->sessionScope->getInstance(
+                reflect(stdClass::class),
+                $this->provider
+            );
         })->throws(\RuntimeException::class);
     }
 }

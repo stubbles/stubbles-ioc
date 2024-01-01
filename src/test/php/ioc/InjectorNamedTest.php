@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\Boss;
 use stubbles\test\ioc\DevelopersMultipleConstructorParams;
@@ -21,14 +24,11 @@ use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\ioc with @Named annotation.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorNamedTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function namedBindingIsKnownWhenSpecified(): void
     {
         $binder = new Binder();
@@ -37,9 +37,7 @@ class InjectorNamedTest extends TestCase
         assertTrue($injector->hasBinding(Employee::class, 'schst'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function namedBindingIsNotUsedWhenNoGenericBindingSpecified(): void
     {
         $binder = new Binder();
@@ -48,11 +46,7 @@ class InjectorNamedTest extends TestCase
         assertFalse($injector->hasBinding(Employee::class));
     }
 
-    /**
-     * name based constructor injection with multiple params and one of them is name based
-     *
-     * @test
-     */
+    #[Test]
     public function namedConstructorInjectionWithMultipleParamAndOneNamedParam(): void
     {
         $binder = new Binder();
@@ -61,17 +55,17 @@ class InjectorNamedTest extends TestCase
         $injector = $binder->getInjector();
         $group = $injector->getInstance(DevelopersMultipleConstructorParams::class);
         assertThat(
-                $group,
-                equals(new DevelopersMultipleConstructorParams(
-                        new Boss(),
-                        new TeamMember()
-                ))
+            $group,
+            equals(
+                new DevelopersMultipleConstructorParams(
+                    new Boss(),
+                    new TeamMember()
+                )
+            )
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function namedConstructorInjectionWithMultipleParamAndOneNamedConstantParam(): void
     {
         $binder = new Binder();
@@ -80,17 +74,17 @@ class InjectorNamedTest extends TestCase
         $injector = $binder->getInjector();
         $group = $injector->getInstance(DevelopersMultipleConstructorParamsWithConstant::class);
         assertThat(
-                $group,
-                equals(new DevelopersMultipleConstructorParamsWithConstant(
-                        new TeamMember(),
-                        'role:boss'
-                ))
+            $group,
+            equals(
+                new DevelopersMultipleConstructorParamsWithConstant(
+                    new TeamMember(),
+                    'role:boss'
+                )
+            )
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function namedConstructorInjectionWithMultipleParamAndNamedParamGroup(): void
     {
         $binder = new Binder();
@@ -99,11 +93,13 @@ class InjectorNamedTest extends TestCase
         $injector = $binder->getInjector();
         $group = $injector->getInstance(DevelopersMultipleConstructorParamsGroupedName::class);
         assertThat(
-                $group,
-                equals(new DevelopersMultipleConstructorParamsGroupedName(
-                        new Boss(),
-                        new Boss()
-                ))
+            $group,
+            equals(
+                new DevelopersMultipleConstructorParamsGroupedName(
+                    new Boss(),
+                    new Boss()
+                )
+            )
         );
     }
 }

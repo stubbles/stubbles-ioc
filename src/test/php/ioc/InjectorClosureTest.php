@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\ioc;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\AnotherQuestion;
 use stubbles\test\ioc\Answer;
@@ -18,19 +21,17 @@ use function bovigo\assert\predicate\isSameAs;
  * Test for stubbles\ioc\Injector with closure binding.
  *
  * @since  2.1.0
- * @group  ioc
- * @group  issue_31
  */
+#[Group('ioc')]
+#[Group('issue_31')]
 class InjectorClosureTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function injectWithClosure(): void
     {
         $binder = new Binder();
         $answer = new Answer();
-        $binder->bind(Answer::class)->toClosure(function() use($answer) { return $answer; });
+        $binder->bind(Answer::class)->toClosure(fn() => $answer);
         $question = $binder->getInjector()->getInstance(AnotherQuestion::class);
         assertThat($question, isInstanceOf(AnotherQuestion::class));
         assertThat($question->getAnswer(), isSameAs($answer));

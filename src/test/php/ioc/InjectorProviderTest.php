@@ -8,6 +8,8 @@ declare(strict_types=1);
  */
 namespace stubbles\ioc;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\AnotherQuestion;
@@ -21,65 +23,56 @@ use function bovigo\assert\predicate\isSameAs;
 use function bovigo\callmap\verify;
 /**
  * Test for stubbles\ioc\Injector with provider binding.
- *
- * @group  ioc
  */
+#[Group('ioc')]
 class InjectorProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function injectWithProviderInstance(): void
     {
         $binder   = new Binder();
         $answer   = new Answer();
         $provider = NewInstance::of(InjectionProvider::class)
-                ->returns(['get' => $answer]);
+            ->returns(['get' => $answer]);
         $binder->bind(Answer::class)->toProvider($provider);
         $question = $binder->getInjector()
-                ->getInstance(AnotherQuestion::class);
+            ->getInstance(AnotherQuestion::class);
         assertThat($question->getAnswer(), isSameAs($answer));
         verify($provider, 'get')->received('answer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectWithInvalidProviderClassThrowsException(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)->toProviderClass(\stdClass::class);
         $injector = $binder->getInjector();
         expect(function() use ($injector) {
-                $injector->getInstance(AnotherQuestion::class);
+            $injector->getInstance(AnotherQuestion::class);
         })->throws(BindingException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectWithProviderClassName(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)
-                ->toProviderClass(MyProviderClass::class);
+            ->toProviderClass(MyProviderClass::class);
         $question = $binder->getInjector()
-                ->getInstance(AnotherQuestion::class);
+            ->getInstance(AnotherQuestion::class);
         assertThat($question->getAnswer(), isInstanceOf(Answer::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function injectWithProviderClass(): void
     {
         $binder = new Binder();
         $binder->bind(Answer::class)
-                 ->toProviderClass(
-                       new \ReflectionClass(MyProviderClass::class)
-                );
+            ->toProviderClass(
+                new \ReflectionClass(MyProviderClass::class)
+            );
         $question = $binder->getInjector()
-                ->getInstance(AnotherQuestion::class);
+            ->getInstance(AnotherQuestion::class);
         assertThat($question->getAnswer(), isInstanceOf(Answer::class));
     }
 }
