@@ -8,6 +8,7 @@
  * changed method declaration of `stubbles\ioc\InjectionProvider::get()` and `stubbles\ioc\binding\Binding::getInstance()` to include the return type hint `mixed`
  * changed type hint for param `$name` of `stubbles\ioc\binding\Binding::getInstance()` to `string|ReflectionClass|null`
  * changed return type hint of `stubbles\Environment::registerExceptionHandler()` and `stubbles\Environment::registerErrorHandler()` from none to `bool|object`
+ * added mixed type hint to parameters and return values that were previously without any type hint
 
 ## 10.2.0 (2019-12-25)
 
