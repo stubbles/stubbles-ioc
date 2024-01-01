@@ -8,14 +8,10 @@ connection parameters for a database:
 
 ```php
 class MyApplication {
-    private $dbParams;
-
     /**
      * @Named('dbParams')
      */
-    public function __construct($params) {
-        $this->dbParams = $params;
-    }
+    public function __construct(private string $params) { }
 
     // ... other methods of the class
 }
@@ -28,10 +24,12 @@ hint to identify the binding.
 
 Now, all that's left to do is specify a binding for the constant `dbParams`:
 
-    $binder->bindConstant('dbParams')->to('mysql:host=localhost;dbname=test');
+```php
+$binder->bindConstant('dbParams')->to('mysql:host=localhost;dbname=test');
 
-    $injector = $binder->getInjector();
-    $app = $injector->getInstance('MyApplication');
+$injector = $binder->getInjector();
+$app = $injector->getInstance(MyApplication::class);
+```
 
 The `$injector` will now return a configured instance of `MyApplication` with
 the `$dbParams` property set.

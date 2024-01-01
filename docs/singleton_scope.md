@@ -8,12 +8,12 @@ behaves like the `new` operator. If you want to create only one instance of the
 
 ```php
 $binder = new stubbles\ioc\Binder();
-$binder->bind('Car')->to('BMW')->asSingleton();
+$binder->bind(Car::class)->to(BMW::class)->asSingleton();
 // other bindings
 
 $injector = $binder->getInjector();
-$bmw1 = $injector->getInstance('Car');
-$bmw2 = $injector->getInstance('Car');
+$bmw1 = $injector->getInstance(Car::class);
+$bmw2 = $injector->getInstance(Car::class);
 
 if ($bmw1 === $bmw2) {
     echo "Same object.\n";
@@ -32,7 +32,7 @@ sure that the application uses only one instance of the class `Schst`:
  * @Singleton
  */
 class Schst implements Person {
-    public function sayHello() {
+    public function sayHello(): string {
         echo "My name is Stephan\n";
     }
 }
@@ -43,12 +43,12 @@ should have a reference to the same `Schst` instance:
 
 ```php
 $binder = new stubbles\ioc\Binder();
-$binder->bind('Car')->to('BMW');
+$binder->bind(Car::class)->to(BMW::class);
 // other bindings
 
 $injector = $binder->getInjector();
-$bmw1 = $injector->getInstance('Car');
-$bmw2 = $injector->getInstance('Car');
+$bmw1 = $injector->getInstance(Car::class);
+$bmw2 = $injector->getInstance(Car::class);
 
 var_dump($bmw1);
 var_dump($bmw1);

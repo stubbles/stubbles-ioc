@@ -221,4 +221,3 @@ Further features
 * [Create the whole application](docs/application.md)
 * [Application properties](docs/application_properties.md)
 * [Runtime environment](docs/runtime_environment.md)
-* [Rootpath & Resource loader](docs/rootpath_resourceloader.md)

@@ -40,15 +40,10 @@ PluginManager for this:
 ```php
 class PluginManager
 {
-    private $plugins;
-
     /**
      * @List(example\Plugin.class)
      */
-    public __construct($plugins)
-    {
-        $this->plugins = $plugins;
-    }
+    public __construct(private array $plugins) { }
 
     // Methods for managing plugins
 }
@@ -59,9 +54,9 @@ concrete Plugin implementations. We can now use list bindings to tell the
 injector how to construct the list:
 
 ```php
-$binder->bindList('example\Plugin')
-       ->withValue(new SecurityPlugin()) // alternatively: ->withValue('example\\SecurityPlugin')
-       ->withValueFromProvider('example\\CoolPluginProvider'); // provides AnotherCoolPlugin
+$binder->bindList(Plugin::class)
+    ->withValue(new SecurityPlugin()) // alternatively: ->withValue(SecurityPlugin::class)
+    ->withValueFromProvider('example\\CoolPluginProvider'); // provides AnotherCoolPlugin
 ```
 
 _stubbles/ioc_ will now take care of creating the plugin list and injecting it
@@ -82,13 +77,12 @@ class BindingModuleOne implements BindingModule
 {
     /**
      * configure the binder
-     *
-     * @param  Binder  $binder
      */
-    public function configure(Binder $binder)
+    public function configure(Binder $binder): void
     {
-         $binder->bindList('example\Plugin')
-                ->withValue(new SecurityPlugin());  // alternatively: ->withValue('example\\SecurityPlugin')
+         $binder->bindList(Plugin::class)
+            ->withValue(new SecurityPlugin()); 
+            // alternatively: ->withValue(SecurityPlugin::class)
     }
 }
 
@@ -96,13 +90,11 @@ class BindingModuleTwo implements BindingModule
 {
     /**
      * configure the binder
-     *
-     * @param  Binder  $binder
      */
-    public function configure(Binder $binder)
+    public function configure(Binder $binder): void
     {
-         $binder->bindList('example\Plugin')
-                ->withValueFromProvider('example\\CoolPluginProvider');
+         $binder->bindList(Plugin::class)
+            ->withValueFromProvider(CoolPluginProvider::class);
     }
 }
 ```
@@ -146,8 +138,8 @@ class Configuration
 }
 
 $binder->bindList('config')
-       ->withValue('foo')
-       ->withValueFromProvider('example\\ConfigValueProvider'); // provides another config value
+    ->withValue('foo')
+    ->withValueFromProvider('example\\ConfigValueProvider'); // provides another config value
 ```
 
 ## Named bindings and list bindings
@@ -162,7 +154,7 @@ Since release 2.1.0 it is also possible to bind values using closures:
 
 ```php
 $binder->bindList('config')
-       ->withValueFromClosure(function() { return 'foo'; });
+    ->withValueFromClosure(fn() => 'foo';);
 ```
 
 This comes in handy when a value should be initialized lazy because it's too

@@ -10,14 +10,7 @@ session scope implementation, but it's very easy to implement one. For this, the
 consists of one method:
 
 ```php
-/**
- * returns the requested instance from the scope
- *
- * @param   \ReflectionClass $impl concrete implementation
- * @param   \stubbles\ioc\InjectionProvider $provider
- * @return  object
- */
-public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
+public function getInstance(ReflectionClass $impl, InjectionProvider $provider): mixed
 ```
 
 Within this method the implementation has to decide whether there is already an
@@ -28,19 +21,13 @@ scope might look like that:
 
 ```php
 namespace example;
+use ReflectionClass;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\binding\BindingScope;
 
 class ExampleSessionScope implements BindingScope
 {
-    /**
-     * returns the requested instance from the scope
-     *
-     * @param  \ReflectionClass $impl concrete implementation
-     * @param  \stubbles\ioc\InjectionProvider $provider
-     * @return object
-     */
-    public function getInstance(\ReflectionClass $impl, InjectionProvider $provider)
+    public function getInstance(ReflectionClass $impl, InjectionProvider $provider): mixed
     {
         if (!isset($_SESSION[$impl->getName()]) {
             $_SESSION[$impl->getName()] = $provider->get();

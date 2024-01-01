@@ -24,20 +24,15 @@ class MyApplication extends App
      *
      * @return  array
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return [
-                new example\StuffRequiredForApplicationBindingModule(),
-                'example\other\MoreStuffBindingModule'
+            new example\StuffRequiredForApplicationBindingModule(),
+            'example\other\MoreStuffBindingModule'
         ];
     }
 
-    private $controller;
-
-    public function __construct(Controller $controller)
-    {
-        $this->controller = $controller;
-    }
+    public function __construct(private Controller $controller) { }
 
     public function run()
     {
@@ -77,7 +72,7 @@ class MyApplicationBindingModule implements BindingModule
      *
      * @param  Binder  $binder
      */
-    public function configure(Binder $binder)
+    public function configure(Binder $binder): void
     {
         $binder->bind('example\\SomeInterface')
                ->to('example\\SomeImplementation');
@@ -100,15 +95,15 @@ class MyApplication extends App
     /**
      * returns a list of binding modules used to wire the object graph
      *
-     * @return  array
+     * @return  array<BindingModule|Closure>
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return [
-                example\ExampleBindingModule::newInstance()
-                        ->withCoolStuff()
-                        ->addAwesomeness(),
-                'example\other\MoreStuffBindingModule'
+            ExampleBindingModule::newInstance()
+                ->withCoolStuff()
+                ->addAwesomeness(),
+            MoreStuffBindingModule::class
         );
     }
 
@@ -153,17 +148,17 @@ class MyApplication extends App
     /**
      * returns a list of binding modules used to wire the object graph
      *
-     * @return  array
+     * @return  array<BindingModule|Closure>
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return [
-                new example\StuffRequiredForApplicationBindingModule(),
-                'example\other\MoreStuffBindingModule',
-                function(Binder $binder)
-                {
-                    $binder->bindConstant('answer')->to(42);
-                }
+            new StuffRequiredForApplicationBindingModule(),
+            MoreStuffBindingModule::class,
+            function(Binder $binder): void
+            {
+                $binder->bindConstant('answer')->to(42);
+            }
         ];
     }
 }

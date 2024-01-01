@@ -14,7 +14,7 @@ used. To achieve this, add the `@ImplementedBy` annotation to your interface.
  * @ImplementedBy(Schst.class)
  */
 interface Person {
-    public function sayHello();
+    public function sayHello(): string;
 }
 
 
@@ -25,7 +25,7 @@ It should be noted though, that once a specific binding for `Person` is added to
 the binder that the annotation is not considered anymore:
 
 ```php
-    $binder->bind('Person')->to('Mikey);
+    $binder->bind('Person')->to('Mikey');
     $person = $binder->getInjector()->getInstance('Person');
 ```
 
@@ -47,7 +47,7 @@ implementation for PROD. This can be accomplished by specifying the environment:
  * @ImplementedBy(Schst.class)
  */
 interface Person {
-    public function sayHello();
+    public function sayHello(): string;
 }
 ```
 

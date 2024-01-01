@@ -8,11 +8,11 @@ provider](injection_providers.md) would be overblown. This is where closure
 bindings come in handy:
 
 ```php
-$binder->bind('Person')->toClosure(function() { return new Schst(); });
+$binder->bind('Person')->toClosure(fn() => new Schst());
 // other bindings
 
 $injector = $binder->getInjector();
-$bmw = $injector->getInstance('Car');
+$bmw = $injector->getInstance(Car::class);
 
 var_dump($schst);
 var_dump($bmw);
@@ -26,11 +26,11 @@ For class bindings the closure binding can be combined with scopes, i.e. the
 [singleton scope](singleton_scope.md):
 
 ```php
-    $binder->bind('Person')->toClosure(function() { return new Schst(); })->asSingleton();
+    $binder->bind('Person')->toClosure(fn() => new Schst())->asSingleton();
 ```
 
 Closure bindings are also available for [constant bindings](constant_values.md):
 
 ```php
-    $binder->bindConstant('answer')->toClosure(function() { return 42; });
+    $binder->bindConstant('answer')->toClosure(fn() => 42);
 ```

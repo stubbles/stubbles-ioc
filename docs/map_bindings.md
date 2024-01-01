@@ -28,9 +28,10 @@ class PluginManager
 Bindings can be defined as follows:
 
 ```php
-$binder->bindMap('example\Plugin')
-       ->withEntry('security', new SecurityPlugin())  // alternatively: ->withEntry('security', 'example\\SecurityPlugin')
-       ->withEntryFromProvider('coolStuff', 'example\\CoolPluginProvider'); // provides AnotherCoolPlugin
+$binder->bindMap(Plugin::class)
+    ->withEntry('security', new SecurityPlugin()) 
+    // alternatively: ->withEntry('security', SecurityPlugin::class)
+    ->withEntryFromProvider('coolStuff', CoolPluginProvider::class); // provides AnotherCoolPlugin
 ```
 
 ## Closure bindings
@@ -38,8 +39,8 @@ $binder->bindMap('example\Plugin')
 Since release 2.1.0 it is also possible to bind values using closures:
 
 ```php
-$binder->bindMap('example\Plugin')
-       ->withEntryFromClosure('extended', function() { return EvenMoreSecurityPlugin(); });
+$binder->bindMap(Plugin::class)
+    ->withEntryFromClosure('extended', fn() => EvenMoreSecurityPlugin());
 ```
 
 This comes in handy when a value should be initialized lazy because it's too

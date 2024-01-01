@@ -31,20 +31,12 @@ use stubbles\values\Properties;
 class Example
 {
     /**
-     * @type  Properties
-     */
-    private $properties;
-
-    /**
      * constructor
      *
      * @param  Properties  $properties
      * @Named('config')
      */
-    public function __construct(Properties $properties)
-    {
-        $this->properties = $properties;
-    }
+    public function __construct(private Properties $properties) { }
 
     // ... useful methods to do something ...
 }
@@ -65,20 +57,12 @@ namespace example;
 class AnotherExample
 {
     /**
-     * @type  string
-     */
-    private $roland;
-
-    /**
      * constructor
      *
      * @param  string  $roland
      * @Named('example.roland')
      */
-    public function __construct($roland)
-    {
-        $this->roland = $roland;
-    }
+    public function __construct(private string $roland) { }
 
     ... useful methods to do something ...
 }
@@ -151,12 +135,12 @@ class MyApplication extends App
     /**
      * returns a list of binding modules used to wire the object graph
      *
-     * @return  array
+     * @return  array<BindingModule|Closure>
      */
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return [
-                self::runtime()->addPathType('docroot'),
+            self::runtime()->addPathType('docroot'),
         ];
     }
 }
@@ -180,10 +164,10 @@ namespace example;
 use net\stubbles\App;
 class MyApplication extends App
 {
-    public static function __bindings()
+    public static function __bindings(): array
     {
         return [
-                self::runtime()->withCurrentWorkingDirectory()
+            self::runtime()->withCurrentWorkingDirectory()
         ];
     }
 }
@@ -213,7 +197,7 @@ class MyApplication extends App
     public static function __bindings()
     {
         return [
-                self::runtime()->withHostname()
+            self::runtime()->withHostname()
         ];
     }
 }

@@ -14,7 +14,7 @@ interface requires you to implement one method only:
 
 ```php
 interface InjectionProvider {
-    public function get($name = null);
+    public function get(string $name = null): mixed;
 }
 ```
 
@@ -23,31 +23,29 @@ The following example shows how to use this feature to inject a `PDO` instance:
 ```php
 namespace example;
 class MyApplication {
-    private $pdo;
-
-    public function __construct(\PDO $pdo) {
-        $this->pdo = $pdo;
-    }
+    public function __construct(private \PDO $pdo) { }
 }
 ```
 
 The class `MyApplication` requires an instance of [PDO](http://www.php.net/pdo).
 If you take a look at the PDO documentation you will see that the constructor
 requires parameters for the connection and the username and password. As `PDO`
-is an internal class, you cannot add `@Named` annotation and thus, _stubbles/ioc_
+is an internal class, you cannot add a `@Named` annotation and thus, _stubbles/ioc_
 is not able to create this object.
 
 The solution is to implement a provider, which creates the `PDO` instance:
 
 ```php
 namespace example;
+use PDO;
 use stubbles\ioc\InjectionProvider;
 /**
  * Provider to create PDO instances
  */
 class PDOProvider implements InjectionProvider {
 
-    public function get($name = null) {
+    public function get(string $name = null): PDO
+    {
         // get the connection parameters from any source
         $dsn  = MyRegistry::get('pdoDsn');
         $user = MyRegistry::get('pdoUser');
@@ -63,9 +61,9 @@ This provider can now be bound to the type `PDO` and will be used to create all
 ```php
 // create an instance of the provider and use it for the bindings
 $provider = new PDOProvider();
-$binder->bind('\PDO')->toProvider($provider);
+$binder->bind(PDO::class)->toProvider($provider);
 $injector = $binder->getInjector();
-$app = $injector->getInstance('example\MyApplication');
+$app = $injector->getInstance(MyApplication::class);
 ```
 
 When creating the `MyApplication` instance, the injector requires to create an
@@ -81,7 +79,7 @@ The above example can be improved by not binding the `PDO` class to the given
 provider instance but to a provider class:
 
 ```php
-$binder->bind('PDO')->toProviderClass('example\PDOProvider');
+$binder->bind(PDO::class)->toProviderClass(PDOProvider::class);
 ```
 
 This has two advantages:
@@ -98,20 +96,18 @@ use stubbles\ioc\InjectionProvider;
  * Provider to create PDO instances
  */
 class PDOProvider implements InjectionProvider {
-    protected $dsn, $user, $pass;
-
     /**
       * @Named{dsn}('pdoDsn')
       * @Named{user}('pdoUser')
       * @Named{pass}('pdoPass')
       */
-    public function __construct($dsn, $user, $pass) {
-        $this->dsn  = $dsn;
-        $this->user = $user;
-        $this->pass = $pass;
-    }
+    public function __construct(
+        private string $dsn,
+        private string $user,
+        private string $pass
+    ) { }
 
-    public function get($name = null) {
+    public function get(string $name = null): PDO {
         return new PDO($this->dsn, $this->user, $this->pass);
     }
 }
@@ -123,13 +119,13 @@ can use this later for constructing the `PDO` instance. Now we just need to
 modify our bindings:
 
 ```php
-$binder->bind('PDO')->toProviderClass('PDOProvider');
+$binder->bind(PDO::class)->toProviderClass(PDOProvider::class);
 $binder->bindConstant('pdoDsn')->to('mysql:dbname=testdb;host=127.0.0.1');
 $binder->bindConstant('pdoUser')->to('root');
 $binder->bindConstant('pdoPass')->to('secretPassword');
 
 $injector = $binder->getInjector();
-$app = $injector->getInstance('example\MyApplication');
+$app = $injector->getInstance(MyApplication::class);
 ```
 
 ## Default providers
@@ -145,14 +141,14 @@ implementation instance with the [default implementations](default_implementaion
  * @ProvidedBy(example\PersonProvider.class)
  */
 interface Person {
-    public function sayHello();
+    public function sayHello(): string;
 }
 ```
 
 This has the same effect as
 
 ```php
-$binder->bind('Person')->toProviderClass('PersonProvider');
+$binder->bind(Person::class)->toProviderClass(PersonProvider::class);
 ```
 
 but is available automatically with the annotation, without the need to create

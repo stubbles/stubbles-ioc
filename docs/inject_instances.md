@@ -11,11 +11,11 @@ create a new instance:
 ```php
 $schst = new Schst();
 
-$binder->bind('Person')->toInstance($schst);
+$binder->bind(Person::class)->toInstance($schst);
 // other bindings
 
 $injector = $binder->getInjector();
-$bmw = $injector->getInstance('Car');
+$bmw = $injector->getInstance(Car::class);
 
 var_dump($schst);
 var_dump($bmw);

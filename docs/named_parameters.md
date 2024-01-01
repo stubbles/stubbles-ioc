@@ -10,21 +10,16 @@ This is the new code:
 
 ```php
 class BMW implements Car {
-    private $driver;
-    private $coDriver;
-    private $engine;
-    private $tire;
-
-    public function __construct(Engine $engine, Tire $tire, Person $driver, Person $coDriver = null) {
-        $this->engine   = $engine;
-        $this->tire     = $tire;
-        $this->driver   = $driver;
-        $this->coDriver = $coDriver;
-    }
+    public function __construct(
+        private Engine $engine,
+        private Tire $tire,
+        private Person $driver,
+        private ?Person $coDriver = null
+    ) { }
 }
 
 class Mikey implements Person {
-    public function sayHello() {
+    public function sayHello(): string {
         echo "My name is Frank\n";
     }
 }
@@ -61,20 +56,15 @@ Again, you need to modify the `BMW` class a little bit:
 
 ```php
 class BMW implements Car {
-    private $driver;
-    private $coDriver;
-    private $engine;
-    private $tire;
-    
     /**
      * @Named{coDriver}('Co-Driver')
      */
-    public function __construct(Engine $engine, Tire $tire, Person $driver, Person $coDriver = null) {
-        $this->engine   = $engine;
-        $this->tire     = $tire;
-        $this->driver   = $driver;
-        $this->coDriver = $coDriver;
-    }
+    public function __construct(
+        private Engine $engine,
+        private Tire $tire,
+        private Person $driver,
+        private ?Person $coDriver = null
+    ) { }
 }
 ```
 
@@ -84,12 +74,12 @@ from all other `Person` instances. You may now specify a separate binding for
 this instance:
 
 ```php
-$binder->bind('Person')->to('Schst');
-$binder->bind('Person')->named('Co-Driver')->to('Mikey');
+$binder->bind(Person::class)->to(Schst::class);
+$binder->bind(Person::class)->named('Co-Driver')->to(Mikey::class);
 // other bindings
 
 $injector = $binder->getInjector();
-$bmw = $injector->getInstance('Car');
+$bmw = $injector->getInstance(Car::class);
 var_dump($bmw);
 ```
 
