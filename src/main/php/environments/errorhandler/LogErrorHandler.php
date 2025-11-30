@@ -28,24 +28,24 @@ class LogErrorHandler implements ErrorHandler
      *
      * @var  string[]
      */
-    private static array $levelStrings  = [
-            E_ERROR             => 'E_ERROR',
-            E_WARNING           => 'E_WARNING',
-            E_PARSE             => 'E_PARSE',
-            E_NOTICE            => 'E_NOTICE',
-            E_CORE_ERROR        => 'E_CORE_ERROR',
-            E_CORE_WARNING      => 'E_CORE_WARNING',
-            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
-            E_USER_ERROR        => 'E_USER_ERROR',
-            E_USER_WARNING      => 'E_USER_WARNING',
-            E_USER_NOTICE       => 'E_USER_NOTICE',
-            // use raw number to prevent deprecation warning
-            2048                => 'E_STRICT',
-            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-            E_DEPRECATED        => 'E_DEPRECATED',
-            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
-            E_ALL               => 'E_ALL',
+    private const array LEVEL_STRINGS = [
+        E_ERROR             => 'E_ERROR',
+        E_WARNING           => 'E_WARNING',
+        E_PARSE             => 'E_PARSE',
+        E_NOTICE            => 'E_NOTICE',
+        E_CORE_ERROR        => 'E_CORE_ERROR',
+        E_CORE_WARNING      => 'E_CORE_WARNING',
+        E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
+        E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
+        E_USER_ERROR        => 'E_USER_ERROR',
+        E_USER_WARNING      => 'E_USER_WARNING',
+        E_USER_NOTICE       => 'E_USER_NOTICE',
+        // use raw number to prevent deprecation warning
+        2048                => 'E_STRICT',
+        E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+        E_DEPRECATED        => 'E_DEPRECATED',
+        E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
+        E_ALL               => 'E_ALL',
     ];
     /**
      * directory to log errors into
@@ -111,7 +111,7 @@ class LogErrorHandler implements ErrorHandler
         ?int $line = null
     ): bool {
         $logData  = date('Y-m-d H:i:s') . '|' . $level;
-        $logData .= '|' . (self::$levelStrings[$level] ?? 'unknown');
+        $logData .= '|' . (self::LEVEL_STRINGS[$level] ?? 'unknown');
         $logData .= '|' . $message;
         $logData .= '|' . $file;
         $logData .= '|' . $line;

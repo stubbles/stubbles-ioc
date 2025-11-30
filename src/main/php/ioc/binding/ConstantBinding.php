@@ -23,7 +23,7 @@ class ConstantBinding implements Binding
     /**
      * This string is used when generating the key for a constant binding.
      */
-    public const TYPE = '__CONSTANT__';
+    public const string TYPE = '__CONSTANT__';
     private mixed $value;
     /**
      * provider to use for this binding

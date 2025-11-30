@@ -23,7 +23,7 @@ class MapBinding extends MultiBinding
     /**
      * This string is used when generating the key for a map binding.
      */
-    public const TYPE = '__MAP__';
+    public const string TYPE = '__MAP__';
     /**
      * list of bindings for the map values
      *

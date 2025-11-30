@@ -23,7 +23,7 @@ class ListBinding extends MultiBinding
     /**
      * This string is used when generating the key for a list binding.
      */
-    public const TYPE = '__LIST__';
+    public const string TYPE = '__LIST__';
     /**
      * list of bindings for the list values
      *

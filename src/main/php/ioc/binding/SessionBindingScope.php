@@ -21,7 +21,7 @@ use stubbles\ioc\binding\BindingScope;
  */
 class SessionBindingScope implements BindingScope
 {
-    private const SESSION_KEY  = 'stubbles.ioc.session.scope#';
+    private const string SESSION_KEY  = 'stubbles.ioc.session.scope#';
     private ?Session $session = null;
 
     /**

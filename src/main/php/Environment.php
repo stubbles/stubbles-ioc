@@ -21,11 +21,11 @@ interface Environment
     /**
      * constant for enabled cache
      */
-    const CACHE_ENABLED  = true;
+    public const bool CACHE_ENABLED  = true;
     /**
      * constant for disabled cache
      */
-    const CACHE_DISABLED = false;
+    public const bool CACHE_DISABLED = false;
 
     /**
      * returns the name of the environment

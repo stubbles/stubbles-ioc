@@ -24,7 +24,7 @@ class PropertyBinding implements Binding
     /**
      * This string is used when generating the key for a constant binding.
      */
-    public const TYPE = '__PROPERTY__';
+    public const string TYPE = '__PROPERTY__';
 
     public function __construct(private Properties $properties, private string $environment) { }
 

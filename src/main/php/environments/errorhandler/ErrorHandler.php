@@ -19,11 +19,11 @@ interface ErrorHandler
     /**
      * constant to signal that php's internal error handling should take over
      */
-    const CONTINUE_WITH_PHP_INTERNAL_HANDLING = false;
+    public const bool CONTINUE_WITH_PHP_INTERNAL_HANDLING = false;
     /**
      * constant to signal error handling should be stopped
      */
-    const STOP_ERROR_HANDLING                 = true;
+    public const bool STOP_ERROR_HANDLING                 = true;
 
     /**
      * checks whether this error handler is responsible for the given error
