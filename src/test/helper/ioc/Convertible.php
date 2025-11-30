@@ -11,7 +11,7 @@ namespace stubbles\test\ioc;
  */
 class Convertible implements Vehicle
 {
-    public function __construct(public Tire $tire, public Roof $roof = null) { }
+    public function __construct(public Tire $tire, public ?Roof $roof = null) { }
 
     /**
      * moves the vehicle forward

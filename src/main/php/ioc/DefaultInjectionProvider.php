@@ -45,7 +45,7 @@ class DefaultInjectionProvider implements InjectionProvider
      *
      * @return  T
      */
-    public function get(string $name = null): mixed
+    public function get(?string $name = null): mixed
     {
         $constructor = $this->class->getConstructor();
         if (null === $constructor || $this->class->isInternal()) {
@@ -162,7 +162,7 @@ class DefaultInjectionProvider implements InjectionProvider
 
     private function detectBindingName(
         ReflectionParameter $param,
-        string $default = null
+        ?string $default = null
     ): string|ReflectionClass|null {
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {

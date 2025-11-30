@@ -32,8 +32,8 @@ class ErrorHandlers implements ErrorHandler
     public function isResponsible(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
@@ -49,8 +49,8 @@ class ErrorHandlers implements ErrorHandler
     public function isSupressable(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool
     {
         foreach ($this->errorHandlers as $errorHandler) {
@@ -66,8 +66,8 @@ class ErrorHandlers implements ErrorHandler
     public function handle(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool
     {
         $errorReporting = error_reporting();

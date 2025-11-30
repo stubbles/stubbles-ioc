@@ -40,7 +40,8 @@ class LogErrorHandler implements ErrorHandler
             E_USER_ERROR        => 'E_USER_ERROR',
             E_USER_WARNING      => 'E_USER_WARNING',
             E_USER_NOTICE       => 'E_USER_NOTICE',
-            E_STRICT            => 'E_STRICT',
+            // use raw number to prevent deprecation warning
+            2048                => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
             E_ALL               => 'E_ALL'
     ];
@@ -78,8 +79,8 @@ class LogErrorHandler implements ErrorHandler
     public function isResponsible(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool {
         return true;
     }
@@ -94,8 +95,8 @@ class LogErrorHandler implements ErrorHandler
     public function isSupressable(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool {
         return false;
     }
@@ -104,8 +105,8 @@ class LogErrorHandler implements ErrorHandler
     public function handle(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool {
         $logData  = date('Y-m-d H:i:s') . '|' . $level;
         $logData .= '|' . (self::$levelStrings[$level] ?? 'unknown');

@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
@@ -98,6 +99,7 @@ class AppTest extends TestCase
      * @since  2.0.0
      */
     #[Test]
+    #[WithoutErrorHandler]
     public function canCreateRuntime(): void
     {
         assertThat(
@@ -123,6 +125,7 @@ class AppTest extends TestCase
      * @since  3.4.0
      */
     #[Test]
+    #[WithoutErrorHandler]
     public function bindCurrentWorkingDirectory(): void
     {
         $binder = new Binder();
@@ -135,8 +138,9 @@ class AppTest extends TestCase
      * @since  3.4.0
      */
     #[Test]
-    #[TestWith(['stubbles.hostname.nq'])]
-    #[TestWith(['stubbles.hostname.fq'])]
+    #[TestWith(['stubbles.hostname.nq'], 'non-qualified')]
+    #[TestWith(['stubbles.hostname.fq'], 'fully-qualified')]
+    #[WithoutErrorHandler]
     public function bindHostname(string $key): void
     {
         $binder = new Binder();
@@ -146,6 +150,7 @@ class AppTest extends TestCase
     }
 
     #[Test]
+    #[WithoutErrorHandler]
     public function invalidBindingModuleThrowsIllegalArgumentException(): void
     {
         expect(function() {

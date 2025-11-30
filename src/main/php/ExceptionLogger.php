@@ -67,7 +67,7 @@ class ExceptionLogger
     /**
      * returns fields for exception to log
      */
-    private function fieldsOf(Throwable $throwable = null): string
+    private function fieldsOf(?Throwable $throwable = null): string
     {
         if (null === $throwable) {
             return '||||';

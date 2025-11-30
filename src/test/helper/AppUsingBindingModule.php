@@ -22,7 +22,7 @@ class AppUsingBindingModule extends App
     /**
      * creates mode binding module
      */
-    public static function callBindRuntime(Environment $environment = null): Runtime
+    public static function callBindRuntime(?Environment $environment = null): Runtime
     {
         return self::runtime($environment);
     }

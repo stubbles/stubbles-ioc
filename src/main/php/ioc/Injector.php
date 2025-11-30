@@ -63,7 +63,7 @@ class Injector
     public function __construct(
         private ?string $environment = null,
         array $bindings = [],
-        BindingScopes $scopes = null
+        ?BindingScopes $scopes = null
     ) {
         $this->scopes = $scopes ?? new BindingScopes();
         foreach ($bindings as $binding) {
@@ -81,7 +81,7 @@ class Injector
      * @param  class-string  $sessionInterface  optional
      * @since  5.4.0
      */
-    public function setSession(Session $session, string $sessionInterface = null): self
+    public function setSession(Session $session, ?string $sessionInterface = null): self
     {
         $this->scopes->setSession($session);
         $binding = $this->bind(

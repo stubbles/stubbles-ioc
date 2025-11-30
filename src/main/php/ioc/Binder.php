@@ -48,7 +48,7 @@ class Binder
      */
     private array $mapBindings  = [];
 
-    public function __construct(BindingScopes $scopes = null)
+    public function __construct(?BindingScopes $scopes = null)
     {
         $this->scopes = $scopes ?? new BindingScopes();
     }

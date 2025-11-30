@@ -37,8 +37,8 @@ interface ErrorHandler
     public function isResponsible(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool;
 
     /**
@@ -56,8 +56,8 @@ interface ErrorHandler
     public function isSupressable(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool;
 
     /**
@@ -72,7 +72,7 @@ interface ErrorHandler
     public function handle(
         int $level,
         string $message,
-        string $file = null,
-        int $line = null
+        ?string $file = null,
+        ?int $line = null
     ): bool;
 }

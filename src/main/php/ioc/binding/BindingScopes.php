@@ -22,7 +22,7 @@ class BindingScopes
     /**
      * @since  1.5.0
      */
-    public function  __construct(BindingScope $singletonScope = null, BindingScope $sessionScope = null)
+    public function  __construct(?BindingScope $singletonScope = null, ?BindingScope $sessionScope = null)
     {
         $this->singletonScope = $singletonScope ?? new SingletonBindingScope();
         $this->sessionScope   = $sessionScope ?? new SessionBindingScope();

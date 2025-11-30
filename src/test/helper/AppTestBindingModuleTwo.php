@@ -17,7 +17,7 @@ class AppTestBindingModuleTwo implements BindingModule
     /**
      * configure the binder
      */
-    public function configure(Binder $binder, string $projectPath = null): void
+    public function configure(Binder $binder, ?string $projectPath = null): void
     {
         $binder->bind('bar')->to('stdClass');
     }

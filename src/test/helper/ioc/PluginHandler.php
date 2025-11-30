@@ -43,10 +43,10 @@ class PluginHandler
             private array $configMap,
             private ?array $pluginList = null,
             private ?array $pluginMap = null,
-            Plugin $std = null,
+            ?Plugin $std = null,
             mixed $answer = null,
-            array $list = null,
-            array $map = null)
+            ?array $list = null,
+            ?array $map = null)
     {
         $this->configList = $configList;
         $this->configMap  = $configMap;
