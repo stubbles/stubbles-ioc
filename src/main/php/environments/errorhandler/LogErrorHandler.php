@@ -43,7 +43,9 @@ class LogErrorHandler implements ErrorHandler
             // use raw number to prevent deprecation warning
             2048                => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-            E_ALL               => 'E_ALL'
+            E_DEPRECATED        => 'E_DEPRECATED',
+            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
+            E_ALL               => 'E_ALL',
     ];
     /**
      * directory to log errors into
