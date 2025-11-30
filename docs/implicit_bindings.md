@@ -9,9 +9,6 @@ will implicitly bind the concrete class to itself:
 class Window {}
 
 class BMW implements Car {
-    private $driver;
-    private $engine;
-    private $tire;
     private $window;
 
     // same constructor and methods as in previous examples

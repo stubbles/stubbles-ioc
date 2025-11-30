@@ -19,13 +19,13 @@ _stubbles/ioc_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/ioc": "^11.0"
+    composer require "stubbles/ioc": "^12.0"
 
 
 Requirements
 ------------
 
-_stubbles/ioc_ requires at least PHP 8.2.
+_stubbles/ioc_ requires at least PHP 8.3.
 
 
 Inversion of Control
@@ -69,14 +69,7 @@ The implementations are:
 
 ```php
 class BMW implements Car {
-    private $driver;
-    private $engine;
-    private $tire;
-
-    public function __construct(Engine $engine, Tire $tire, Person $driver) {
-        $this->engine = $engine;
-        $this->tire   = $tire;
-        $this->driver = $driver;
+    public function __construct(private Engine $engine, private Tire $tire, private Person $driver) {
     }
     public function moveForward($miles) {
         $this->driver->sayHello();

@@ -14,7 +14,7 @@ interface requires you to implement one method only:
 
 ```php
 interface InjectionProvider {
-    public function get(string $name = null): mixed;
+    public function get(?string $name = null): mixed;
 }
 ```
 
@@ -44,7 +44,7 @@ use stubbles\ioc\InjectionProvider;
  */
 class PDOProvider implements InjectionProvider {
 
-    public function get(string $name = null): PDO
+    public function get(?string $name = null): PDO
     {
         // get the connection parameters from any source
         $dsn  = MyRegistry::get('pdoDsn');
@@ -107,7 +107,7 @@ class PDOProvider implements InjectionProvider {
         private string $pass
     ) { }
 
-    public function get(string $name = null): PDO {
+    public function get(?string $name = null): PDO {
         return new PDO($this->dsn, $this->user, $this->pass);
     }
 }

@@ -104,7 +104,7 @@ class MyApplication extends App
                 ->withCoolStuff()
                 ->addAwesomeness(),
             MoreStuffBindingModule::class
-        );
+        ];
     }
 
     ...  other methods here ...
