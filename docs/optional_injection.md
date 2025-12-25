@@ -3,7 +3,7 @@ Optional injection
 
 Probably you do not want to inject an object every time, because the class will
 work fine without the dependency. If a parameter has a default value and is
-optional injection will be done using the default value.
+optional, injection will be done using the default value.
 
 ```php
 class BMWWithCoDriver extends BMW {
