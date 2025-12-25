@@ -14,7 +14,6 @@ class PluginManager
     private $plugins;
 
     /**
-     * @Inject
      * @Map(example\Plugin.class)
      */
     public __construct($plugins)
