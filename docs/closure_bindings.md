@@ -8,7 +8,7 @@ provider](injection_providers.md) would be overblown. This is where closure
 bindings come in handy:
 
 ```php
-$binder->bind('Person')->toClosure(fn() => new Schst());
+$binder->bind(Person::class)->toClosure(fn() => new Schst());
 // other bindings
 
 $injector = $binder->getInjector();
@@ -26,7 +26,7 @@ For class bindings the closure binding can be combined with scopes, i.e. the
 [singleton scope](singleton_scope.md):
 
 ```php
-    $binder->bind('Person')->toClosure(fn() => new Schst())->asSingleton();
+    $binder->bind(Person::class)->toClosure(fn() => new Schst())->asSingleton();
 ```
 
 Closure bindings are also available for [constant bindings](constant_values.md):
