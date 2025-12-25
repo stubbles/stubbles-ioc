@@ -110,7 +110,7 @@ abstract class MultiBinding implements Binding
                         ((is_int($key)) ? ('list') : ('map')),
                         $this->name,
                         $key,
-                        $type
+                        $type instanceof ReflectionClass ? $type->getName() : $type
                     )
                 );
             }
