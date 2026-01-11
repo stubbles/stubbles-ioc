@@ -7,7 +7,7 @@
         "php": "^8.3",
         "stubbles/sequence": "^11.0",
         "stubbles/values": "^12.0",
-        "stubbles/reflect": "^11.0"
+        "stubbles/reflect": "^11.1"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.12",
