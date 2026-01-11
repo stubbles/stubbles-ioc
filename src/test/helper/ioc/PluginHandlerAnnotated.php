@@ -6,15 +6,12 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Listing;
-use stubbles\ioc\attributes\Map;
-use stubbles\ioc\attributes\Named;
-
 /**
  * Helper class for the test.
+ *
+ * @deprecated will be removed with 13.0.0
  */
-class PluginHandler
+class PluginHandlerAnnotated
 {
     /**
      * some passed arguments
@@ -34,16 +31,24 @@ class PluginHandler
      * @param  mixed     $answer
      * @param  array     $list
      * @param  array     $map
+     * @List{configList}('listConfig')
+     * @Map{configMap}('mapConfig')
+     * @List{pluginList}(stubbles\test\ioc\Plugin.class)
+     * @Map{pluginMap}(stubbles\test\ioc\Plugin.class)
+     * @Named{std}('foo')
+     * @Named{answer}('foo')
+     * @List{list}('aList')
+     * @Map{map}('aMap')
      */
     public function __construct(
-            #[Listing('listConfig')] private array $configList,
-            #[Map('mapConfig')] private array $configMap,
-            #[Listing(Plugin::class)] private ?array $pluginList = null,
-            #[Map(Plugin::class)] private ?array $pluginMap = null,
-            #[Named('foo')] ?Plugin $std = null,
-            #[Named('foo')] mixed $answer = null,
-            #[Listing('aList')] ?array $list = null,
-            #[Map('aMap')] ?array $map = null)
+            private array $configList,
+            private array $configMap,
+            private ?array $pluginList = null,
+            private ?array $pluginMap = null,
+            ?Plugin $std = null,
+            mixed $answer = null,
+            ?array $list = null,
+            ?array $map = null)
     {
         $this->configList = $configList;
         $this->configMap  = $configMap;

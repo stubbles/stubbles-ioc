@@ -5,17 +5,16 @@ Map bindings are almost the same as [list bindings](list_bindings.md), but while
 list bindings are kind of anonymous (you can see them as indexed arrays) map
 bindings allow for named values (which compares to associative arrays). The
 functionality of map bindings is identical to list bindings, this includes typed
-and untyped map bindings. The only difference is the `@Map` annotation and how
+and untyped map bindings. The only difference is the `#[Map]` attribute and how
 map bindings are created with the binder:
 
 ```php
+use stubbles\ioc\attributes\Map;
 class PluginManager
 {
     private $plugins;
 
-    /**
-     * @Map(example\Plugin.class)
-     */
+    #[Map(Plugin::class)]
     public __construct($plugins)
     {
         $this->plugins = $plugins;

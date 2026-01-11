@@ -6,19 +6,16 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Named;
-
 /**
- * Test class for missing array injection.
+ * Interface with annotation.
  *
- * @since  2.0.0
+ * @ImplementedBy(stubbles\test\ioc\Schst.class)
+ * @deprecated will be removed with 13.0.0
  */
-class MissingArrayInjection
+interface PersonAnnotated
 {
     /**
-     * @param  array  $data
+     * a method
      */
-    #[Named('foo')]
-    public function __construct(private array $data) { }
+    public function sayHello(): string;
 }

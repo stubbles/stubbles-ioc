@@ -50,26 +50,25 @@ The properties `$driver` and `$coDriver` both contain references to the instance
 of `Schst` as both parameters are typehinted against the `Person` interface. In
 real-life, you would probably be able to inject a different co-driver, but until
 now, an interface can only be bound to one implementation. This can be changed
-using the `@Named` annotation.
+using the `#[Named]` attribute.
 
 Again, you need to modify the `BMW` class a little bit:
 
 ```php
+use stubbles\ioc\attributes\Named;
+
 class BMW implements Car {
-    /**
-     * @Named{coDriver}('Co-Driver')
-     */
     public function __construct(
         private Engine $engine,
         private Tire $tire,
         private Person $driver,
-        private ?Person $coDriver = null
+        #[Named('Co-Driver')] private ?Person $coDriver = null
     ) { }
 }
 ```
 
-By adding the `@Named{coDriver}('Co-Driver')` annotation, you gave _stubbles/ioc_
-the possibility to distinguish the `Person` instance passed to `setCoDriver`
+By adding the `#[Named('Co-Driver')]` attribute, you gave _stubbles/ioc_
+the possibility to distinguish the `Person` instance for this parameter
 from all other `Person` instances. You may now specify a separate binding for
 this instance:
 
@@ -103,10 +102,10 @@ object(BMW)#34 (4) {
 ```
 
 As desired, _stubbles/ioc_ created an instance of the new class `Mikey` and
-injected it using the `setCoDriver()` method. You may use as many named bindings
+injected it for the coDriver parameter. You may use as many named bindings
 for one type as you like and combine it with all other features like scoping.
 
-The `@Named` annotation can be used in several ways:
+The `#[Named]` attribute can be used in several ways:
 
  * per method, binding all parameters of the method to this name
  * per parameter, binding only the parameter to this name

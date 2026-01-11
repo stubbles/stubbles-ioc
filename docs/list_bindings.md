@@ -38,11 +38,10 @@ We have two plugins that should be managed by our application which uses the
 PluginManager for this:
 
 ```php
+use stubbles\ioc\attributes\Listing;
 class PluginManager
 {
-    /**
-     * @List(example\Plugin.class)
-     */
+    #[Listing(Plugin::class)]
     public __construct(private array $plugins) { }
 
     // Methods for managing plugins
@@ -56,7 +55,7 @@ injector how to construct the list:
 ```php
 $binder->bindList(Plugin::class)
     ->withValue(new SecurityPlugin()) // alternatively: ->withValue(SecurityPlugin::class)
-    ->withValueFromProvider('example\\CoolPluginProvider'); // provides AnotherCoolPlugin
+    ->withValueFromProvider(CoolPluginProvider::class); // provides AnotherCoolPlugin
 ```
 
 _stubbles/ioc_ will now take care of creating the plugin list and injecting it
@@ -111,28 +110,23 @@ that each entry within the list is of the same type. This is also enforced by
 _stubbles/ioc_. If a value gets added which is not of the required type a
 `stubbles\ioc\binding\BindingException` will be thrown when the list is created.
 
-The type of the list is defined with the value of the `@List` annotation. In the
-PluginManager above you can see such a definition. The type is also used to
+The type of the list is defined with the value of the `#[Listing]` attribute. In
+the PluginManager above you can see such a definition. The type is also used to
 identify the list when you add values to it, even though only the type name is
-used here without the _.class_ addition.
+used here.
 
 ## Untyped lists
 
 List bindings can also be untyped. To create an untyped list, simply use a
-string name as value for the `@List` annotation:
+string name as value for the `#[Listing]` attribute:
 
 ```php
+use stubbles\ioc\attributes\Listing;
 class Configuration
 {
-    private $config;
-
-    /**
-     * @List('config')
-     */
-    public __construct($config)
-    {
-        $this->config = $config;
-    }
+    #[Listing('config')]
+    public __construct(private array $config)
+    { }
 
     // more methods
 }
@@ -144,9 +138,9 @@ $binder->bindList('config')
 
 ## Named bindings and list bindings
 
-It is not possible to annotate list bindings with the `@Named` annotation. As
+It is not possible to annotate list bindings with the `#[Named]` attribute. As
 lists already are identified with their own names it is not required to use
-`@Named` for lists.
+`#[Named]` for lists.
 
 ## Closure bindings
 

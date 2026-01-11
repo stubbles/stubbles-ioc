@@ -8,14 +8,17 @@ declare(strict_types=1);
  */
 namespace stubbles\test;
 use stubbles\App;
-use stubbles\ioc\attributes\Named;
-
 /**
  * Helper class for ioc tests.
+ *
+ * @deprecated will be removed with 13.0.0
  */
-class AppClassWithoutBindings extends App
+class AppAnnotatedClassWithoutBindings extends App
 {
-    public function __construct(#[Named('stubbles.project.path')] public string $pathOfProject) { }
+    /**
+     * @Named('stubbles.project.path')
+     */
+    public function __construct(public string $pathOfProject) { }
 
     /**
      * runs the command

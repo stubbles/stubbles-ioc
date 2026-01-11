@@ -12,6 +12,8 @@ namespace stubbles\ioc;
 
 use InvalidArgumentException;
 use ReflectionClass;
+use stubbles\ioc\attributes\ImplementedBy;
+use stubbles\ioc\attributes\ProvidedBy;
 use stubbles\ioc\binding\Binding;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\BindingScopes;
@@ -22,8 +24,11 @@ use stubbles\ioc\binding\MapBinding;
 use stubbles\ioc\binding\PropertyBinding;
 use stubbles\ioc\binding\Session;
 use stubbles\reflect\annotation\Annotations;
+use stubbles\reflect\Attributes;
 
 use function stubbles\reflect\annotationsOf;
+use function stubbles\reflect\attributesOf;
+
 /**
  * Injector for the IoC functionality.
  *
@@ -257,7 +262,12 @@ class Injector
 
         if (!in_array($type, [PropertyBinding::TYPE, ConstantBinding::TYPE, ListBinding::TYPE, MapBinding::TYPE])) {
             /** @var class-string<object> $type */
-            $this->index[$type] = $this->getAnnotatedBinding(new \ReflectionClass($type));
+            $binding = $this->getAttributedBinding(new \ReflectionClass($type));
+            if (null === $binding) {
+                $binding = $this->getAnnotatedBinding(new \ReflectionClass($type));
+            }
+
+            $this->index[$type] = $binding;
             return $this->index[$type];
         }
 
@@ -274,6 +284,37 @@ class Injector
         }
 
         return $name;
+    }
+
+    /**
+     * returns binding denoted by attributes on type to create
+     *
+     * An attributed binding is when the type to create is attributes with
+     * #[ImplementedBy] oder #[ProvidedBy].
+     *
+     * If this is not the case it will fall back to the implicit binding.
+     */
+    private function getAttributedBinding(ReflectionClass $class): ?Binding
+    {
+        $attributes = attributesOf($class);
+        if ($attributes->isEmpty()) {
+            return null;
+        }
+
+        if ($attributes)
+        if ($class->isInterface() && $attributes->contain(ImplementedBy::class)) {
+            return $this->bind($class->getName())
+                ->to($this->findImplementationByAttributes($attributes, $class->getName()));
+        } elseif ($attributes->contain(ProvidedBy::class)) {
+            return $this->bind($class->getName())
+                ->toProviderClass(
+                    $attributes->firstNamed(ProvidedBy::class)->getProviderClass()
+                );
+        }
+
+        // TODO when support for annotated bindings is removed, this must be replaced by
+        // return $this->getImplicitBinding($class);
+        return null;
     }
 
     /**
@@ -319,6 +360,30 @@ class Injector
 
         if (null === $implementation) {
             throw new BindingException('Interface ' . $type . ' annotated with @ImplementedBy, but no default found');
+        }
+
+        return $implementation;
+    }
+
+    /**
+     * finds implementation to be used from list of #[ImplementedBy] attributes
+     *
+     * @param class-string $type
+     * @throws BindingException
+     */
+    private function findImplementationByAttributes(Attributes $attributes, string $type): ReflectionClass
+    {
+        $implementation = null;
+        foreach ($attributes->named(ImplementedBy::class) as $attribute) {
+            if (null !== $this->environment && $attribute->matchesEnvironment($this->environment)) {
+                $implementation = $attribute->getClass();
+            } elseif (!$attribute->isRestrictedByEnvironment() && null == $implementation) {
+                $implementation = $attribute->getClass();
+            }
+        }
+
+        if (null === $implementation) {
+            throw new BindingException('Interface ' . $type . ' attributed with #[ImplementedBy], but no default found');
         }
 
         return $implementation;

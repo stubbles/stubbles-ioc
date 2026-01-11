@@ -7,15 +7,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Named;
-
 /**
  * Helper class for the test.
+ *
+ * @deprecated will be removed with 13.0.0
  */
-class AnotherQuestion
+class AnotherAnnotatedQuestion
 {
-    public function __construct(#[Named('answer')] private Answer $answer) { }
+    /**
+     * @Named('answer')
+     */
+    public function __construct(private Answer $answer) { }
 
     public function getAnswer(): Answer
     {

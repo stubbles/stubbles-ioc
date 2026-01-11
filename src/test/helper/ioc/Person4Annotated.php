@@ -6,17 +6,14 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\ImplementedBy;
-
 /**
- * Interface with several ImplementedBy attributes.
+ * Interface with annotation.
  *
  * @since  6.0.0
+ * @ImplementedBy(environment="DEV", class=stubbles\test\ioc\Mikey.class)
+ * @deprecated will be removed with 13.0.0
  */
-#[ImplementedBy(Mikey::class, environment:'DEV')]
-#[ImplementedBy(Schst::class)]
-interface Person3
+interface Person4Annotated
 {
     /**
      * a method

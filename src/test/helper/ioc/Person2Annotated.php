@@ -6,14 +6,13 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\ProvidedBy;
-
 /**
  * Helper class for the test
+ *
+ * @ProvidedBy(stubbles\test\ioc\InjectorProvidedByProvider.class)
+ * @deprecated will be removed with 13.0.0
  */
-#[ProvidedBy(InjectorProvidedByProvider::class)]
-interface Person2
+interface Person2Annotated
 {
     public function sayHello2(): string;
 }

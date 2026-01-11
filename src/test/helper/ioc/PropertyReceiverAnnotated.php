@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -7,18 +6,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Named;
-
 /**
  * Helper class for the test.
+ *
+ * @deprecated will be removed with 13.0.0
  */
-class AnotherQuestion
+class PropertyReceiverAnnotated
 {
-    public function __construct(#[Named('answer')] private Answer $answer) { }
-
-    public function getAnswer(): Answer
-    {
-        return $this->answer;
-    }
+    /**
+     * @Property{foo}('example.foo')
+     * @Property{bar}('example.bar')
+     */
+    public function __construct(public string $foo, public $bar) { }
 }

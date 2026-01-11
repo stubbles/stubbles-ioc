@@ -6,14 +6,13 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Singleton;
-
 /**
  * Class that is marked as Singleton
+ *
+ * @Singleton
+ * @deprecated will be removed with 13.0.0
  */
-#[Singleton]
-class RandomSingleton implements Number
+class RandomSingletonAnnotated implements Number
 {
     /**
      * value of the number

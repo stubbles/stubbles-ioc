@@ -14,6 +14,10 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use stubbles\ioc\attributes\Listing;
+use stubbles\ioc\attributes\Map;
+use stubbles\ioc\attributes\Named;
+use stubbles\ioc\attributes\Property;
 use stubbles\ioc\binding\BindingException;
 use stubbles\ioc\binding\ConstantBinding;
 use stubbles\ioc\binding\ListBinding;
@@ -21,6 +25,8 @@ use stubbles\ioc\binding\MapBinding;
 use stubbles\ioc\binding\PropertyBinding;
 
 use function stubbles\reflect\annotationsOf;
+use function stubbles\reflect\attributesOf;
+
 /**
  * Default injection provider.
  *
@@ -102,8 +108,25 @@ class DefaultInjectionProvider implements InjectionProvider
     /**
      * returns default binding name for all parameters on given method
      */
-    private function methodBindingName(ReflectionMethod $method): ?string
+    private function methodBindingName(ReflectionMethod $method): string|ReflectionClass|null
     {
+        $attributes = attributesOf($method);
+        if ($attributes->contain(Listing::class)) {
+            return $attributes->firstNamed(Listing::class)->getName();
+        }
+
+        if ($attributes->contain(Map::class)) {
+            return $attributes->firstNamed(Map::class)->getName();
+        }
+
+        if ($attributes->contain(Named::class)) {
+            return $attributes->firstNamed(Named::class)->getName();
+        }
+
+        if ($attributes->contain(Property::class)) {
+            return $attributes->firstNamed(Property::class)->getName();
+        }
+
         $annotations = annotationsOf($method);
         if ($annotations->contain('List')) {
             return $annotations->firstNamed('List')->getValue();
@@ -129,6 +152,8 @@ class DefaultInjectionProvider implements InjectionProvider
      */
     private function paramType(ReflectionMethod $method, ReflectionParameter $param): string
     {
+        $methodAttributes = attributesOf($method);
+        $paramAttributes = attributesOf($param);
         $methodAnnotations = annotationsOf($method);
         $paramAnnotations  = annotationsOf($param);
         $paramClass        = $param->getType();
@@ -136,7 +161,10 @@ class DefaultInjectionProvider implements InjectionProvider
             null !== $paramClass
             && $paramClass instanceof ReflectionNamedType
         ) {
-            if ($methodAnnotations->contain('Property') || $paramAnnotations->contain('Property')) {
+            if (
+                $methodAttributes->contain(Property::class) || $paramAttributes->contain(Property::class)
+                || $methodAnnotations->contain('Property') || $paramAnnotations->contain('Property')
+            ) {
                 return PropertyBinding::TYPE;
             }
 
@@ -145,15 +173,24 @@ class DefaultInjectionProvider implements InjectionProvider
             }
         }
 
-        if ($methodAnnotations->contain('List') || $paramAnnotations->contain('List')) {
+        if (
+            $methodAttributes->contain(Listing::class) || $paramAttributes->contain(Listing::class)
+            || $methodAnnotations->contain('List') || $paramAnnotations->contain('List')
+        ) {
             return ListBinding::TYPE;
         }
 
-        if ($methodAnnotations->contain('Map') || $paramAnnotations->contain('Map')) {
+        if (
+            $methodAttributes->contain(Map::class) || $paramAttributes->contain(Map::class)
+            || $methodAnnotations->contain('Map') || $paramAnnotations->contain('Map')
+        ) {
             return MapBinding::TYPE;
         }
 
-        if ($methodAnnotations->contain('Property') || $paramAnnotations->contain('Property')) {
+        if (
+            $methodAttributes->contain(Property::class) || $paramAttributes->contain(Property::class)
+            || $methodAnnotations->contain('Property') || $paramAnnotations->contain('Property')
+        ) {
             return PropertyBinding::TYPE;
         }
 
@@ -164,6 +201,23 @@ class DefaultInjectionProvider implements InjectionProvider
         ReflectionParameter $param,
         ?string $default = null
     ): string|ReflectionClass|null {
+        $attributes = attributesOf($param);
+        if ($attributes->contain(Listing::class)) {
+            return $attributes->firstNamed(Listing::class)->getName();
+        }
+
+        if ($attributes->contain(Map::class)) {
+            return $attributes->firstNamed(Map::class)->getName();
+        }
+
+        if ($attributes->contain(Named::class)) {
+            return $attributes->firstNamed(Named::class)->getName();
+        }
+
+        if ($attributes->contain(Property::class)) {
+            return $attributes->firstNamed(Property::class)->getName();
+        }
+
         $annotations = annotationsOf($param);
         if ($annotations->contain('List')) {
             return $annotations->firstNamed('List')->getValue();

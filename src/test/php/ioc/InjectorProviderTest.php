@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
+use stubbles\test\ioc\AnotherAnnotatedQuestion;
 use stubbles\test\ioc\AnotherQuestion;
 use stubbles\test\ioc\Answer;
 use stubbles\test\ioc\MyProviderClass;
@@ -37,6 +38,23 @@ class InjectorProviderTest extends TestCase
         $binder->bind(Answer::class)->toProvider($provider);
         $question = $binder->getInjector()
             ->getInstance(AnotherQuestion::class);
+        assertThat($question->getAnswer(), isSameAs($answer));
+        verify($provider, 'get')->received('answer');
+    }
+
+    /**
+     * @deprecated
+     */
+    #[Test]
+    public function injectWithProviderInstanceForAnnotatedClass(): void
+    {
+        $binder   = new Binder();
+        $answer   = new Answer();
+        $provider = NewInstance::of(InjectionProvider::class)
+            ->returns(['get' => $answer]);
+        $binder->bind(Answer::class)->toProvider($provider);
+        $question = $binder->getInjector()
+            ->getInstance(AnotherAnnotatedQuestion::class);
         assertThat($question->getAnswer(), isSameAs($answer));
         verify($provider, 'get')->received('answer');
     }

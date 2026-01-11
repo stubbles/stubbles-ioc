@@ -20,6 +20,7 @@ use stubbles\test\ioc\Goodyear;
 use stubbles\test\ioc\ImplicitDependency;
 use stubbles\test\ioc\ImplicitOptionalDependency;
 use stubbles\test\ioc\MissingArrayInjection;
+use stubbles\test\ioc\MissingArrayInjectionAnnotation;
 use stubbles\test\ioc\Tire;
 use stubbles\test\ioc\Vehicle;
 
@@ -132,6 +133,18 @@ class InjectorBasicTest extends TestCase
         $injector = Binder::createInjector();
         expect(function() use ($injector) {
                 $injector->getInstance(Bike::class);
+        })->throws(BindingException::class);
+    }
+
+    /**
+     * @deprecated
+     */
+    #[Test]
+    public function missingConstantBindingOnInjectionHandlingThrowsBindingExceptionForAnnotatedName(): void
+    {
+        $injector = Binder::createInjector();
+        expect(function() use ($injector) {
+            $injector->getInstance(MissingArrayInjectionAnnotation::class);
         })->throws(BindingException::class);
     }
 

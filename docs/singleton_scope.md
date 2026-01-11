@@ -1,7 +1,7 @@
 Singletons
 ----------
 
-Multiple calls to `$injector->getInstance('Car');` will return different
+Multiple calls to `$injector->getInstance(Car::class);` will return different
 objects. In most cases, this is probably what you want, as the IoC framework
 behaves like the `new` operator. If you want to create only one instance of the
 `BMW` class, you can easily convert the `BMW` class to a [singleton](http://en.wikipedia.org/wiki/Singleton_pattern).
@@ -23,14 +23,14 @@ if ($bmw1 === $bmw2) {
 Using `asSingleton()` makes sure that the instance is created only once and
 subsequent calls to `getInstance()` will return the same instance.
 
-Another way to treat a class as a singleton is using the `@Singleton`
-annotation, which is used to annotate the class. The following example makes
-sure that the application uses only one instance of the class `Schst`:
+Another way to treat a class as a singleton is using the `#[Singleton]`
+attribute. The following example makes sure that the application uses
+only one instance of the class `Schst`:
 
 ```php
-/**
- * @Singleton
- */
+use stubbles\ioc\attributes\Singleton;
+
+#[Singleton]
 class Schst implements Person {
     public function sayHello(): string {
         echo "My name is Stephan\n";
@@ -83,5 +83,3 @@ object(BMW)#30 (3) {
 As you can see, the two `BMW` instances have different object handles (_#30_
 and _#34_), but the `$driver` properties point to the same `Schst` instance
 (object handle _#50_).
-
-Implementing the singleton pattern never has been this easy.

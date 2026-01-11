@@ -6,12 +6,15 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
+
+use stubbles\ioc\attributes\ImplementedBy;
+
 /**
- * Interface with annotation.
+ * Interface with attribute.
  *
  * @since  6.0.0
- * @ImplementedBy(environment="DEV", class=stubbles\test\ioc\Mikey.class)
  */
+#[ImplementedBy(Mikey::class, environment:'DEV')]
 interface Person4
 {
     /**

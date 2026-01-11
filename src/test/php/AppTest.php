@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\Binder;
 use stubbles\ioc\Injector;
+use stubbles\test\AppAnnotatedClassWithoutBindings;
 use stubbles\test\AppClassWithBindings;
 use stubbles\test\AppClassWithInvalidBindingModule;
 use stubbles\test\AppClassWithoutBindings;
@@ -59,6 +60,22 @@ class AppTest extends TestCase
         assertThat($appCommandWithBindings, isInstanceOf(AppClassWithBindings::class));
     }
 
+    /**
+     * @deprecated will be removed with 13.0.0
+     */
+    #[Test]
+    public function createInstanceCreatesAnnotatedInstanceWithoutBindings(): void
+    {
+        assertThat(
+            App::createInstance(
+                AppAnnotatedClassWithoutBindings::class,
+                'projectPath'
+            ),
+            isInstanceOf(AppAnnotatedClassWithoutBindings::class)
+        );
+    }
+
+
     #[Test]
     public function createInstanceCreatesInstanceWithoutBindings(): void
     {
@@ -79,6 +96,19 @@ class AppTest extends TestCase
     {
         assertThat(
             AppClassWithBindings::create('projectPath')->pathOfProject,
+            equals('projectPath')
+        );
+    }
+
+    /**
+     * @since  5.0.0
+     * @deprecated will be removed with 13.0.0
+     */
+    #[Test]
+    public function projectPathIsBoundWithoutExplicitBindingsInAnnotatedClass(): void
+    {
+        assertThat(
+            AppAnnotatedClassWithoutBindings::create('projectPath')->pathOfProject,
             equals('projectPath')
         );
     }

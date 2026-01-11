@@ -21,8 +21,6 @@ use Throwable;
 use function bovigo\assert\assertThat;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\predicate\equals;
-use function stubbles\reflect\annotationsOf;
-use function stubbles\reflect\annotationsOfConstructor;
 /**
  * Tests for stubbles\ExceptionLogger.
  *
@@ -46,29 +44,6 @@ class ExceptionLoggerTest extends TestCase
     {
         $this->root            = vfsStream::setup();
         $this->exceptionLogger = new ExceptionLogger(vfsStream::url('root'));
-    }
-
-    /**
-     * @since  5.4.0
-     */
-    #[Test]
-    public function annotationsPresentOnClass(): void
-    {
-        assertTrue(annotationsOf($this->exceptionLogger)->contain('Singleton'));
-    }
-
-    /**
-     * @since  3.3.1
-     */
-    #[Test]
-    public function annotationsPresentOnConstructor(): void
-    {
-        $annotations = annotationsOfConstructor($this->exceptionLogger);
-        assertTrue($annotations->contain('Named'));
-        assertThat(
-                $annotations->named('Named')[0]->getName(),
-                equals('stubbles.project.path')
-        );
     }
 
     #[Test]

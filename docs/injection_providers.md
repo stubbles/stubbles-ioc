@@ -30,7 +30,7 @@ class MyApplication {
 The class `MyApplication` requires an instance of [PDO](http://www.php.net/pdo).
 If you take a look at the PDO documentation you will see that the constructor
 requires parameters for the connection and the username and password. As `PDO`
-is an internal class, you cannot add a `@Named` annotation and thus, _stubbles/ioc_
+is an internal class, you cannot add a `#[Named]` attribute and thus, _stubbles/ioc_
 is not able to create this object.
 
 The solution is to implement a provider, which creates the `PDO` instance:
@@ -92,19 +92,15 @@ To demonstrate the last point we extend the `PDOProvider` class a bit:
 ```php
 namespace example;
 use stubbles\ioc\InjectionProvider;
+use stubbles\ioc\attributes\Named;
 /**
  * Provider to create PDO instances
  */
 class PDOProvider implements InjectionProvider {
-    /**
-      * @Named{dsn}('pdoDsn')
-      * @Named{user}('pdoUser')
-      * @Named{pass}('pdoPass')
-      */
     public function __construct(
-        private string $dsn,
-        private string $user,
-        private string $pass
+        #[Named('pdoDsn')] private string $dsn,
+        #[Named('pdoUser')] private string $user,
+        #[Named('pdoPass')] private string $pass
     ) { }
 
     public function get(?string $name = null): PDO {
@@ -113,10 +109,10 @@ class PDOProvider implements InjectionProvider {
 }
 ```
 
-As you can see we annotate the constructor of the provider and inject the
-required constructor data for the `PDO` class into the provider so the provider
-can use this later for constructing the `PDO` instance. Now we just need to
-modify our bindings:
+As you can see we attribute the constructor parameters of the provider and
+inject the required constructor data for the `PDO` class into the provider
+so the provider can use this later for constructing the `PDO` instance. Now
+we just need to modify our bindings:
 
 ```php
 $binder->bind(PDO::class)->toProviderClass(PDOProvider::class);
@@ -132,14 +128,14 @@ $app = $injector->getInstance(MyApplication::class);
 
 In case you have an interface and an implementation, but can not create the
 implementation instance with the [default implementations](default_implementaions.md)
-`@ImplementedBy` annotation, the `@ProvidedBy` annotation is another opportunity:
+`#[ImplementedBy]` attribute, the `#[ProvidedBy]` attribute is another opportunity:
 
 ```php
+use stubbles\ioc\attributes\ProvidedBy;
 /**
  * All Persons should be instantiated using the PersonProvider class.
- *
- * @ProvidedBy(example\PersonProvider.class)
  */
+#[ProvidedBy(example\PersonProvider::class)]
 interface Person {
     public function sayHello(): string;
 }
@@ -151,5 +147,5 @@ This has the same effect as
 $binder->bind(Person::class)->toProviderClass(PersonProvider::class);
 ```
 
-but is available automatically with the annotation, without the need to create
+but is available automatically with the attribute, without the need to create
 this binding explicitly.

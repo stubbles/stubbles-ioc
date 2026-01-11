@@ -5,28 +5,28 @@ Very often you only use one concrete implementation of an interface in your
 application and only added the interface or abstract class to make dependent
 classes better testable. To avoid having to bind all of your interfaces to the
 concrete implementations you may specify a default implementation which will be
-used. To achieve this, add the `@ImplementedBy` annotation to your interface.
+used. To achieve this, add the `#[ImplementedBy]` attribute to your interface.
 
 ```php
+use stubbles\ioc\attributes\ImplementedBy;
 /**
  * All Persons should be bound to the class Schst unless Person is bound
- *
- * @ImplementedBy(Schst.class)
  */
+#[ImplementedBy(Schst::class)]
 interface Person {
     public function sayHello(): string;
 }
 
 
-$person = $injector->getInstance('Person'); // $person is now an instance of Schst
+$person = $injector->getInstance(Person::class); // $person is now an instance of Schst
 ```
 
 It should be noted though, that once a specific binding for `Person` is added to
 the binder that the annotation is not considered anymore:
 
 ```php
-    $binder->bind('Person')->to('Mikey');
-    $person = $binder->getInjector()->getInstance('Person');
+    $binder->bind(Person::class)->to(Mikey::class);
+    $person = $binder->getInjector()->getInstance(Person::class);
 ```
 
 In this example, `$person` is now an instance of `Mikey` and not of `Schst` -
@@ -42,10 +42,10 @@ environment, e.g. a mock implementation for DEV and the real service
 implementation for PROD. This can be accomplished by specifying the environment:
 
 ```php
-/**
- * @ImplementedBy(environment="DEV", class=Mikey.class)
- * @ImplementedBy(Schst.class)
- */
+use stubbles\ioc\attributes\ImplementedBy;
+
+#[ImplementedBy(Mikey::class, environment:'DEV')]
+#[ImplementedBy(Schst::class)]
 interface Person {
     public function sayHello(): string;
 }

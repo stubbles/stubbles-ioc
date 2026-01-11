@@ -27,16 +27,12 @@ To get access to all property values, the class should declare a dependency to
 
 ```php
 namespace example;
+use stubbles\ioc\attributes\Named;
 use stubbles\values\Properties;
 class Example
 {
-    /**
-     * constructor
-     *
-     * @param  Properties  $properties
-     * @Named('config')
-     */
-    public function __construct(private Properties $properties) { }
+    public function __construct(
+        #[Named('config')] private Properties $properties) { }
 
     // ... useful methods to do something ...
 }
@@ -54,15 +50,11 @@ only. This could be done by using constants:
 
 ```php
 namespace example;
+use stubbles\ioc\attributes\Named;
 class AnotherExample
 {
-    /**
-     * constructor
-     *
-     * @param  string  $roland
-     * @Named('example.roland')
-     */
-    public function __construct(private string $roland) { }
+    public function __construct(
+        #[Named('example.roland')] private string $roland) { }
 
     ... useful methods to do something ...
 }

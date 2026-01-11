@@ -6,11 +6,13 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
+
+use stubbles\ioc\attributes\ImplementedBy;
+
 /**
- * Interface with annotation.
- *
- * @ImplementedBy(stubbles\test\ioc\Schst.class)
+ * Interface with ImplementedBy attribute.
  */
+#[ImplementedBy(Schst::class)]
 interface Person
 {
     /**

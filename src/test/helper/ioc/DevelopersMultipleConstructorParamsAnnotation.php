@@ -6,19 +6,17 @@
  * file that was distributed with this source code.
  */
 namespace stubbles\test\ioc;
-
-use stubbles\ioc\attributes\Named;
-
 /**
  * Helper class for the test.
+ *
+ * @deprecated will be removed with 13.0.0
  */
-class DevelopersMultipleConstructorParams
+class DevelopersMultipleConstructorParamsAnnotation
 {
     /**
      * constructor with Named() annotation on a specific param
+     *
+     * @Named{boss}('schst')
      */
-    public function __construct(
-        #[Named('schst')] public Employee $boss,
-        public Employee $employee
-    ) { }
+    public function __construct(public Employee $boss, public Employee $employee) { }
 }

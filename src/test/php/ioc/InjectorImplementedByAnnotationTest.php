@@ -13,19 +13,21 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\ioc\binding\BindingException;
 use stubbles\test\ioc\Mikey;
-use stubbles\test\ioc\Person;
-use stubbles\test\ioc\Person3;
-use stubbles\test\ioc\Person4;
+use stubbles\test\ioc\PersonAnnotated as Person;
+use stubbles\test\ioc\Person3Annotated as Person3;
+use stubbles\test\ioc\Person4Annotated as Person4;
 use stubbles\test\ioc\Schst;
 
 use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
- * Test for stubbles\ioc\Injector with the ImplementedBy attribute.
+ * Test for stubbles\ioc\Injector with the ImplementedBy annotation.
+ *
+ * @deprecated will be removed with 13.0.0
  */
 #[Group('ioc')]
-class InjectorImplementedByTest extends TestCase
+class InjectorImplementedByAnnotationTest extends TestCase
 {
     #[Test]
     public function createsInstanceFromImplementedByAnnotationIfNoExplicitBindingsSet(): void

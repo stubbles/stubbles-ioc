@@ -1,7 +1,6 @@
 {
     "name": "stubbles/ioc",
     "type": "library",
-    "homepage": "http://stubbles.net/",
     "license": "BSD-3-Clause",
     "description": "Dependency injection.",
     "require": {
@@ -30,7 +29,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "12.0.x-dev"
+            "dev-main": "12.1.x-dev"
         }
     },
     "minimum-stability": "dev",

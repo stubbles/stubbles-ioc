@@ -1,5 +1,18 @@
 # Changelog
 
+## 12.1.0 (2026-??-??)
+
+### Heads up
+
+* Added attributes to replace all annotation based features. Annotations are now deprecated, and support for annotations will be removed with release 13.0.0. All attributes can be found in the `stubles\ioc\attributes` namespace. Attributes have the same name as the previous annotations, with one exception: `@List` became `#[Listing]` due to "list" being a reserved keyword in PHP which can't be used for class names.
+  * `#[ImplementedBy(string $class, ?string $environment = null)]` (replaces `@ImplementedBy`), is repeatable and applicable on interfaces (technically it can be applied to classes, but is only recognized on interfaces by stubbles/ioc)
+  * `#[Listing(string $name)]` (replaces `@List`), applicable on methods and parameters
+  * `#[Map(string $name)]` (replaces `@Map`), applicable on methods and parameters
+  * `#[Named(string $name)]` (replaces `@Named`), applicable on methods and parameters
+  * `#[Property(string $name)]` (replaces `@Property`), applicable on methods and parameters
+  * `#[ProvidedBy(string $providerClass)]` (replaces `@ProvidedBy`), applicable on classes
+  * `#[Singleton]` (replaces `@Singleton`), applicable on classes
+
 ## 12.0.0 (2025-11-29)
 
 ### BC breaks

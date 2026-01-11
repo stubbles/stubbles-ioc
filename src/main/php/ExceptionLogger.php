@@ -10,24 +10,24 @@ declare(strict_types=1);
  */
 namespace stubbles;
 
+use stubbles\ioc\attributes\Named;
+use stubbles\ioc\attributes\Singleton;
 use Throwable;
 
 /**
  * Can be used to log exceptions.
  *
  * @since  3.3.0
- * @Singleton
  */
+#[Singleton]
 class ExceptionLogger
 {
     private string $logDir;
     private int $filemode = 0700;
 
-    /**
-     * @Named('stubbles.project.path')
-     */
-    public function __construct(string $projectPath)
-    {
+    public function __construct(
+        #[Named('stubbles.project.path')] string $projectPath
+    ) {
         $this->logDir = $projectPath
             . DIRECTORY_SEPARATOR
             . 'log'

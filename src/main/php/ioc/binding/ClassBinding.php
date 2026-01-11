@@ -13,12 +13,15 @@ namespace stubbles\ioc\binding;
 use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
+use stubbles\ioc\attributes\Singleton;
 use stubbles\ioc\ClosureInjectionProvider;
 use stubbles\ioc\DefaultInjectionProvider;
 use stubbles\ioc\InjectionProvider;
 use stubbles\ioc\Injector;
 
 use function stubbles\reflect\annotationsOf;
+use function stubbles\reflect\attributesOf;
+
 /**
  * Binding to bind an interface to an implementation.
  *
@@ -212,7 +215,7 @@ class ClassBinding implements Binding
             return $this->instance;
         }
 
-        if (null === $this->scope && annotationsOf($this->impl())->contain('Singleton')) {
+        if (null === $this->scope && (attributesOf($this->impl())->contain(Singleton::class) || annotationsOf($this->impl())->contain('Singleton'))) {
             $this->scope = $this->scopes->singleton();
         }
 

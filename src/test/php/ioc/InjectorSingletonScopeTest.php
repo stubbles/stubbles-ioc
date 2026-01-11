@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use stubbles\test\ioc\Number;
 use stubbles\test\ioc\Random;
 use stubbles\test\ioc\RandomSingleton;
+use stubbles\test\ioc\RandomSingletonAnnotated;
 use stubbles\test\ioc\SlotMachine;
 
 use function bovigo\assert\assertThat;
@@ -57,8 +58,23 @@ class InjectorSingletonScopeTest extends TestCase
         );
     }
 
+    /**
+     * @deprecated
+     */
     #[Test]
     public function classAnnotatedWithSingletonWillOnlyBeCreatedOnce(): void
+    {
+        $binder = new Binder();
+        $binder->bind(Number::class)->to(RandomSingletonAnnotated::class);
+        $slot = $binder->getInjector()->getInstance(SlotMachine::class);
+        assertThat(
+            $slot->number1,
+            isInstanceOf(RandomSingletonAnnotated::class)->and(isSameAs($slot->number2))
+        );
+    }
+
+    #[Test]
+    public function classAttributedWithSingletonWillOnlyBeCreatedOnce(): void
     {
         $binder = new Binder();
         $binder->bind(Number::class)->to(RandomSingleton::class);

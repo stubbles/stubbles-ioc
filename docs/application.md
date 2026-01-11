@@ -69,13 +69,11 @@ class MyApplicationBindingModule implements BindingModule
 {
     /**
      * configure the binder
-     *
-     * @param  Binder  $binder
      */
     public function configure(Binder $binder): void
     {
-        $binder->bind('example\\SomeInterface')
-               ->to('example\\SomeImplementation');
+        $binder->bind(example\SomeInterface::class)
+               ->to(example\SomeImplementation::class);
 
         ... more bindings which might make sense here ...
     }
