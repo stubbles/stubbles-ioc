@@ -13,11 +13,15 @@ namespace stubbles\ioc\attributes;
 use Attribute;
 use ReflectionClass;
 
-use function stubbles\reflect\reflect;
-
+/**
+ * @template T of object
+ */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class ImplementedBy
 {
+    /**
+     * @param class-string<T> $class
+     */
     public function __construct(
         private string $class,
         private ?string $environment = null
@@ -35,8 +39,11 @@ class ImplementedBy
         ;
     }
 
+    /**
+     * @return ReflectionClass<T>
+     */
     public function getClass(): ReflectionClass
     {
-        return reflect($this->class);
+        return new ReflectionClass($this->class);
     }
 }

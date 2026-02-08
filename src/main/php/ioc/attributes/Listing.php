@@ -13,8 +13,6 @@ namespace stubbles\ioc\attributes;
 use Attribute;
 use ReflectionClass;
 
-use function stubbles\reflect\reflect;
-
 #[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PARAMETER)]
 class Listing
 {
@@ -23,7 +21,7 @@ class Listing
     public function getName(): string|ReflectionClass
     {
         if (interface_exists($this->name) || class_exists($this->name)) {
-            return reflect($this->name);
+            return new ReflectionClass($this->name);
         }
 
         return $this->name;

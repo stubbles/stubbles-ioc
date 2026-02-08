@@ -13,8 +13,6 @@ namespace stubbles\ioc\attributes;
 use Attribute;
 use ReflectionClass;
 
-use function stubbles\reflect\reflect;
-
 #[Attribute(Attribute::TARGET_CLASS)]
 /**
  * @template T of object
@@ -31,6 +29,6 @@ class ProvidedBy
      */
     public function getProviderClass(): ReflectionClass
     {
-        return reflect($this->providerClass);
+        return new ReflectionClass($this->providerClass);
     }
 }
