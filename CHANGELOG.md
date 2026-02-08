@@ -4,7 +4,7 @@
 
 ### Heads up
 
-* Added attributes to replace all annotation based features. Annotations are now deprecated, and support for annotations will be removed with release 13.0.0. All attributes can be found in the `stubles\ioc\attributes` namespace. Attributes have the same name as the previous annotations, with one exception: `@List` became `#[Listing]` due to "list" being a reserved keyword in PHP which can't be used for class names.
+* Added attributes from [stubbles/ioc-attributes](https://packagist.org/packages/stubbles/ioc-attributes) to replace all annotation based features. Annotations are now deprecated, and support for annotations will be removed with release 13.0.0. All attributes can be found in the `stubles\ioc\attributes` namespace. Attributes have the same name as the previous annotations, with one exception: `@List` became `#[Listing]` due to "list" being a reserved keyword in PHP which can't be used for class names.
   * `#[ImplementedBy(string $class, ?string $environment = null)]` (replaces `@ImplementedBy`), is repeatable and applicable on interfaces (technically it can be applied to classes, but is only recognized on interfaces by stubbles/ioc)
   * `#[Listing(string $name)]` (replaces `@List`), applicable on methods and parameters
   * `#[Map(string $name)]` (replaces `@Map`), applicable on methods and parameters

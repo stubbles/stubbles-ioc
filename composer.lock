@@ -4,8 +4,48 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e9aab09082a94b7211bc658ab880f83",
+    "content-hash": "18b6b2441dab86f6dda8fbcb1b0c79d8",
     "packages": [
+        {
+            "name": "stubbles/ioc-attributes",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stubbles/stubbles-ioc-attributes.git",
+                "reference": "66c71f4359ddce551dd2f40e78f3bcfa15179b9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stubbles/stubbles-ioc-attributes/zipball/66c71f4359ddce551dd2f40e78f3bcfa15179b9d",
+                "reference": "66c71f4359ddce551dd2f40e78f3bcfa15179b9d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "stubbles\\ioc\\attributes\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Attributes for dependency injection with stubbles/ioc.",
+            "support": {
+                "issues": "https://github.com/stubbles/stubbles-ioc-attributes/issues",
+                "source": "https://github.com/stubbles/stubbles-ioc-attributes/tree/main"
+            },
+            "time": "2026-02-08T08:49:01+00:00"
+        },
         {
             "name": "stubbles/reflect",
             "version": "dev-main",
